@@ -1,0 +1,43 @@
+.layer-properties__toggle {
+    display: none !important;
+}
+
+.layer-properties__panel {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ffffff1f transparent;
+}
+
+.layer-properties__panel::-webkit-scrollbar {
+    width: 5px;
+}
+
+.layer-properties__panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.layer-properties__panel::-webkit-scrollbar-thumb {
+    background: #ffffff1f;
+    border-radius: 25px;
+    transition: background-color 0.2s;
+}
+
+.layer-properties__panel::-webkit-scrollbar-thumb:hover {
+    background: #ffffff38;
+}
+
+@media (max-width: 1000px) {
+    .layer-properties__toggle {
+        display: flex !important;
+    }
+
+    .layer-properties__panel {
+        display: none;
+    }
+
+    .layer-properties__panel.open {
+        display: block;
+    }
+}

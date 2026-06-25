@@ -1,0 +1,21 @@
+.canvas-properties__toggle {
+    display: none !important;
+}
+
+.canvas-properties__panel {
+    display: block;
+}
+
+@media (max-width: 1000px) {
+    .canvas-properties__toggle {
+        display: flex !important;
+    }
+
+    .canvas-properties__panel {
+        display: none;
+    }
+
+    .canvas-properties__panel.open {
+        display: block;
+    }
+}

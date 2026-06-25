@@ -1,0 +1,17 @@
+:root {
+    --root-color: #00ffff;
+
+    --main-background-color: #101010;
+    --secondary-background-color: #151515;
+
+    --main-button-background: #202020;
+
+    --container-background: #252525;
+    --secondary-container-background: #303030;
+
+    --main-border-color: #151515;
+    --secondary-border-color: #303030;
+
+    --main-foreground-color: #ffffff;
+    --secondary-foreground-color: #bbbbbb;
+}

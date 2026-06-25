@@ -1,0 +1,107 @@
+@import url(./Animation.css);
+
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Verdana, sans-serif;
+}
+
+html,
+body {
+    position: relative;
+    color: var(--main-foreground-color);
+    background-color: var(--main-background-color);
+}
+
+.container {
+    width: 100%;
+    height: calc(100dvh - 1rem);
+}
+
+.animational-text {
+    background: radial-gradient(circle, var(--root-color), transparent);
+    background-size: 200% 200%;
+    background-clip: text;
+    animation: animational-text 15s linear infinite;
+    color: transparent;
+}
+
+.seperator {
+    height: 1px;
+    width: 80%;
+    margin: 0.5rem auto;
+    border: 1px solid var(--secondary-border-color);
+    border-radius: 25px;
+}
+
+.v-seperator {
+    width: 1px;
+    height: 50%;
+    margin-inline: 0.5rem;
+    border: 1px solid var(--secondary-border-color);
+    border-radius: 25px;
+}
+
+.desc {
+    color: var(--secondary-foreground-color);
+}
+
+.empty-list {
+    text-align: center;
+    color: #bbbbbb;
+    margin-block: 1rem;
+}
+
+.white-space {
+    flex: 1;
+}
+
+.button {
+    width: fit-content;
+    height: fit-content;
+    cursor: pointer;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    display: flex;
+    align-content: center;
+    gap: 0.25rem;
+    color: inherit;
+    background-color: #303030;
+    padding: 0.5rem;
+    transition:
+        border 0.3s ease,
+        color 0.3s ease,
+        background 0.3s ease;
+}
+
+.button > svg {
+    font-size: 1rem;
+}
+
+.button.small {
+    padding: 0.375rem;
+}
+
+.button.small > svg {
+    font-size: 0.875rem;
+}
+
+.button:hover {
+    color: var(--root-color);
+    border-color: var(--root-color);
+}
+
+.button:disabled {
+    pointer-events: none;
+    filter: brightness(80%);
+}
+
+.button.round {
+    border-radius: 25px;
+}
+
+.button.active {
+    color: #000000;
+    border-color: #000000;
+    background-color: var(--root-color);
+}

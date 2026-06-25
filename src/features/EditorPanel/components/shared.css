@@ -1,0 +1,18 @@
+.scrollable {
+    overflow: auto;
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background-color: #505050;
+    border-radius: 25px;
+}
+
+.scrollable::-webkit-scrollbar-corner {
+    background-color: transparent;
+}

@@ -1,0 +1,29 @@
+.start-panel__method-button {
+    cursor: pointer;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    max-width: 180px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    color: inherit;
+    background-color: var(--main-button-background);
+    transition:
+        border 0.5s ease-in-out,
+        color 0.5s ease-in-out;
+}
+
+.start-panel__method-button:hover {
+    color: var(--root-color);
+    border-color: var(--root-color);
+}
+
+.start-panel__method-button > svg {
+    font-size: clamp(2rem, 10vw, 3rem);
+}

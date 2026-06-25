@@ -1,0 +1,10 @@
+.properties-section__content--group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.properties-section__content--group.empty {
+    align-items: center;
+    padding: 0.5rem;
+}

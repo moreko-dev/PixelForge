@@ -1,0 +1,11 @@
+.status-container__zoom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.status-container__zoom-value {
+    margin-inline: 0.5rem;
+    color: var(--secondary-foreground-color);
+}

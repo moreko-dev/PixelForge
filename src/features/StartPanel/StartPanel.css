@@ -1,0 +1,43 @@
+.start-panel {
+    overflow: auto;
+    max-width: 1000px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary-background-color);
+    color: inherit;
+    border: 1px solid var(--secondary-border-color);
+    border-radius: 0.5rem;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.start-panel__title {
+    font-size: 1.8rem;
+    margin: 0;
+    margin-bottom: 1rem;
+    padding-block: 1rem 2rem;
+    text-align: center;
+}
+
+.start-panel__desc {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.start-panel__methods {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+@media screen and (max-width: 680px) {
+    .start-panel__methods {
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .start-panel__desc {
+        text-align: center;
+    }
+}

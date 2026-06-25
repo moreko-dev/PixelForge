@@ -1,0 +1,21 @@
+.header-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    max-width: 600px;
+    height: 52px;
+    width: 100%;
+    border-radius: 25px;
+    background-color: var(--container-background);
+    border: 1px solid var(--main-border-color);
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+}
+
+.header-container__title {
+    font-size: 1.5rem;
+    color: var(--root-color);
+}
