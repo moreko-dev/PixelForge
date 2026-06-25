@@ -58,7 +58,7 @@ The goal of this project is to provide a light-weight image editing experience d
 
 ## 🚀 Live Demo
 
-https://demo.demo
+https://pixel-forge-indol.vercel.app/
 
 ## 🛠️ Technologies
 
