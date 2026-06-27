@@ -1,0 +1,32 @@
+The next PixelForge update:
+
+features:
+
+- Improve 'StartPanel' UX
+- Improve 'Layer section' UX
+- Auto open layer properties panel (On add & On select)
+- Select, drag and resize elements with handlers
+- Canvas resize with handlers
+- Keyboard shortcuts
+- Crop tool for Canvas and images
+- Gradient support
+- New shapes support
+
+bugs:
+
+- Fix scrolling in Canvas section
+- Fix line tool
+
+roadmap:
+
+- Improve 'StartPanel' UX
+- Improve 'Layer section' UX
+- Fix scrolling in Canvas section
+- Fix line tool
+- Select, drag and resize elements with handlers
+- Canvas resize with handlers
+- Auto open layer properties panel (On add & On select)
+- Keyboard shortcuts
+- Crop tool for Canvas and images
+- Gradient support
+- New shapes
