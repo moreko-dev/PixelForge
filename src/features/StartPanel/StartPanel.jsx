@@ -1,8 +1,8 @@
 import "./StartPanel.css";
-import "./components/shared.css";
+import EmptyDocumentMethod from "./components/EmptyDocumentMethod/EmptyDocumentMethod";
 import ImportImageMethod from "./components/ImportImageMethod/ImportImageMethod";
 import ImportProjectMethod from "./components/ImportProjectMethod/ImportProjectMethod";
-import EmptyDocumentMethod from "./components/EmptyDocumentMethod/EmptyDocumentMethod";
+import "./components/shared.css";
 
 function StartPanel() {
     return (
@@ -10,10 +10,12 @@ function StartPanel() {
             <h1 className="start-panel__title">
                 Welcome to <span className="animational-text">PixelForge</span>
             </h1>
-            <span className="start-panel__desc desc">Select how to start!</span>
+            <span className="start-panel__desc">
+                Create a new project or continue where you left off
+            </span>
             <div className="start-panel__methods">
-                <EmptyDocumentMethod />
                 <ImportImageMethod />
+                <EmptyDocumentMethod />
                 <ImportProjectMethod />
             </div>
         </div>

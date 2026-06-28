@@ -1,9 +1,9 @@
 import { useContext, useRef } from "react";
 import toast from "react-hot-toast";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { DocumentContext } from "../../../../contexts/DocumentContext";
 import { defaultFilterValues, layersType } from "../../../../data/Constants";
 import { randomID } from "../../../../utils/Functions";
-import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 
 function ImportImageMethod() {
     const { documentState, setDocumentState } = useContext(DocumentContext);
@@ -76,11 +76,16 @@ function ImportImageMethod() {
     return (
         <>
             <button
-                className="start-panel__method-button"
+                className="start-panel__method-button secondary"
                 onClick={importImageButtonHandler}
             >
                 <MdOutlineAddPhotoAlternate />
-                Import image to start editing
+                <span className="start-panel__method-button-title">
+                    Import image
+                </span>
+                <span className="start-panel__method-button-desc">
+                    Import an image to edit
+                </span>
             </button>
             <input
                 type="file"
