@@ -7,8 +7,13 @@ import "./DocumentViewContainer.css";
 function DocumentViewContainer() {
     const draggedElementRef = useRef(null);
     const offsetRef = useRef({ x: 0, y: 0 });
-    const { documentState, setDocumentState, documentCanvasRef, isDrawing } =
-        useContext(DocumentContext);
+    const {
+        documentState,
+        setDocumentState,
+        documentCanvasRef,
+        documentViewContainerRef,
+        isDrawing,
+    } = useContext(DocumentContext);
 
     useEffect(() => {
         const canvasContext = documentCanvasRef.current.getContext("2d");
@@ -181,7 +186,7 @@ function DocumentViewContainer() {
     }, [documentState]);
 
     return (
-        <div className="document-view-container scrollable">
+        <div className="document-view-container" ref={documentViewContainerRef}>
             <canvas
                 id="canvas"
                 className="document-view-canvas"

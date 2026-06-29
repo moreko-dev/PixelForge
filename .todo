@@ -3,7 +3,6 @@ The next PixelForge update:
 features:
 
 - Improve 'StartPanel' UX
-- Improve 'Layer section' UX
 - Auto open layer properties panel (On add & On select)
 - Select, drag and resize elements with handlers
 - Canvas resize with handlers
@@ -19,9 +18,8 @@ bugs:
 
 roadmap:
 
-- Improve 'StartPanel' UX
-- Improve 'Layer section' UX
-- Fix scrolling in Canvas section
+- Improve 'StartPanel' UX ✅
+- Fix scrolling in Canvas section ✅
 - Fix line tool
 - Select, drag and resize elements with handlers
 - Canvas resize with handlers

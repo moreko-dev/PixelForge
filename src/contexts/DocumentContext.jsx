@@ -10,6 +10,7 @@ function DocumentProvider({ children }) {
         layers: [],
     });
     const documentCanvasRef = useRef(null);
+    const documentViewContainerRef = useRef(null);
     const isDrawing = useRef(false);
 
     return (
@@ -18,6 +19,7 @@ function DocumentProvider({ children }) {
                 documentState,
                 setDocumentState,
                 documentCanvasRef,
+                documentViewContainerRef,
                 isDrawing,
             }}
         >

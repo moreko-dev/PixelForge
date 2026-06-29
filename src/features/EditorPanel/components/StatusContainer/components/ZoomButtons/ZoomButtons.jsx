@@ -10,7 +10,8 @@ import "./ZoomButtons.css";
 function ZoomButtons() {
     const [zoomValue, setZoomValue] = useState(100);
     const { saveNewChange } = useContext(UndoRedoContext);
-    const { documentState, setDocumentState } = useContext(DocumentContext);
+    const { documentState, setDocumentState, documentViewContainerRef } =
+        useContext(DocumentContext);
 
     const updateZoomValue = (newZoom) => {
         saveNewChange();
@@ -24,6 +25,9 @@ function ZoomButtons() {
                 },
             },
         });
+        documentViewContainerRef.current.style.display = "none";
+        documentViewContainerRef.current.offsetHeight;
+        documentViewContainerRef.current.style.display = "";
     };
 
     const zoomInButtonHandler = () => {
