@@ -1,11 +1,12 @@
 import { useContext, useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 import { DocumentContext } from "../../../../contexts/DocumentContext";
 import { filtersObj, layersType, shapeTypes } from "../../../../data/Constants";
 import { deg2Rad } from "./../../../../utils/Functions";
+import { getMousePosition, hitTest } from "./../../../../utils/Utils";
 import "./DocumentViewContainer.css";
 
 function DocumentViewContainer() {
-    const draggedElementRef = useRef(null);
     const offsetRef = useRef({ x: 0, y: 0 });
     const {
         documentState,
@@ -176,6 +177,10 @@ function DocumentViewContainer() {
                     canvasContext.fill();
                     canvasContext.stroke();
                     canvasContext.closePath();
+                } else {
+                    toast.error(
+                        `Unknown shape type! [${shapeProperties.type}]`,
+                    );
                 }
             } else {
                 toast.error(`Unknown layer type! [${layer.id}: ${layerType}]`);
@@ -184,6 +189,86 @@ function DocumentViewContainer() {
             canvasContext.restore();
         }
     }, [documentState]);
+
+    const canvasClickHandler = (event) => {
+        const { x, y } = getMousePosition(documentCanvasRef.current, event);
+        documentState.layers.forEach((item) => {
+            const layerProps = item.properties;
+            let layerX, layerY, layerWidth, layerHeight;
+
+            if (item.type === layersType.IMAGE_LAYER) {
+                layerX = layerProps.x;
+                layerY = layerProps.y;
+                layerWidth = layerProps.width;
+                layerHeight = layerProps.height;
+            } else if (item.type === layersType.TEXT_LAYER) {
+                const context = documentCanvasRef.current.getContext("2d");
+                context.font = `${layerProps.fontSize}px ${layerProps.fontFamily}`;
+                const metrics = context.measureText(layerProps.value);
+                layerX = layerProps.x;
+                layerY = layerProps.y;
+                layerWidth = metrics.width;
+                layerHeight =
+                    !metrics.actualBoundingBoxAscent ||
+                    !metrics.actualBoundingBoxDescent
+                        ? metrics.actualBoundingBoxAscent +
+                          metrics.actualBoundingBoxDescent
+                        : layerProps.fontSize * 1.2;
+            } else if (item.type === layersType.SHAPE_LAYER) {
+                if (layerProps.type === shapeTypes.RECT) {
+                    layerX = layerProps.x;
+                    layerY = layerProps.y;
+                    layerWidth = layerProps.width;
+                    layerHeight = layerProps.height;
+                } else if (layerProps.type === shapeTypes.LINE) {
+                    if (
+                        layerProps.sy > layerProps.ey &&
+                        layerProps.sx < layerProps.ex
+                    ) {
+                        layerX = layerProps.sx;
+                        layerHeight = layerProps.sy - layerProps.ey;
+                        layerY = layerProps.sy - layerHeight;
+                        layerWidth =
+                            layerProps.sx + (layerProps.ex - layerProps.sx);
+                    } else if (
+                        layerProps.sy > layerProps.ey &&
+                        layerProps.sx > layerProps.ex
+                    ) {
+                        layerX = layerProps.ex;
+                        layerY = layerProps.ey;
+                        layerWidth =
+                            layerProps.ex + (layerProps.sx - layerProps.ex);
+                        layerHeight =
+                            layerProps.ey + (layerProps.sy - layerProps.ey);
+                    } else if (
+                        layerProps.sx > layerProps.ex &&
+                        layerProps.sy < layerProps.ey
+                    ) {
+                        layerX = layerProps.ex;
+                        layerHeight = layerProps.ey - layerProps.sy;
+                        layerY = layerProps.ey - layerHeight;
+                        layerWidth =
+                            layerProps.ex + (layerProps.sx - layerProps.ex);
+                    } else {
+                        layerX = layerProps.sx;
+                        layerY = layerProps.sy;
+                        layerWidth = layerProps.ex - layerProps.sx;
+                        layerHeight = layerProps.ey - layerProps.sy;
+                    }
+                } else if (layerProps.type === shapeTypes.CIRCLE) {
+                    layerX = layerProps.x - layerProps.radius;
+                    layerY = layerProps.y - layerProps.radius;
+                    layerWidth = layerHeight = layerProps.radius * 2;
+                }
+            } else return;
+
+            if (hitTest(layerX, layerY, layerWidth, layerHeight, x, y)) {
+                console.log(true);
+            } else {
+                console.error(false);
+            }
+        });
+    };
 
     return (
         <div className="document-view-container" ref={documentViewContainerRef}>
@@ -194,6 +279,7 @@ function DocumentViewContainer() {
                 height={documentState.canvas.height ?? 500}
                 style={documentState.canvas.styles ?? {}}
                 ref={documentCanvasRef}
+                onClick={canvasClickHandler}
             ></canvas>
         </div>
     );

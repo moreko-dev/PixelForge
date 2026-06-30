@@ -24,8 +24,8 @@ function LineButton({ activeTool, setActiveTool }) {
     const lineModeMouseMoveHandler = useCallback((event) => {
         if (!isDragging.current) return;
         const { x, y } = getMousePosition(documentCanvasRef.current, event);
-        const context = documentCanvasRef.current.getContext("2d");
         [lineRef.current.ex, lineRef.current.ey] = [x, y];
+        const context = documentCanvasRef.current.getContext("2d");
         context.clearRect(
             0,
             0,
@@ -49,6 +49,7 @@ function LineButton({ activeTool, setActiveTool }) {
             type: layersType.SHAPE_LAYER,
             properties: {
                 ...defaultShapeValues,
+                type: TOOL_NAME,
                 sx: lineRef.current.sx,
                 sy: lineRef.current.sy,
                 ex: lineRef.current.ex,

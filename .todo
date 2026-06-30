@@ -20,7 +20,7 @@ roadmap:
 
 - Improve 'StartPanel' UX ✅
 - Fix scrolling in Canvas section ✅
-- Fix line tool
+- Fix line tool ✅
 - Select, drag and resize elements with handlers
 - Canvas resize with handlers
 - Auto open layer properties panel (On add & On select)
