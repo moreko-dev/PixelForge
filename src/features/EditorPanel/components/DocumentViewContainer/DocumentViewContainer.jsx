@@ -192,7 +192,9 @@ function DocumentViewContainer() {
 
     const canvasClickHandler = (event) => {
         const { x, y } = getMousePosition(documentCanvasRef.current, event);
-        documentState.layers.forEach((item) => {
+
+        for (let i = documentState.layers.length - 1; i >= 0; i--) {
+            const item = documentState.layers[i];
             const layerProps = item.properties;
             let layerX, layerY, layerWidth, layerHeight;
 
@@ -263,11 +265,10 @@ function DocumentViewContainer() {
             } else return;
 
             if (hitTest(layerX, layerY, layerWidth, layerHeight, x, y)) {
-                console.log(true);
-            } else {
-                console.error(false);
+                console.log(item);
+                return;
             }
-        });
+        }
     };
 
     return (
