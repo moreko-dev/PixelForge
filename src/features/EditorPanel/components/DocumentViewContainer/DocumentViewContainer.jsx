@@ -3,7 +3,11 @@ import toast from "react-hot-toast";
 import { DocumentContext } from "../../../../contexts/DocumentContext";
 import { filtersObj, layersType, shapeTypes } from "../../../../data/Constants";
 import { deg2Rad } from "./../../../../utils/Functions";
-import { getMousePosition, hitTest } from "./../../../../utils/Utils";
+import {
+    getLayerBounds,
+    getMousePosition,
+    hitTest,
+} from "./../../../../utils/Utils";
 import "./DocumentViewContainer.css";
 
 function DocumentViewContainer() {
@@ -140,14 +144,14 @@ function DocumentViewContainer() {
                 if (shapeProperties.type === shapeTypes.RECT) {
                     // Render rect
                     canvasContext.fillRect(
-                        shapeProperties.x,
-                        shapeProperties.y,
+                        shapeProperties.sx,
+                        shapeProperties.sy,
                         shapeProperties.width,
                         shapeProperties.height,
                     );
                     canvasContext.strokeRect(
-                        shapeProperties.x,
-                        shapeProperties.y,
+                        shapeProperties.sx,
+                        shapeProperties.sy,
                         shapeProperties.width,
                         shapeProperties.height,
                     );
@@ -217,46 +221,19 @@ function DocumentViewContainer() {
                           metrics.actualBoundingBoxDescent
                         : layerProps.fontSize * 1.2;
             } else if (item.type === layersType.SHAPE_LAYER) {
-                if (layerProps.type === shapeTypes.RECT) {
-                    layerX = layerProps.x;
-                    layerY = layerProps.y;
-                    layerWidth = layerProps.width;
-                    layerHeight = layerProps.height;
-                } else if (layerProps.type === shapeTypes.LINE) {
-                    if (
-                        layerProps.sy > layerProps.ey &&
-                        layerProps.sx < layerProps.ex
-                    ) {
-                        layerX = layerProps.sx;
-                        layerHeight = layerProps.sy - layerProps.ey;
-                        layerY = layerProps.sy - layerHeight;
-                        layerWidth =
-                            layerProps.sx + (layerProps.ex - layerProps.sx);
-                    } else if (
-                        layerProps.sy > layerProps.ey &&
-                        layerProps.sx > layerProps.ex
-                    ) {
-                        layerX = layerProps.ex;
-                        layerY = layerProps.ey;
-                        layerWidth =
-                            layerProps.ex + (layerProps.sx - layerProps.ex);
-                        layerHeight =
-                            layerProps.ey + (layerProps.sy - layerProps.ey);
-                    } else if (
-                        layerProps.sx > layerProps.ex &&
-                        layerProps.sy < layerProps.ey
-                    ) {
-                        layerX = layerProps.ex;
-                        layerHeight = layerProps.ey - layerProps.sy;
-                        layerY = layerProps.ey - layerHeight;
-                        layerWidth =
-                            layerProps.ex + (layerProps.sx - layerProps.ex);
-                    } else {
-                        layerX = layerProps.sx;
-                        layerY = layerProps.sy;
-                        layerWidth = layerProps.ex - layerProps.sx;
-                        layerHeight = layerProps.ey - layerProps.sy;
-                    }
+                if (
+                    [shapeTypes.LINE, shapeTypes.RECT].includes(layerProps.type)
+                ) {
+                    const layerBounds = getLayerBounds(
+                        layerProps.sx,
+                        layerProps.sy,
+                        layerProps.ex,
+                        layerProps.ey,
+                    );
+                    layerX = layerBounds.x;
+                    layerY = layerBounds.y;
+                    layerWidth = layerBounds.w;
+                    layerHeight = layerBounds.h;
                 } else if (layerProps.type === shapeTypes.CIRCLE) {
                     layerX = layerProps.x - layerProps.radius;
                     layerY = layerProps.y - layerProps.radius;

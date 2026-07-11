@@ -8,7 +8,7 @@ import { getMousePosition } from "../../../../../utils/Utils";
 function RectangleButton({ activeTool, setActiveTool }) {
     const TOOL_NAME = "rect";
     const isDragging = useRef(false);
-    const rectangleRef = useRef({ x: 0, y: 0, w: 0, h: 0 });
+    const rectangleRef = useRef({ sx: 0, sy: 0, ex: 0, ey: 0, w: 0, h: 0 });
     const { documentState, setDocumentState, documentCanvasRef, isDrawing } =
         useContext(DocumentContext);
 
@@ -16,7 +16,7 @@ function RectangleButton({ activeTool, setActiveTool }) {
         isDrawing.current = true;
         isDragging.current = true;
         const { x, y } = getMousePosition(documentCanvasRef.current, event);
-        [rectangleRef.current.x, rectangleRef.current.y] = [x, y];
+        [rectangleRef.current.sx, rectangleRef.current.sy] = [x, y];
         const context = documentCanvasRef.current.getContext("2d");
         context.save();
     }, []);
@@ -27,9 +27,10 @@ function RectangleButton({ activeTool, setActiveTool }) {
         const context = documentCanvasRef.current.getContext("2d");
         context.save();
         [rectangleRef.current.w, rectangleRef.current.h] = [
-            x - rectangleRef.current.x,
-            y - rectangleRef.current.y,
+            x - rectangleRef.current.sx,
+            y - rectangleRef.current.sy,
         ];
+        [rectangleRef.current.ex, rectangleRef.current.ey] = [x, y];
         context.clearRect(
             0,
             0,
@@ -37,8 +38,8 @@ function RectangleButton({ activeTool, setActiveTool }) {
             documentCanvasRef.current.height,
         );
         context.strokeRect(
-            rectangleRef.current.x,
-            rectangleRef.current.y,
+            rectangleRef.current.sx,
+            rectangleRef.current.sy,
             rectangleRef.current.w,
             rectangleRef.current.h,
         );
@@ -55,8 +56,10 @@ function RectangleButton({ activeTool, setActiveTool }) {
             properties: {
                 ...defaultShapeValues,
                 type: TOOL_NAME,
-                x: rectangleRef.current.x,
-                y: rectangleRef.current.y,
+                sx: rectangleRef.current.sx,
+                sy: rectangleRef.current.sy,
+                ex: rectangleRef.current.ex,
+                ey: rectangleRef.current.ey,
                 width: rectangleRef.current.w,
                 height: rectangleRef.current.h,
             },
@@ -65,7 +68,7 @@ function RectangleButton({ activeTool, setActiveTool }) {
             ...prev,
             layers: [...prev.layers, newLayer],
         }));
-        rectangleRef.current = { x: 0, y: 0, w: 0, h: 0 };
+        rectangleRef.current = { sx: 0, sy: 0, ex: 0, ey: 0, w: 0, h: 0 };
     }, []);
 
     useEffect(() => {
