@@ -3,7 +3,8 @@ import { DocumentContext } from "../../../../../../../../../../../../../contexts
 import { UndoRedoContext } from "../../../../../../../../../../../../../contexts/UndoRedoContext";
 
 function ImageDimension({ layerID }) {
-    const { documentState, setDocumentState } = useContext(DocumentContext);
+    const { documentState, setDocumentState, setHandlerNeedsUpdate } =
+        useContext(DocumentContext);
     const { saveNewChange } = useContext(UndoRedoContext);
     let layerProps = documentState.layers.find(
         (item) => item.id === layerID,
@@ -19,11 +20,16 @@ function ImageDimension({ layerID }) {
                 ...layersArray[layerIndex].properties,
                 [name]: value,
             },
+            layer: {
+                ...layersArray[layerIndex].layer,
+                [name]: value,
+            },
         });
         setDocumentState({
             ...documentState,
             layers: layersArray,
         });
+        setHandlerNeedsUpdate((prev) => !prev);
         layerProps = layersArray[layerIndex].properties;
     };
 

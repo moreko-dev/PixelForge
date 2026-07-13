@@ -37,6 +37,12 @@ function ImportImageButton() {
                         {
                             id: layerID,
                             type: layersType.IMAGE_LAYER,
+                            layer: {
+                                x: 0,
+                                y: 0,
+                                width: image.width,
+                                height: image.height,
+                            },
                             properties: {
                                 image: image,
                                 src: image.src,

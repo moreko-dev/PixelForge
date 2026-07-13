@@ -3,7 +3,7 @@ import { PiRectangle } from "react-icons/pi";
 import { DocumentContext } from "../../../../../contexts/DocumentContext";
 import { defaultShapeValues, layersType } from "../../../../../data/Constants";
 import { randomID } from "../../../../../utils/Functions";
-import { getMousePosition } from "../../../../../utils/Utils";
+import { getLayerBounds, getMousePosition } from "../../../../../utils/Utils";
 
 function RectangleButton({ activeTool, setActiveTool }) {
     const TOOL_NAME = "rect";
@@ -50,6 +50,12 @@ function RectangleButton({ activeTool, setActiveTool }) {
         isDrawing.current = false;
         isDragging.current = false;
         const layerID = randomID(6);
+        const { x, y, w, h } = getLayerBounds(
+            rectangleRef.current.sx,
+            rectangleRef.current.sy,
+            rectangleRef.current.ex,
+            rectangleRef.current.ey,
+        );
         const newLayer = {
             id: layerID,
             type: layersType.SHAPE_LAYER,
@@ -63,6 +69,7 @@ function RectangleButton({ activeTool, setActiveTool }) {
                 width: rectangleRef.current.w,
                 height: rectangleRef.current.h,
             },
+            layer: { x, y, width: w, height: h },
         };
         setDocumentState((prev) => ({
             ...prev,

@@ -59,7 +59,8 @@ function ImagePosition({ layerID }) {
         ],
     ];
 
-    const { documentState, setDocumentState } = useContext(DocumentContext);
+    const { documentState, setDocumentState, setHandlerNeedsUpdate } =
+        useContext(DocumentContext);
     const { saveNewChange } = useContext(UndoRedoContext);
 
     const alignButtonsHandler = (align) => {
@@ -94,11 +95,17 @@ function ImagePosition({ layerID }) {
         layersArray.splice(layerIndex, 1, {
             ...layersArray[layerIndex],
             properties: layerProps,
+            layer: {
+                ...layersArray[layerIndex].layer,
+                x: layerProps.x,
+                y: layerProps.y,
+            },
         });
         setDocumentState({
             ...documentState,
             layers: layersArray,
         });
+        setHandlerNeedsUpdate((prev) => !prev);
     };
 
     return (

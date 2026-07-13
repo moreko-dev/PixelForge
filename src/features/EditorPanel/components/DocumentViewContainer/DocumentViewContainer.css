@@ -1,4 +1,5 @@
 .document-view-container {
+    position: relative;
     width: 100%;
     height: 100%;
     overflow: scroll;
@@ -20,4 +21,19 @@
 
 .document-view-container::-webkit-scrollbar-corner {
     background-color: transparent;
+}
+
+.document-element-handler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    display: block;
+    border: 2px solid var(--root-color);
+    pointer-events: none;
+}
+
+.document-element-handler.hidden {
+    display: none;
 }

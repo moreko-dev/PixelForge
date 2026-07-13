@@ -12,6 +12,8 @@ function DocumentProvider({ children }) {
     const documentCanvasRef = useRef(null);
     const documentViewContainerRef = useRef(null);
     const isDrawing = useRef(false);
+    const [selectedLayer, setSelectedLayer] = useState(null);
+    const [handlerNeedsUpdate, setHandlerNeedsUpdate] = useState(false);
 
     return (
         <DocumentContext.Provider
@@ -21,6 +23,10 @@ function DocumentProvider({ children }) {
                 documentCanvasRef,
                 documentViewContainerRef,
                 isDrawing,
+                selectedLayer,
+                setSelectedLayer,
+                handlerNeedsUpdate,
+                setHandlerNeedsUpdate,
             }}
         >
             {children}

@@ -1,3 +1,5 @@
+import { shapeTypes } from "../../../../../../../../../../../../../data/Constants";
+
 function RectangleProperties({ layerID, layerProps, handler }) {
     return (
         <>
@@ -20,6 +22,7 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                                     value={layerProps[item]}
                                     onChange={(event) =>
                                         handler(
+                                            shapeTypes.RECT,
                                             item,
                                             Number(event.target.value),
                                         )
@@ -47,7 +50,11 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                                 className="property-wrapper__input"
                                 value={layerProps[item]}
                                 onChange={(event) =>
-                                    handler(item, Number(event.target.value))
+                                    handler(
+                                        shapeTypes.CIRCLE,
+                                        item,
+                                        Number(event.target.value),
+                                    )
                                 }
                             />
                         </div>

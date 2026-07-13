@@ -4,8 +4,8 @@ import { DocumentContext } from "../../../../contexts/DocumentContext";
 import { filtersObj, layersType, shapeTypes } from "../../../../data/Constants";
 import { deg2Rad } from "./../../../../utils/Functions";
 import {
-    getLayerBounds,
     getMousePosition,
+    getStartPointOfCanvas,
     hitTest,
 } from "./../../../../utils/Utils";
 import "./DocumentViewContainer.css";
@@ -18,7 +18,11 @@ function DocumentViewContainer() {
         documentCanvasRef,
         documentViewContainerRef,
         isDrawing,
+        selectedLayer,
+        setSelectedLayer,
+        handlerNeedsUpdate,
     } = useContext(DocumentContext);
+    const documentElementHandlerRef = useRef(null);
 
     useEffect(() => {
         const canvasContext = documentCanvasRef.current.getContext("2d");
@@ -200,53 +204,39 @@ function DocumentViewContainer() {
         for (let i = documentState.layers.length - 1; i >= 0; i--) {
             const item = documentState.layers[i];
             const layerProps = item.properties;
-            let layerX, layerY, layerWidth, layerHeight;
-
-            if (item.type === layersType.IMAGE_LAYER) {
-                layerX = layerProps.x;
-                layerY = layerProps.y;
-                layerWidth = layerProps.width;
-                layerHeight = layerProps.height;
-            } else if (item.type === layersType.TEXT_LAYER) {
-                const context = documentCanvasRef.current.getContext("2d");
-                context.font = `${layerProps.fontSize}px ${layerProps.fontFamily}`;
-                const metrics = context.measureText(layerProps.value);
-                layerX = layerProps.x;
-                layerY = layerProps.y;
-                layerWidth = metrics.width;
-                layerHeight =
-                    !metrics.actualBoundingBoxAscent ||
-                    !metrics.actualBoundingBoxDescent
-                        ? metrics.actualBoundingBoxAscent +
-                          metrics.actualBoundingBoxDescent
-                        : layerProps.fontSize * 1.2;
-            } else if (item.type === layersType.SHAPE_LAYER) {
-                if (
-                    [shapeTypes.LINE, shapeTypes.RECT].includes(layerProps.type)
-                ) {
-                    const layerBounds = getLayerBounds(
-                        layerProps.sx,
-                        layerProps.sy,
-                        layerProps.ex,
-                        layerProps.ey,
-                    );
-                    layerX = layerBounds.x;
-                    layerY = layerBounds.y;
-                    layerWidth = layerBounds.w;
-                    layerHeight = layerBounds.h;
-                } else if (layerProps.type === shapeTypes.CIRCLE) {
-                    layerX = layerProps.x - layerProps.radius;
-                    layerY = layerProps.y - layerProps.radius;
-                    layerWidth = layerHeight = layerProps.radius * 2;
-                }
-            } else return;
-
-            if (hitTest(layerX, layerY, layerWidth, layerHeight, x, y)) {
-                console.log(item);
+            const layerBounds = item.layer;
+            if (
+                hitTest(
+                    layerBounds.x,
+                    layerBounds.y,
+                    layerBounds.width,
+                    layerBounds.height,
+                    x,
+                    y,
+                )
+            ) {
+                // console.log(item);
+                setSelectedLayer(item);
                 return;
             }
         }
+        setSelectedLayer(null);
     };
+
+    useEffect(() => {
+        if (selectedLayer) {
+            const { x, y, width, height } = selectedLayer.layer;
+            const canvasBounds = getStartPointOfCanvas(
+                documentCanvasRef.current,
+            );
+            documentElementHandlerRef.current.style.top = `${canvasBounds.y + y - 5}px`;
+            documentElementHandlerRef.current.style.left = `${canvasBounds.x + x - 5}px`;
+            documentElementHandlerRef.current.style.width = `${width}px`;
+            documentElementHandlerRef.current.style.height = `${height}px`;
+            documentElementHandlerRef.current.style.scale =
+                documentState.canvas.styles.scale ?? 1;
+        }
+    }, [selectedLayer, handlerNeedsUpdate]);
 
     return (
         <div className="document-view-container" ref={documentViewContainerRef}>
@@ -259,6 +249,10 @@ function DocumentViewContainer() {
                 ref={documentCanvasRef}
                 onClick={canvasClickHandler}
             ></canvas>
+            <div
+                className={`document-element-handler ${selectedLayer ? "" : "hidden"}`}
+                ref={documentElementHandlerRef}
+            ></div>
         </div>
     );
 }

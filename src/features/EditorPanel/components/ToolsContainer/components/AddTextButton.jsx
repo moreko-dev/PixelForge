@@ -4,8 +4,8 @@ import { MdOutlineTextFields } from "react-icons/md";
 import Modal from "../../../../../components/Modal/Modal";
 import { DocumentContext } from "../../../../../contexts/DocumentContext";
 import { UndoRedoContext } from "../../../../../contexts/UndoRedoContext";
-import { defaultTextValues, layersType } from "../../../../../data/Constants";
 import { randomID } from "../../../../../utils/Functions";
+import { getTextLayerBounds } from "../../../../../utils/Utils";
 
 function AddTextModalContent({ value, onChange }) {
     return (
@@ -26,7 +26,8 @@ function AddTextButton() {
     const [addTextModalShow, setAddTextModalShow] = useState(false);
     const [newText, setNewText] = useState("");
     const { saveNewChange } = useContext(UndoRedoContext);
-    const { documentState, setDocumentState } = useContext(DocumentContext);
+    const { documentCanvasRef, documentState, setDocumentState } =
+        useContext(DocumentContext);
 
     const addTextButtonHandler = () => {
         setAddTextModalShow(true);
@@ -44,18 +45,23 @@ function AddTextButton() {
         }
         saveNewChange();
         const layerID = randomID(6);
+        const layer = {
+            id: layerID,
+            type: layersType.TEXT_LAYER,
+            properties: {
+                ...defaultTextValues,
+                value: newText,
+            },
+        };
+        const { x, y, w, h } = getTextLayerBounds(
+            documentCanvasRef.current,
+            layer.properties,
+        );
         setDocumentState({
             ...documentState,
             layers: [
                 ...documentState.layers,
-                {
-                    id: layerID,
-                    type: layersType.TEXT_LAYER,
-                    properties: {
-                        ...defaultTextValues,
-                        value: newText,
-                    },
-                },
+                { ...layer, layer: { x, y, width: w, height: h } },
             ],
         });
         addTextModalOnClose();
