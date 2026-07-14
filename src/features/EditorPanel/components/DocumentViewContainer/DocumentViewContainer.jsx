@@ -18,9 +18,8 @@ function DocumentViewContainer() {
         documentCanvasRef,
         documentViewContainerRef,
         isDrawing,
-        selectedLayer,
-        setSelectedLayer,
-        handlerNeedsUpdate,
+        selectedLayerID,
+        setSelectedLayerID,
     } = useContext(DocumentContext);
     const documentElementHandlerRef = useRef(null);
 
@@ -198,6 +197,24 @@ function DocumentViewContainer() {
         }
     }, [documentState]);
 
+    useEffect(() => {
+        if (selectedLayerID) {
+            const selectedLayer = documentState.layers.find(
+                (item) => item.id === selectedLayerID,
+            );
+            const { x, y, width, height } = selectedLayer.layer;
+            const canvasBounds = getStartPointOfCanvas(
+                documentCanvasRef.current,
+            );
+            documentElementHandlerRef.current.style.top = `${canvasBounds.y + y - 5}px`;
+            documentElementHandlerRef.current.style.left = `${canvasBounds.x + x - 5}px`;
+            documentElementHandlerRef.current.style.width = `${width}px`;
+            documentElementHandlerRef.current.style.height = `${height}px`;
+            documentElementHandlerRef.current.style.scale =
+                documentState.canvas.styles.scale ?? 1;
+        }
+    }, [selectedLayerID, documentState]);
+
     const canvasClickHandler = (event) => {
         const { x, y } = getMousePosition(documentCanvasRef.current, event);
 
@@ -216,27 +233,12 @@ function DocumentViewContainer() {
                 )
             ) {
                 // console.log(item);
-                setSelectedLayer(item);
+                setSelectedLayerID(item.id);
                 return;
             }
         }
-        setSelectedLayer(null);
+        setSelectedLayerID(null);
     };
-
-    useEffect(() => {
-        if (selectedLayer) {
-            const { x, y, width, height } = selectedLayer.layer;
-            const canvasBounds = getStartPointOfCanvas(
-                documentCanvasRef.current,
-            );
-            documentElementHandlerRef.current.style.top = `${canvasBounds.y + y - 5}px`;
-            documentElementHandlerRef.current.style.left = `${canvasBounds.x + x - 5}px`;
-            documentElementHandlerRef.current.style.width = `${width}px`;
-            documentElementHandlerRef.current.style.height = `${height}px`;
-            documentElementHandlerRef.current.style.scale =
-                documentState.canvas.styles.scale ?? 1;
-        }
-    }, [selectedLayer, handlerNeedsUpdate]);
 
     return (
         <div className="document-view-container" ref={documentViewContainerRef}>
@@ -250,7 +252,7 @@ function DocumentViewContainer() {
                 onClick={canvasClickHandler}
             ></canvas>
             <div
-                className={`document-element-handler ${selectedLayer ? "" : "hidden"}`}
+                className={`document-element-handler ${selectedLayerID ? "" : "hidden"}`}
                 ref={documentElementHandlerRef}
             ></div>
         </div>

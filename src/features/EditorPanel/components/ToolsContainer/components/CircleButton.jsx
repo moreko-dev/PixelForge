@@ -3,7 +3,11 @@ import { PiCircle } from "react-icons/pi";
 import { DocumentContext } from "../../../../../contexts/DocumentContext";
 import { defaultShapeValues, layersType } from "../../../../../data/Constants";
 import { randomID } from "../../../../../utils/Functions";
-import { getMousePosition, getRadius } from "../../../../../utils/Utils";
+import {
+    getCircleLayerBounds,
+    getMousePosition,
+    getRadius,
+} from "../../../../../utils/Utils";
 
 function CircleButton({ activeTool, setActiveTool }) {
     const TOOL_NAME = "circle";
@@ -64,6 +68,13 @@ function CircleButton({ activeTool, setActiveTool }) {
                 y: circleRef.current.y,
                 radius: circleRef.current.radius,
             },
+        };
+        const { x, y, w, h } = getCircleLayerBounds(newLayer.properties);
+        newLayer.layer = {
+            x,
+            y,
+            width: w,
+            height: h,
         };
         setDocumentState((prev) => ({
             ...prev,

@@ -7,13 +7,13 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                 <h3 className="property-section__title">Shape Dimension</h3>
                 <div className="property-section__content">
                     <div className="property-wrapper__sbs">
-                        {["x", "y"].map((item, index) => (
+                        {["sx", "sy"].map((item, index) => (
                             <div key={index} className="property-wrapper">
                                 <label
                                     htmlFor={`shape-${item}-${layerID}`}
                                     className="property-wrapper__label"
                                 >
-                                    {item}:
+                                    {item.charAt(1)}:
                                 </label>
                                 <input
                                     type="number"

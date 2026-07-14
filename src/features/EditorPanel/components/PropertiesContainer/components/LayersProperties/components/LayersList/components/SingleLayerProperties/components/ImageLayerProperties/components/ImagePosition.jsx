@@ -59,7 +59,7 @@ function ImagePosition({ layerID }) {
         ],
     ];
 
-    const { documentState, setDocumentState, setHandlerNeedsUpdate } =
+    const { documentState, setDocumentState } =
         useContext(DocumentContext);
     const { saveNewChange } = useContext(UndoRedoContext);
 
@@ -105,7 +105,6 @@ function ImagePosition({ layerID }) {
             ...documentState,
             layers: layersArray,
         });
-        setHandlerNeedsUpdate((prev) => !prev);
     };
 
     return (

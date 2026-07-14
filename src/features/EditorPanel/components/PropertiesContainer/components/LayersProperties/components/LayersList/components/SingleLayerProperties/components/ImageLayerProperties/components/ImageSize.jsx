@@ -3,7 +3,7 @@ import { DocumentContext } from "../../../../../../../../../../../../../contexts
 import { UndoRedoContext } from "../../../../../../../../../../../../../contexts/UndoRedoContext";
 
 function ImageSize({ layerID }) {
-    const { documentState, setDocumentState, setHandlerNeedsUpdate } =
+    const { documentState, setDocumentState } =
         useContext(DocumentContext);
     const { saveNewChange } = useContext(UndoRedoContext);
     let layerProps = documentState.layers.find(
@@ -29,7 +29,6 @@ function ImageSize({ layerID }) {
             ...documentState,
             layers: layersArray,
         });
-        setHandlerNeedsUpdate((prev) => !prev);
         layerProps = layersArray[layerIndex].properties;
     };
 

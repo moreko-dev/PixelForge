@@ -9,12 +9,8 @@ import TextValue from "./components/TextValue";
 
 function TextLayerProperties({ layerID }) {
     const { saveNewChange } = useContext(UndoRedoContext);
-    const {
-        documentCanvasRef,
-        documentState,
-        setDocumentState,
-        setHandlerNeedsUpdate,
-    } = useContext(DocumentContext);
+    const { documentCanvasRef, documentState, setDocumentState } =
+        useContext(DocumentContext);
     let layerProps = documentState.layers.find(
         (item) => item.id === layerID,
     ).properties;
@@ -47,7 +43,6 @@ function TextLayerProperties({ layerID }) {
             ...documentState,
             layers: layersArray,
         });
-        setHandlerNeedsUpdate((prev) => !prev);
         layerProps = layersArray[layerIndex].properties;
     };
 

@@ -13,8 +13,7 @@ import ShapeShadow from "./components/ShapeShadow";
 import ShapeStrokeStyle from "./components/ShapeStrokeStyle";
 
 function ShapeLayerProperties({ layerID, layerProperties }) {
-    const { documentState, setDocumentState, setHandlerNeedsUpdate } =
-        useContext(DocumentContext);
+    const { documentState, setDocumentState } = useContext(DocumentContext);
     const { saveNewChange } = useContext(UndoRedoContext);
     let layerProps = documentState.layers.find(
         (item) => item.id === layerID,
@@ -51,7 +50,6 @@ function ShapeLayerProperties({ layerID, layerProperties }) {
             ...documentState,
             layers: layersArray,
         });
-        setHandlerNeedsUpdate((prev) => !prev);
         layerProps = layersArray[layerIndex].properties;
     };
 

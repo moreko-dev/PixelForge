@@ -4,6 +4,7 @@ import { MdOutlineTextFields } from "react-icons/md";
 import Modal from "../../../../../components/Modal/Modal";
 import { DocumentContext } from "../../../../../contexts/DocumentContext";
 import { UndoRedoContext } from "../../../../../contexts/UndoRedoContext";
+import { defaultTextValues, layersType } from "../../../../../data/Constants";
 import { randomID } from "../../../../../utils/Functions";
 import { getTextLayerBounds } from "../../../../../utils/Utils";
 

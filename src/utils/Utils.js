@@ -82,7 +82,7 @@ export function getLayerBounds(sx, sy, ex, ey) {
 }
 
 export function getTextLayerBounds(canvas, layerProps) {
-    const context = cnavas.getContext("2d");
+    const context = canvas.getContext("2d");
     context.font = `${layerProps.fontSize}px ${layerProps.fontFamily}`;
     const metrics = context.measureText(layerProps.value);
     let layerX, layerY, layerWidth, layerHeight;
