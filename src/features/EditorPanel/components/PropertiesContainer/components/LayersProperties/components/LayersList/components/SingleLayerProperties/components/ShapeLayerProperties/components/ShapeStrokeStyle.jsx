@@ -1,4 +1,4 @@
-function ShapeStrokeStyle({ layerID, layerProps, handler }) {
+function ShapeStrokeStyle({ layerID, layerProps, handler, shapeType }) {
     return (
         <div className="property-section">
             <h3 className="property-section__title">Shape Stroke</h3>
@@ -16,7 +16,9 @@ function ShapeStrokeStyle({ layerID, layerProps, handler }) {
                         className="property-wrapper__input"
                         value={layerProps.lineWidth}
                         onChange={(event) =>
-                            handler("lineWidth", Number(event.target.value))
+                            handler(shapeType, {
+                                lineWidth: Number(event.target.value),
+                            })
                         }
                     />
                 </div>
@@ -33,7 +35,9 @@ function ShapeStrokeStyle({ layerID, layerProps, handler }) {
                         className="property-wrapper__input"
                         value={layerProps.strokeStyle}
                         onChange={(event) =>
-                            handler("strokeStyle", event.target.value)
+                            handler(shapeType, {
+                                strokeStyle: event.target.value,
+                            })
                         }
                     />
                 </div>

@@ -7,10 +7,8 @@ import {
     getLayerBounds,
 } from "../../../../../../../../../../../../utils/Utils";
 import CircleProperties from "./components/CircleProperties";
+import LineProperties from "./components/LineProperties";
 import RectangleProperties from "./components/RectangleProperties";
-import ShapeFillStyle from "./components/ShapeFillStyle";
-import ShapeShadow from "./components/ShapeShadow";
-import ShapeStrokeStyle from "./components/ShapeStrokeStyle";
 
 function ShapeLayerProperties({ layerID, layerProperties }) {
     const { documentState, setDocumentState } = useContext(DocumentContext);
@@ -19,7 +17,7 @@ function ShapeLayerProperties({ layerID, layerProperties }) {
         (item) => item.id === layerID,
     ).properties;
 
-    const shapeLayerPropertiesHandler = (type, key, value) => {
+    const shapeLayerPropertiesHandler = (type, keyValues) => {
         saveNewChange();
         const layersArray = documentState.layers.slice();
         const layerIndex = layersArray.findIndex((item) => item.id === layerID);
@@ -27,11 +25,11 @@ function ShapeLayerProperties({ layerID, layerProperties }) {
             ...layersArray[layerIndex],
             properties: {
                 ...layersArray[layerIndex].properties,
-                [key]: value,
+                ...keyValues,
             },
         };
         const { x, y, w, h } =
-            type === shapeTypes.RECT
+            type === shapeTypes.RECT || type === shapeTypes.LINE
                 ? getLayerBounds(
                       layer.properties.sx,
                       layer.properties.sy,
@@ -55,35 +53,27 @@ function ShapeLayerProperties({ layerID, layerProperties }) {
 
     return (
         <>
-            {layerProperties.type === shapeTypes.RECT && (
+            {layerProperties.type === shapeTypes.RECT ? (
                 <RectangleProperties
                     layerID={layerID}
                     layerProps={layerProps}
                     handler={shapeLayerPropertiesHandler}
                 />
-            )}
-            {layerProperties.type === shapeTypes.CIRCLE && (
+            ) : layerProperties.type === shapeTypes.CIRCLE ? (
                 <CircleProperties
                     layerID={layerID}
                     layerProps={layerProps}
                     handler={shapeLayerPropertiesHandler}
                 />
+            ) : layerProperties.type === shapeTypes.LINE ? (
+                <LineProperties
+                    layerID={layerID}
+                    layerProps={layerProps}
+                    handler={shapeLayerPropertiesHandler}
+                />
+            ) : (
+                <>!Invalid shape type!</>
             )}
-            <ShapeFillStyle
-                layerID={layerID}
-                layerProps={layerProps}
-                handler={shapeLayerPropertiesHandler}
-            />
-            <ShapeStrokeStyle
-                layerID={layerID}
-                layerProps={layerProps}
-                handler={shapeLayerPropertiesHandler}
-            />
-            <ShapeShadow
-                layerID={layerID}
-                layerProps={layerProps}
-                handler={shapeLayerPropertiesHandler}
-            />
         </>
     );
 }

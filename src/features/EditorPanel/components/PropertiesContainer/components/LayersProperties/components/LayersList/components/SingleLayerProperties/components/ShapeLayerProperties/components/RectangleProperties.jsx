@@ -1,6 +1,20 @@
 import { shapeTypes } from "../../../../../../../../../../../../../data/Constants";
+import ShapeFillStyle from "./ShapeFillStyle";
+import ShapeShadow from "./ShapeShadow";
+import ShapeStrokeStyle from "./ShapeStrokeStyle";
 
 function RectangleProperties({ layerID, layerProps, handler }) {
+    const rectangleBoudingHanlder = (event, diffType) => {
+        const prevSValue = diffType === "sx" ? layerProps.sx : layerProps.sy;
+        const newSValue = Number(event.target.value);
+        const sDiff = prevSValue - newSValue;
+        const prevEValue = diffType === "sx" ? layerProps.ex : layerProps.ey;
+        handler(shapeTypes.RECT, {
+            [diffType]: newSValue,
+            [diffType === "sx" ? "ex" : "ey"]: prevEValue - sDiff,
+        });
+    };
+
     return (
         <>
             <div className="property-section">
@@ -21,11 +35,10 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                                     className="property-wrapper__input"
                                     value={layerProps[item]}
                                     onChange={(event) =>
-                                        handler(
-                                            shapeTypes.RECT,
-                                            item,
-                                            Number(event.target.value),
-                                        )
+                                        // handler(shapeTypes.RECT, {
+                                        //     [item]: Number(event.target.value),
+                                        // })
+                                        rectangleBoudingHanlder(event, item)
                                     }
                                 />
                             </div>
@@ -50,17 +63,33 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                                 className="property-wrapper__input"
                                 value={layerProps[item]}
                                 onChange={(event) =>
-                                    handler(
-                                        shapeTypes.CIRCLE,
-                                        item,
-                                        Number(event.target.value),
-                                    )
+                                    handler(shapeTypes.RECT, {
+                                        [item]: Number(event.target.value),
+                                    })
                                 }
                             />
                         </div>
                     ))}
                 </div>
             </div>
+            <ShapeFillStyle
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.RECT}
+            />
+            <ShapeStrokeStyle
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.RECT}
+            />
+            <ShapeShadow
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.RECT}
+            />
         </>
     );
 }

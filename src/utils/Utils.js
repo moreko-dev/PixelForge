@@ -7,8 +7,6 @@ export function checkJSONFileSchema(json) {
 }
 
 export function downloadFile(href, download) {
-    console.log(href, download);
-
     const link = document.createElement("a");
     link.href = href;
     link.download = download;
@@ -56,29 +54,16 @@ export function hitTest(
 }
 
 export function getLayerBounds(sx, sy, ex, ey) {
-    let layerX, layerY, layerWidth, layerHeight;
-    if (sy > ey && sx < ex) {
-        layerX = sx;
-        layerHeight = sy - ey;
-        layerY = sy - layerHeight;
-        layerWidth = sx + (ex - sx);
-    } else if (sy > ey && sx > ex) {
-        layerX = ex;
-        layerY = ey;
-        layerWidth = ex + (sx - ex);
-        layerHeight = ey + (sy - ey);
-    } else if (sx > ex && sy < ey) {
-        layerX = ex;
-        layerHeight = ey - sy;
-        layerY = ey - layerHeight;
-        layerWidth = ex + (sx - ex);
-    } else {
-        layerX = sx;
-        layerY = sy;
-        layerWidth = ex - sx;
-        layerHeight = ey - sy;
-    }
-    return { x: layerX, y: layerY, w: layerWidth, h: layerHeight };
+    const layerX = Math.min(sx, ex);
+    const layerY = Math.min(sy, ey);
+    const layerWidth = Math.abs(ex - sx);
+    const layerHeight = Math.abs(ey - sy);
+    return {
+        x: layerX,
+        y: layerY,
+        w: layerWidth,
+        h: layerHeight,
+    };
 }
 
 export function getTextLayerBounds(canvas, layerProps) {
