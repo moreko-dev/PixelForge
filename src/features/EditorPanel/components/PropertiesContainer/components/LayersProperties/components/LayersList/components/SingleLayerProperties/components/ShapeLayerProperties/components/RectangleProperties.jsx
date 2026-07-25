@@ -4,7 +4,7 @@ import ShapeShadow from "./ShapeShadow";
 import ShapeStrokeStyle from "./ShapeStrokeStyle";
 
 function RectangleProperties({ layerID, layerProps, handler }) {
-    const rectangleBoudingHanlder = (event, diffType) => {
+    const rectangleDimensionHanlder = (event, diffType) => {
         const prevSValue = diffType === "sx" ? layerProps.sx : layerProps.sy;
         const newSValue = Number(event.target.value);
         const sDiff = prevSValue - newSValue;
@@ -35,10 +35,7 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                                     className="property-wrapper__input"
                                     value={layerProps[item]}
                                     onChange={(event) =>
-                                        // handler(shapeTypes.RECT, {
-                                        //     [item]: Number(event.target.value),
-                                        // })
-                                        rectangleBoudingHanlder(event, item)
+                                        rectangleDimensionHanlder(event, item)
                                     }
                                 />
                             </div>
