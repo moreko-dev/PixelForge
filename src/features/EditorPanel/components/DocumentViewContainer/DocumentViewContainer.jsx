@@ -220,6 +220,7 @@ function DocumentViewContainer() {
 
         for (let i = documentState.layers.length - 1; i >= 0; i--) {
             const item = documentState.layers[i];
+            if (item.type === layersType.BRUSH_LAYER) continue;
             const layerProps = item.properties;
             const layerBounds = item.layer;
             if (
@@ -232,7 +233,6 @@ function DocumentViewContainer() {
                     y,
                 )
             ) {
-                // console.log(item);
                 setSelectedLayerID(item.id);
                 return;
             }

@@ -15,6 +15,18 @@ function RectangleProperties({ layerID, layerProps, handler }) {
         });
     };
 
+    const rectangleSizeHandler = (event, diffType) => {
+        const prevValue =
+            diffType === "width" ? layerProps.width : layerProps.height;
+        const newValue = Number(event.target.value);
+        const diff = prevValue - newValue;
+        const prevEValue = diffType === "width" ? layerProps.ex : layerProps.ey;
+        handler(shapeTypes.RECT, {
+            [diffType]: newValue,
+            [diffType === "width" ? "ex" : "ey"]: prevEValue - diff,
+        });
+    };
+
     return (
         <>
             <div className="property-section">
@@ -60,9 +72,7 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                                 className="property-wrapper__input"
                                 value={layerProps[item]}
                                 onChange={(event) =>
-                                    handler(shapeTypes.RECT, {
-                                        [item]: Number(event.target.value),
-                                    })
+                                    rectangleSizeHandler(event, item)
                                 }
                             />
                         </div>
