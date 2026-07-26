@@ -4,6 +4,7 @@ import { DocumentContext } from "../../../../contexts/DocumentContext";
 import { filtersObj, layersType, shapeTypes } from "../../../../data/Constants";
 import { deg2Rad } from "./../../../../utils/Functions";
 import {
+    getDraggedPosition,
     getMousePosition,
     getStartPointOfCanvas,
     hitTest,
@@ -22,6 +23,7 @@ function DocumentViewContainer() {
         setSelectedLayerID,
     } = useContext(DocumentContext);
     const documentElementHandlerRef = useRef(null);
+    const isDragging = useRef(false);
 
     useEffect(() => {
         const canvasContext = documentCanvasRef.current.getContext("2d");
@@ -215,9 +217,9 @@ function DocumentViewContainer() {
         }
     }, [selectedLayerID, documentState]);
 
-    const canvasClickHandler = (event) => {
+    const canvasMouseDownHandler = (event) => {
+        isDragging.current = true;
         const { x, y } = getMousePosition(documentCanvasRef.current, event);
-
         for (let i = documentState.layers.length - 1; i >= 0; i--) {
             const item = documentState.layers[i];
             if (item.type === layersType.BRUSH_LAYER) continue;
@@ -240,6 +242,44 @@ function DocumentViewContainer() {
         setSelectedLayerID(null);
     };
 
+    const canvasMouseMoveHandler = (event) => {
+        if (selectedLayerID && isDragging.current && !isDrawing.current) {
+            const { x, y } = getMousePosition(documentCanvasRef.current, event);
+            let selectedLayer = documentState.layers.find(
+                (item) => item.id === selectedLayerID,
+            );
+            const draggedPosition = getDraggedPosition(
+                x,
+                y,
+                selectedLayer.properties.x,
+                selectedLayer.properties.y,
+            );
+            selectedLayer.properties.x = draggedPosition.x;
+            selectedLayer.properties.y = draggedPosition.y;
+            // selectedLayer = {
+            //     ...selectedLayer,
+            //     properties: {
+            //         ...selectedLayer.properties,
+            //         x: draggedPosition.x,
+            //         y: draggedPosition.y,
+            //     },
+            // };
+            const layerArray = documentState.layers.slice();
+            const layerIndex = layerArray.findIndex(
+                (item) => item.id === selectedLayerID,
+            );
+            layerArray.splice(layerIndex, 1, selectedLayer);
+            setDocumentState({
+                ...documentState,
+                layers: layerArray,
+            });
+        }
+    };
+
+    const canvasMouseUpHandler = () => {
+        isDragging.current = false;
+    };
+
     return (
         <div className="document-view-container" ref={documentViewContainerRef}>
             <canvas
@@ -249,7 +289,9 @@ function DocumentViewContainer() {
                 height={documentState.canvas.height ?? 500}
                 style={documentState.canvas.styles ?? {}}
                 ref={documentCanvasRef}
-                onClick={canvasClickHandler}
+                onMouseDown={canvasMouseDownHandler}
+                onMouseMove={canvasMouseMoveHandler}
+                onMouseUp={canvasMouseUpHandler}
             ></canvas>
             <div
                 className={`document-element-handler ${selectedLayerID ? "" : "hidden"}`}

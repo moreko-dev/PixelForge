@@ -89,3 +89,10 @@ export function getCircleLayerBounds(layerProps) {
     layerWidth = layerHeight = layerProps.radius * 2;
     return { x: layerX, y: layerY, w: layerWidth, h: layerHeight };
 }
+
+export function getDraggedPosition(mouseX, mouseY, elementX, elementY) {
+    return {
+        x: mouseX - elementX,
+        y: mouseY - elementY,
+    };
+}
