@@ -90,9 +90,25 @@ export function getCircleLayerBounds(layerProps) {
     return { x: layerX, y: layerY, w: layerWidth, h: layerHeight };
 }
 
-export function getDraggedPosition(mouseX, mouseY, elementX, elementY) {
+export function getDraggedPosition(deltaX, deltaY, elementX, elementY) {
     return {
-        x: mouseX - elementX,
-        y: mouseY - elementY,
+        x: deltaX + elementX,
+        y: deltaY + elementY,
+    };
+}
+
+export function getRectTypeDraggedPosition(
+    deltaX,
+    deltaY,
+    elementX,
+    elementY,
+    elementEX,
+    elementEY,
+) {
+    return {
+        x: deltaX + elementX,
+        y: deltaY + elementY,
+        ex: deltaX + elementEX,
+        ey: deltaY + elementEY,
     };
 }

@@ -104,3 +104,5 @@ export const shapeTypes = {
 };
 
 export const downloadType = { png: "PNG", jpeg: "JPEG" };
+
+export const HANDLER_BORDER = 4;
