@@ -19,7 +19,6 @@ import {
 import "./DocumentViewContainer.css";
 
 function DocumentViewContainer() {
-    const offsetRef = useRef({ x: 0, y: 0 });
     const {
         documentState,
         setDocumentState,
@@ -370,7 +369,12 @@ function DocumentViewContainer() {
             <div
                 className={`document-element-handler ${selectedLayerID ? "" : "hidden"}`}
                 ref={documentElementHandlerRef}
-            ></div>
+            >
+                <div className="element-handler top"></div>
+                <div className="element-handler right"></div>
+                <div className="element-handler bottom"></div>
+                <div className="element-handler left"></div>
+            </div>
         </div>
     );
 }

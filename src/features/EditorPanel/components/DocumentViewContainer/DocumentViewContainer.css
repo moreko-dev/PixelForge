@@ -37,3 +37,36 @@
 .document-element-handler.hidden {
     display: none;
 }
+
+.element-handler {
+    position: absolute;
+    width: 15px;
+    aspect-ratio: 1/1;
+    background-color: var(--root-color);
+    border-radius: 9999px;
+    cursor: pointer;
+}
+
+.element-handler.top {
+    top: 0;
+    left: 50%;
+    translate: -50% -65%;
+}
+
+.element-handler.right {
+    right: 0;
+    top: 50%;
+    translate: 65% -50%;
+}
+
+.element-handler.bottom {
+    bottom: 0;
+    left: 50%;
+    translate: -50% 65%;
+}
+
+.element-handler.left {
+    top: 50%;
+    left: 0;
+    translate: -65% -50%;
+}
