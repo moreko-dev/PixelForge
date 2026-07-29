@@ -33,6 +33,16 @@ function DocumentViewContainer() {
     const mouseStartPositionRef = useRef({ x: 0, y: 0 });
     const elementStartPositionRef = useRef({ x: 0, y: 0, ex: 0, ey: 0 });
 
+    const topHandlerRef = useRef(null);
+    const rightHandlerRef = useRef(null);
+    const bottomHandlerRef = useRef(null);
+    const leftHandlerRef = useRef(null);
+    const grabbedHandler = useRef({
+        status: false,
+        handler: null,
+        mousePos: null,
+    });
+
     const isRectType = (layer) => {
         return (
             layer.type === layersType.SHAPE_LAYER &&
@@ -281,7 +291,60 @@ function DocumentViewContainer() {
     };
 
     const canvasMouseMoveHandler = (event) => {
-        if (selectedLayerID && isDragging.current && !isDrawing.current) {
+        if (
+            selectedLayerID &&
+            grabbedHandler.current.status &&
+            !isDrawing.current
+        ) {
+            const { x: cx, y: cy } = getMousePosition(
+                documentCanvasRef.current,
+                event,
+            );
+            let diff;
+            let selectedLayer = documentState.layers.find(
+                (item) => item.id === selectedLayerID,
+            );
+            if (grabbedHandler.current.handler === "bottom") {
+                diff = cy - grabbedHandler.current.mousePos.y;
+                selectedLayer = {
+                    ...selectedLayer,
+                    properties: {
+                        ...selectedLayer.properties,
+                        height: selectedLayer.properties.height + diff,
+                    },
+                    layer: {
+                        ...selectedLayer.layer,
+                        height: selectedLayer.properties.height + diff,
+                    },
+                };
+            } else if (grabbedHandler.current.handler === "right") {
+                diff = cx - grabbedHandler.current.mousePos.x;
+                selectedLayer = {
+                    ...selectedLayer,
+                    properties: {
+                        ...selectedLayer.properties,
+                        width: selectedLayer.properties.width + diff,
+                    },
+                    layer: {
+                        ...selectedLayer.layer,
+                        width: selectedLayer.properties.width + diff,
+                    },
+                };
+            }
+            const layerArray = documentState.layers.slice();
+            const layerIndex = layerArray.findIndex(
+                (item) => item.id === selectedLayerID,
+            );
+            layerArray.splice(layerIndex, 1, selectedLayer);
+            setDocumentState({
+                ...documentState,
+                layers: layerArray,
+            });
+        } else if (
+            selectedLayerID &&
+            isDragging.current &&
+            !isDrawing.current
+        ) {
             const { x, y } = getMousePosition(documentCanvasRef.current, event);
             let selectedLayer = documentState.layers.find(
                 (item) => item.id === selectedLayerID,
@@ -353,6 +416,23 @@ function DocumentViewContainer() {
         elementStartPositionRef.current = { x: 0, y: 0, ex: 0, ey: 0 };
     };
 
+    const elementHandlerMouseDownHandler = (event) => {
+        const { x, y } = getMousePosition(documentCanvasRef.current, event);
+        grabbedHandler.current = {
+            status: true,
+            handler: event.target.dataset.name,
+            mousePos: { x, y },
+        };
+    };
+
+    const elementHandlerMouseUpHandler = () => {
+        grabbedHandler.current = {
+            status: false,
+            handler: null,
+            mousePos: null,
+        };
+    };
+
     return (
         <div className="document-view-container" ref={documentViewContainerRef}>
             <canvas
@@ -370,10 +450,34 @@ function DocumentViewContainer() {
                 className={`document-element-handler ${selectedLayerID ? "" : "hidden"}`}
                 ref={documentElementHandlerRef}
             >
-                <div className="element-handler top"></div>
-                <div className="element-handler right"></div>
-                <div className="element-handler bottom"></div>
-                <div className="element-handler left"></div>
+                {/* <div
+                    className="element-handler top"
+                    ref={topHandlerRef}
+                    data-name="top"
+                    onMouseDown={elementHandlerMouseDownHandler}
+                    onMouseUp={elementHandlerMouseUpHandler}
+                ></div> */}
+                <div
+                    className="element-handler right"
+                    ref={rightHandlerRef}
+                    data-name="right"
+                    onMouseDown={elementHandlerMouseDownHandler}
+                    onMouseUp={elementHandlerMouseUpHandler}
+                ></div>
+                <div
+                    className="element-handler bottom"
+                    ref={bottomHandlerRef}
+                    data-name="bottom"
+                    onMouseDown={elementHandlerMouseDownHandler}
+                    onMouseUp={elementHandlerMouseUpHandler}
+                ></div>
+                {/* <div
+                    className="element-handler left"
+                    ref={leftHandlerRef}
+                    data-name="left"
+                    onMouseDown={elementHandlerMouseDownHandler}
+                    onMouseUp={elementHandlerMouseUpHandler}
+                ></div> */}
             </div>
         </div>
     );
