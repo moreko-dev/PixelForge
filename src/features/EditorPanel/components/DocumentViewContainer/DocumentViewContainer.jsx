@@ -14,6 +14,7 @@ import {
     getMousePosition,
     getRectTypeDraggedPosition,
     getStartPointOfCanvas,
+    getTextLayerBounds,
     hitTest,
 } from "./../../../../utils/Utils";
 import "./DocumentViewContainer.css";
@@ -32,16 +33,12 @@ function DocumentViewContainer() {
     const isDragging = useRef(false);
     const mouseStartPositionRef = useRef({ x: 0, y: 0 });
     const elementStartPositionRef = useRef({ x: 0, y: 0, ex: 0, ey: 0 });
-
-    const topHandlerRef = useRef(null);
-    const rightHandlerRef = useRef(null);
-    const bottomHandlerRef = useRef(null);
-    const leftHandlerRef = useRef(null);
-    const grabbedHandler = useRef({
-        status: false,
-        handler: null,
-        mousePos: null,
-    });
+    const isHandlerGrabbed = useRef(false);
+    const grabbedHandler = useRef(null);
+    const mouseGrabbedPositionRef = useRef({ x: 0, y: 0, cw: 0, ch: 0 });
+    const currentSelectedLayer = documentState.layers.find(
+        (item) => item.id === selectedLayerID,
+    );
 
     const isRectType = (layer) => {
         return (
@@ -288,46 +285,77 @@ function DocumentViewContainer() {
             }
         }
         setSelectedLayerID(null);
+        grabbedHandler.current = null;
     };
 
     const canvasMouseMoveHandler = (event) => {
-        if (
-            selectedLayerID &&
-            grabbedHandler.current.status &&
-            !isDrawing.current
-        ) {
+        if (selectedLayerID && isHandlerGrabbed.current && !isDrawing.current) {
             const { x: cx, y: cy } = getMousePosition(
                 documentCanvasRef.current,
                 event,
             );
-            let diff;
             let selectedLayer = documentState.layers.find(
                 (item) => item.id === selectedLayerID,
             );
-            if (grabbedHandler.current.handler === "bottom") {
-                diff = cy - grabbedHandler.current.mousePos.y;
+            let diff;
+            if (grabbedHandler.current === "right") {
+                if (selectedLayer.type === layersType.IMAGE_LAYER) {
+                    diff = cx - mouseGrabbedPositionRef.current.x;
+                    selectedLayer = {
+                        ...selectedLayer,
+                        properties: {
+                            ...selectedLayer.properties,
+                            width: mouseGrabbedPositionRef.current.cw + diff,
+                        },
+                        layer: {
+                            ...selectedLayer.layer,
+                            width: mouseGrabbedPositionRef.current.cw + diff,
+                        },
+                    };
+                } else if (selectedLayer.type === layersType.TEXT_LAYER) {
+                    let scale =
+                        selectedLayer.properties.fontSize /
+                        selectedLayer.layer.width;
+                    diff = cx - mouseGrabbedPositionRef.current.x;
+                    selectedLayer = {
+                        ...selectedLayer,
+                        properties: {
+                            ...selectedLayer.properties,
+                            fontSize:
+                                (mouseGrabbedPositionRef.current.cw + diff) *
+                                scale,
+                        },
+                    };
+                    const {
+                        x: tx,
+                        y: ty,
+                        w: tw,
+                        h: th,
+                    } = getTextLayerBounds(
+                        documentCanvasRef.current,
+                        selectedLayer.properties,
+                    );
+                    selectedLayer = {
+                        ...selectedLayer,
+                        layer: {
+                            x: tx,
+                            y: ty,
+                            width: tw,
+                            height: th,
+                        },
+                    };
+                }
+            } else if (grabbedHandler.current === "bottom") {
+                diff = cy - mouseGrabbedPositionRef.current.y;
                 selectedLayer = {
                     ...selectedLayer,
                     properties: {
                         ...selectedLayer.properties,
-                        height: selectedLayer.properties.height + diff,
+                        height: mouseGrabbedPositionRef.current.ch + diff,
                     },
                     layer: {
                         ...selectedLayer.layer,
-                        height: selectedLayer.properties.height + diff,
-                    },
-                };
-            } else if (grabbedHandler.current.handler === "right") {
-                diff = cx - grabbedHandler.current.mousePos.x;
-                selectedLayer = {
-                    ...selectedLayer,
-                    properties: {
-                        ...selectedLayer.properties,
-                        width: selectedLayer.properties.width + diff,
-                    },
-                    layer: {
-                        ...selectedLayer.layer,
-                        width: selectedLayer.properties.width + diff,
+                        height: mouseGrabbedPositionRef.current.ch + diff,
                     },
                 };
             }
@@ -411,26 +439,42 @@ function DocumentViewContainer() {
     };
 
     const canvasMouseUpHandler = () => {
+        if (isHandlerGrabbed.current) isHandlerGrabbed.current = false;
         isDragging.current = false;
         mouseStartPositionRef.current = { x: 0, y: 0 };
         elementStartPositionRef.current = { x: 0, y: 0, ex: 0, ey: 0 };
     };
 
-    const elementHandlerMouseDownHandler = (event) => {
+    const handlerMouseDownHandler = (event) => {
+        isHandlerGrabbed.current = true;
+        grabbedHandler.current = event.target.dataset.name;
         const { x, y } = getMousePosition(documentCanvasRef.current, event);
-        grabbedHandler.current = {
-            status: true,
-            handler: event.target.dataset.name,
-            mousePos: { x, y },
-        };
+        const selectedLayer = documentState.layers.find(
+            (item) => item.id === selectedLayerID,
+        );
+        [
+            mouseGrabbedPositionRef.current.x,
+            mouseGrabbedPositionRef.current.y,
+            mouseGrabbedPositionRef.current.cw,
+            mouseGrabbedPositionRef.current.ch,
+        ] = [
+            x,
+            y,
+            selectedLayer[
+                selectedLayer.type === layersType.TEXT_LAYER
+                    ? "layer"
+                    : "properties"
+            ].width,
+            selectedLayer[
+                selectedLayer.type === layersType.TEXT_LAYER
+                    ? "layer"
+                    : "properties"
+            ].height,
+        ];
     };
 
-    const elementHandlerMouseUpHandler = () => {
-        grabbedHandler.current = {
-            status: false,
-            handler: null,
-            mousePos: null,
-        };
+    const handlerMouseUpHandler = () => {
+        isHandlerGrabbed.current = false;
     };
 
     return (
@@ -450,34 +494,20 @@ function DocumentViewContainer() {
                 className={`document-element-handler ${selectedLayerID ? "" : "hidden"}`}
                 ref={documentElementHandlerRef}
             >
-                {/* <div
-                    className="element-handler top"
-                    ref={topHandlerRef}
-                    data-name="top"
-                    onMouseDown={elementHandlerMouseDownHandler}
-                    onMouseUp={elementHandlerMouseUpHandler}
-                ></div> */}
                 <div
                     className="element-handler right"
-                    ref={rightHandlerRef}
                     data-name="right"
-                    onMouseDown={elementHandlerMouseDownHandler}
-                    onMouseUp={elementHandlerMouseUpHandler}
+                    onMouseDown={handlerMouseDownHandler}
+                    onMouseUp={handlerMouseUpHandler}
                 ></div>
-                <div
-                    className="element-handler bottom"
-                    ref={bottomHandlerRef}
-                    data-name="bottom"
-                    onMouseDown={elementHandlerMouseDownHandler}
-                    onMouseUp={elementHandlerMouseUpHandler}
-                ></div>
-                {/* <div
-                    className="element-handler left"
-                    ref={leftHandlerRef}
-                    data-name="left"
-                    onMouseDown={elementHandlerMouseDownHandler}
-                    onMouseUp={elementHandlerMouseUpHandler}
-                ></div> */}
+                {currentSelectedLayer?.type !== layersType.TEXT_LAYER && (
+                    <div
+                        className="element-handler bottom"
+                        data-name="bottom"
+                        onMouseDown={handlerMouseDownHandler}
+                        onMouseUp={handlerMouseUpHandler}
+                    ></div>
+                )}
             </div>
         </div>
     );
