@@ -39,6 +39,7 @@ function DocumentViewContainer() {
     const currentSelectedLayer = documentState.layers.find(
         (item) => item.id === selectedLayerID,
     );
+    const rectEndPositionRef = useRef({ ex: 0, ey: 0 });
 
     const isRectType = (layer) => {
         return (
@@ -344,20 +345,60 @@ function DocumentViewContainer() {
                             height: th,
                         },
                     };
+                } else if (selectedLayer.type === layersType.SHAPE_LAYER) {
+                    const shapeType = selectedLayer.properties.type;
+                    if (shapeType === shapeTypes.RECT) {
+                        diff = cx - mouseGrabbedPositionRef.current.x;
+                        selectedLayer = {
+                            ...selectedLayer,
+                            properties: {
+                                ...selectedLayer.properties,
+                                width:
+                                    mouseGrabbedPositionRef.current.cw + diff,
+                                ex: rectEndPositionRef.current.ex + diff,
+                            },
+                            layer: {
+                                ...selectedLayer.layer,
+                                width:
+                                    mouseGrabbedPositionRef.current.cw + diff,
+                            },
+                        };
+                    }
                 }
             } else if (grabbedHandler.current === "bottom") {
-                diff = cy - mouseGrabbedPositionRef.current.y;
-                selectedLayer = {
-                    ...selectedLayer,
-                    properties: {
-                        ...selectedLayer.properties,
-                        height: mouseGrabbedPositionRef.current.ch + diff,
-                    },
-                    layer: {
-                        ...selectedLayer.layer,
-                        height: mouseGrabbedPositionRef.current.ch + diff,
-                    },
-                };
+                if (selectedLayer.type === layersType.IMAGE_LAYER) {
+                    diff = cy - mouseGrabbedPositionRef.current.y;
+                    selectedLayer = {
+                        ...selectedLayer,
+                        properties: {
+                            ...selectedLayer.properties,
+                            height: mouseGrabbedPositionRef.current.ch + diff,
+                        },
+                        layer: {
+                            ...selectedLayer.layer,
+                            height: mouseGrabbedPositionRef.current.ch + diff,
+                        },
+                    };
+                } else if (selectedLayer.type === layersType.SHAPE_LAYER) {
+                    const shapeType = selectedLayer.properties.type;
+                    if (shapeType === shapeTypes.RECT) {
+                        diff = cy - mouseGrabbedPositionRef.current.y;
+                        selectedLayer = {
+                            ...selectedLayer,
+                            properties: {
+                                ...selectedLayer.properties,
+                                height:
+                                    mouseGrabbedPositionRef.current.ch + diff,
+                                ey: rectEndPositionRef.current.ey + diff,
+                            },
+                            layer: {
+                                ...selectedLayer.layer,
+                                height:
+                                    mouseGrabbedPositionRef.current.ch + diff,
+                            },
+                        };
+                    }
+                }
             }
             const layerArray = documentState.layers.slice();
             const layerIndex = layerArray.findIndex(
@@ -471,6 +512,12 @@ function DocumentViewContainer() {
                     : "properties"
             ].height,
         ];
+        if (selectedLayer.properties?.type === shapeTypes.RECT) {
+            [rectEndPositionRef.current.ex, rectEndPositionRef.current.ey] = [
+                selectedLayer.properties.ex,
+                selectedLayer.properties.ey,
+            ];
+        }
     };
 
     const handlerMouseUpHandler = () => {
@@ -494,19 +541,26 @@ function DocumentViewContainer() {
                 className={`document-element-handler ${selectedLayerID ? "" : "hidden"}`}
                 ref={documentElementHandlerRef}
             >
-                <div
-                    className="element-handler right"
-                    data-name="right"
-                    onMouseDown={handlerMouseDownHandler}
-                    onMouseUp={handlerMouseUpHandler}
-                ></div>
-                {currentSelectedLayer?.type !== layersType.TEXT_LAYER && (
-                    <div
-                        className="element-handler bottom"
-                        data-name="bottom"
-                        onMouseDown={handlerMouseDownHandler}
-                        onMouseUp={handlerMouseUpHandler}
-                    ></div>
+                {![shapeTypes.LINE, shapeTypes.CIRCLE].includes(
+                    currentSelectedLayer?.properties?.type,
+                ) && (
+                    <>
+                        <div
+                            className="element-handler right"
+                            data-name="right"
+                            onMouseDown={handlerMouseDownHandler}
+                            onMouseUp={handlerMouseUpHandler}
+                        ></div>
+                        {currentSelectedLayer?.type !==
+                            layersType.TEXT_LAYER && (
+                            <div
+                                className="element-handler bottom"
+                                data-name="bottom"
+                                onMouseDown={handlerMouseDownHandler}
+                                onMouseUp={handlerMouseUpHandler}
+                            ></div>
+                        )}
+                    </>
                 )}
             </div>
         </div>
