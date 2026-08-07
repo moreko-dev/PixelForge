@@ -1,4 +1,6 @@
 class Camera {
+    #zoom;
+
     constructor(zoom) {
         this.zoom = zoom;
     }
@@ -7,11 +9,11 @@ class Camera {
         if (value < 0) {
             throw new Error("Camera zoom cannot be negative");
         }
-        this._zoom = value;
+        this.#zoom = value;
     }
 
     get zoom() {
-        return this._zoom;
+        return this.#zoom;
     }
 
     zoomIn() {}

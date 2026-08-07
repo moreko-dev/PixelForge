@@ -1,4 +1,8 @@
 class Canvas {
+    #width;
+    #height;
+    #backgroundColor;
+
     constructor(width, height, bgColor) {
         this.width = width;
         this.height = height;
@@ -9,22 +13,22 @@ class Canvas {
         if (value < 0) {
             throw new Error("Canvas width cannot be negative");
         }
-        this._width = value;
+        this.#width = value;
     }
 
     get width() {
-        return this._width;
+        return this.#width;
     }
 
     set height(value) {
         if (value < 0) {
             throw new Error("Canvas height cannot be negative");
         }
-        this._height = value;
+        this.#height = value;
     }
 
     get height() {
-        return this._height;
+        return this.#height;
     }
 
     set backgroundColor(value) {
@@ -33,11 +37,11 @@ class Canvas {
                 `Canvas bgColor should have a valid value -> [${value}]`,
             );
         }
-        this._backgroundColor = value;
+        this.#backgroundColor = value;
     }
 
     get backgroundColor() {
-        return this._backgroundColor;
+        return this.#backgroundColor;
     }
 
     resize() {}

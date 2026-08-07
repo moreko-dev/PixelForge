@@ -1,122 +1,123 @@
-import ImageFilter from "./ImageFilter";
 import Layer from "./Layer";
 
 class ImageLayer extends Layer {
+    #type;
+    #x;
+    #y;
+    #width;
+    #height;
+    #image;
+    #src;
+    #rotate;
+    #flipX;
+    #flipY;
+
     constructor(id, name, visible, locked) {
         super(id, name, visible, locked);
-        this._type = "image";
+        this.#type = "image";
+    }
+
+    get type() {
+        return this.#type;
     }
 
     set x(value) {
         if (value < 0) {
             throw new Error("ImageLayer x property cannot be negative");
         }
-        this._x = value;
+        this.#x = value;
     }
 
     get x() {
-        return this._x;
+        return this.#x;
     }
 
     set y(value) {
         if (value < 0) {
             throw new Error("ImageLayer y property cannot be negative");
         }
-        this._y = value;
+        this.#y = value;
     }
 
     get y() {
-        return this._y;
+        return this.#y;
     }
 
     set width(value) {
         if (value < 0) {
             throw new Error("ImageLayer width cannot be negative");
         }
-        this._width = value;
+        this.#width = value;
     }
 
     get width() {
-        return this._width;
+        return this.#width;
     }
 
     set height(value) {
         if (value < 0) {
             throw new Error("ImageLayer height cannot be negative");
         }
-        this._height = value;
+        this.#height = value;
     }
 
     get height() {
-        return this._height;
+        return this.#height;
     }
 
     set image(value) {
-        if (!value || (!value) instanceof Image) {
+        if (!value || !(value instanceof Image)) {
             throw new Error(`ImageLayer image is not valid -> [${value}]`);
         }
-        this._image = value;
+        this.#image = value;
     }
 
     get image() {
-        return this._image;
+        return this.#image;
     }
 
     set src(value) {
         if (!String(src).trim()) {
             throw new Error(`ImageLayer src is not valid -> [${value}]`);
         }
-        this._src = value;
+        this.#src = value;
     }
 
     get src() {
-        return this._src;
-    }
-
-    set filter(value) {
-        if ((!value) instanceof ImageFilter) {
-            throw new Error(
-                `ImageLayer filter is not valid object -> [${value}]`,
-            );
-        }
-        this._filter = value;
-    }
-
-    get filter() {
-        return this._filter;
+        return this.#src;
     }
 
     set rotate(value) {
         if (value < 0) {
             throw new Error("ImageLayer rotate cannot be negative");
         }
-        this._rotate = value;
+        this.#rotate = value;
     }
 
     get rotate() {
-        this._rotate;
+        this.#rotate;
     }
 
     set flipX(value) {
         if (typeof value !== "boolean") {
             throw new Error("ImageLayer flipX should have a boolean value");
         }
-        this._flipX = value;
+        this.#flipX = value;
     }
 
     get flipX() {
-        return this._flipX;
+        return this.#flipX;
     }
 
     set flipY(value) {
         if (typeof value !== "boolean") {
             throw new Error("ImageLayer flipY should have a boolean value");
         }
-        this._flipY = value;
+        this.#flipY = value;
     }
 
     get flipY() {
-        return this._flipY;
+        return this.#flipY;
     }
 }
 

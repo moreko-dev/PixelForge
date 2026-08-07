@@ -1,4 +1,4 @@
-class ImageFilter {
+class Filter {
     constructor(
         grayscale,
         brightness,
@@ -108,4 +108,4 @@ class ImageFilter {
     }
 }
 
-export default ImageFilter;
+export default Filter;
