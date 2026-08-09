@@ -10,6 +10,22 @@ class Layer {
     #filter;
 
     constructor(id, name, visible, locked) {
+        if (id === undefined) {
+            throw new Error("Layer id cannot be undefined");
+        }
+
+        if (name === undefined) {
+            throw new Error("Layer name cannot be undefined");
+        }
+
+        if (visible === undefined) {
+            throw new Error("Layer visible cannot be undefined");
+        }
+
+        if (locked === undefined) {
+            throw new Error("Layer locked cannot be undefined");
+        }
+
         this.id = id;
         this.name = name;
         this.visible = visible;

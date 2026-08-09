@@ -5,10 +5,10 @@ class Shadow {
     #offsetY;
 
     constructor(color, blur, offsetX, offsetY) {
-        this.color = color;
-        this.blur = blur;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
+        this.color = color || "#000000";
+        this.blur = blur || 0;
+        this.offsetX = offsetX || 0;
+        this.offsetY = offsetY || 0;
     }
 
     set color(value) {
@@ -51,3 +51,5 @@ class Shadow {
         this.#offsetY = value;
     }
 }
+
+export default Shadow;

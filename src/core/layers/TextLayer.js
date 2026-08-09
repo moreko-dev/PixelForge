@@ -13,12 +13,17 @@ class TextLayer extends Layer {
     constructor(id, name, visible, locked) {
         super(id, name, visible, locked);
         this.#type = "text";
+        this.value = "";
+        this.x = 0;
+        this.y = 0;
+        this.width = 0;
+        this.height = 0;
+        this.fontSize = 12;
+        this.fontFamily = ""; // Need constant or enum
+        this.fillStyle = "#000000";
     }
 
     set value(value) {
-        if (!String(value).trim()) {
-            throw new Error(`TextLayer value is not valid -> [${value}]`);
-        }
         this.#value = value;
     }
 
@@ -102,3 +107,5 @@ class TextLayer extends Layer {
         return this.#fillStyle;
     }
 }
+
+export default TextLayer;

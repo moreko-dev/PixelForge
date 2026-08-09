@@ -1,110 +1,101 @@
 class Filter {
-    constructor(
-        grayscale,
-        brightness,
-        contrast,
-        blur,
-        hueRotate,
-        saturate,
-        sepia,
-        opacity,
-    ) {
-        this.grayscale = grayscale;
-        this.brightness = brightness;
-        this.contrast = contrast;
-        this.blur = blur;
-        this["hue-rotate"] = hueRotate;
-        this.saturate = saturate;
-        this.sepia = sepia;
-        this.opacity = opacity;
+    constructor(filters = {}) {
+        this.grayscale = filters.grayscale || 0;
+        this.brightness = filters.brightness || 100;
+        this.contrast = filters.contrast || 100;
+        this.blur = filters.blur || 0;
+        this["hue-rotate"] = filters.hueRotate || 0;
+        this.saturate = filters.saturate || 100;
+        this.sepia = filters.sepia || 0;
+        this.opacity = filters.opacity || 100;
     }
 
     set grayscale(value) {
         if (value < 0) {
             throw new Error("Filter grayscale cannot be negative");
         }
-        this._grayscale = value;
+        this.#grayscale = value;
     }
 
     get grayscale() {
-        return this._grayscale;
+        return this.#grayscale;
     }
 
     set brightness(value) {
         if (value < 0) {
             throw new Error("Filter brightness cannot be negative");
         }
-        this._brightness = value;
+        this.#brightness = value;
     }
 
     get brightness() {
-        return this._brightness;
+        return this.#brightness;
     }
 
     set contrast(value) {
         if (value < 0) {
             throw new Error("Filter contrast cannot be negative");
         }
-        this._contrast = value;
+        this.#contrast = value;
     }
 
     get contrast() {
-        return this._contrast;
+        return this.#contrast;
     }
 
     set blur(value) {
         if (value < 0) {
             throw new Error("Filter blur cannot be negative");
         }
-        this._blur = value;
+        this.#blur = value;
     }
 
     get blur() {
-        return this._blur;
+        return this.#blur;
     }
 
     set ["hue-rotate"](value) {
         if (value < 0) {
             throw new Error("Filter hueRotate cannot be negative");
         }
-        this["_hue-rotate"] = value;
+        this["#hue-rotate"] = value;
     }
 
     get ["hue-rotate"]() {
-        return this["_hue-rotate"];
+        return this["#hue-rotate"];
     }
 
     set saturate(value) {
         if (value < 0) {
             throw new Error("Filter saturate cannot be negative");
         }
-        this._saturate = value;
+        this.#saturate = value;
     }
 
     get saturate() {
-        return this._saturate;
+        return this.#saturate;
     }
 
     set sepia(value) {
         if (value < 0) {
             throw new Error("Filter sepia cannot be negative");
         }
-        this._sepia = value;
+        this.#sepia = value;
     }
 
     get sepia() {
-        return this._sepia;
+        return this.#sepia;
     }
 
     set opacity(value) {
         if (value < 0) {
             throw new Error("Filter opacity cannot be negative");
         }
-        this._opacity = value;
+        this.#opacity = value;
     }
 
     get opacity() {
-        return this._opacity;
+        return this.#opacity;
     }
 }
 

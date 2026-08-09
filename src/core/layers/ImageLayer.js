@@ -15,6 +15,15 @@ class ImageLayer extends Layer {
     constructor(id, name, visible, locked) {
         super(id, name, visible, locked);
         this.#type = "image";
+        this.x = 0;
+        this.y = 0;
+        this.width = 0;
+        this.height = 0;
+        this.image = null;
+        this.src = "";
+        this.rotate = 0;
+        this.flipX = false;
+        this.flipY = false;
     }
 
     get type() {

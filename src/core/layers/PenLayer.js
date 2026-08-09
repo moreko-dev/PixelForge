@@ -11,6 +11,11 @@ class PenLayer extends Layer {
         super(id, name, visible, locked);
         this.#type = "pen";
         this.#points = [];
+        this.strokeStyle = "#000000";
+        this.lineWidth = 1;
+        this.lineCap = ""; // Need constant or enum
+        this.lineJoin = ""; // Need constant or enum
+        this.miterLimit = 5;
     }
 
     get type() {
@@ -78,3 +83,5 @@ class PenLayer extends Layer {
 
     addPoint(x, y) {}
 }
+
+export default PenLayer;
