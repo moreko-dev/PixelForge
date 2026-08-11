@@ -50,6 +50,13 @@ class Shadow {
         }
         this.#offsetY = value;
     }
+
+    reset() {
+        this.color = "#000000";
+        this.blur = 0;
+        this.offsetX = 0;
+        this.offsetY = 0;
+    }
 }
 
 export default Shadow;

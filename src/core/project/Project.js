@@ -1,3 +1,5 @@
+import Canvas from "../canvas/Canvas";
+import { defaultCanvas } from "../CoreConstants";
 import {
     downloadFile,
     generateProjectName,
@@ -17,7 +19,13 @@ class Project {
     constructor(options = {}) {
         this.isProjectCreated = options?.isProjectCreated ?? false;
         this.name = options?.name ?? generateProjectName(6);
-        this.canvas = options?.canvas ?? new CanvasClass();
+        this.canvas =
+            options?.canvas ??
+            new Canvas(
+                defaultCanvas.width,
+                defaultCanvas.height,
+                defaultCanvas.bgColor,
+            );
         this.layers = options?.layers ?? [];
     }
 
@@ -46,9 +54,9 @@ class Project {
     }
 
     set canvas(value) {
-        if (!(value instanceof CanvasClass)) {
+        if (!(value instanceof Canvas)) {
             throw new Error(
-                `Project canvas is not a valid object -> [${vlaue}]`,
+                `Project canvas is not a valid object -> [${value}]`,
             );
         }
         this.#canvas = value;
@@ -107,8 +115,19 @@ class Project {
     home() {
         this.isProjectCreated = false;
         this.name = generateProjectName(6);
-        this.canvas = new CanvasClass();
+        this.canvas.width = defaultCanvas.width;
+        this.canvas.height = defaultCanvas.height;
+        this.canvas.backgroundColor = defaultCanvas.bgColor;
         this.layers = [];
+    }
+
+    toJSON() {
+        return {
+            isProjectCreated: this.isProjectCreated,
+            name: this.name,
+            canvas: this.canvas,
+            layers: this.layers,
+        };
     }
 }
 

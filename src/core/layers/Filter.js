@@ -97,6 +97,17 @@ class Filter {
     get opacity() {
         return this.#opacity;
     }
+
+    reset() {
+        this.grayscale = 0;
+        this.brightness = 100;
+        this.contrast = 100;
+        this.blur = 0;
+        this["hue-rotate"] = 0;
+        this.saturate = 100;
+        this.sepia = 0;
+        this.opacity = 100;
+    }
 }
 
 export default Filter;

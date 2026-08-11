@@ -1,3 +1,4 @@
+import { defaultFilters, defaultShadow } from "../CoreConstants";
 import Filter from "./Filter";
 import Shadow from "./Shadow";
 
@@ -9,27 +10,25 @@ class Layer {
     #shadow;
     #filter;
 
-    constructor(id, name, visible, locked) {
-        if (id === undefined) {
-            throw new Error("Layer id cannot be undefined");
-        }
-
-        if (name === undefined) {
-            throw new Error("Layer name cannot be undefined");
-        }
-
-        if (visible === undefined) {
-            throw new Error("Layer visible cannot be undefined");
-        }
-
-        if (locked === undefined) {
-            throw new Error("Layer locked cannot be undefined");
-        }
+    constructor(id, name, visible, locked, shadow, filter) {
+        if (!id) throw new Error("Layer id cannot be undefined");
+        if (!name) throw new Error("Layer name cannot be undefined");
+        if (!visible) throw new Error("Layer visible cannot be undefined");
+        if (!locked) throw new Error("Layer locked cannot be undefined");
 
         this.id = id;
         this.name = name;
         this.visible = visible;
         this.locked = locked;
+        this.shadow =
+            shadow ||
+            new Shadow(
+                defaultShadow.color,
+                defaultShadow.blur,
+                defaultShadow.offsetX,
+                defaultShadow.offsetY,
+            );
+        this.filter = filter || new Filter(defaultFilters);
     }
 
     set id(value) {
@@ -98,13 +97,24 @@ class Layer {
         return this.#filter;
     }
 
-    move() {}
+    move(mouseStartPosition, mousePosition, elementPosition) {
+        let deltaX = mousePosition.x - mouseStartPosition.x;
+        let deltaY = mousePosition.y - mouseStartPosition.y;
+        let draggedPosition = {
+            x: deltaX + elementPosition.x,
+            y: deltaY + elementPosition.y,
+        };
+        this.x = draggedPosition.x;
+        this.y = draggedPosition.y;
+    }
 
-    resize() {}
-
-    rotate() {}
-
-    clone() {}
+    resize(type, mouseStartPosition, mousePosition, elementDimension) {
+        let posType = type === resizeType.right ? "x" : "y";
+        let dimenType = type === resizeType.right ? "w" : "h";
+        let diff = mousePosition[posType] - mouseStartPosition[posType];
+        let resizedDimension = elementDimension[dimenType] + diff;
+        this[posType] = resizedDimension;
+    }
 }
 
 export default Layer;

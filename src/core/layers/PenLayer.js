@@ -1,3 +1,5 @@
+import { defaultLineCap, defaultLineJoin } from "../CoreConstants";
+
 class PenLayer extends Layer {
     #type;
     #strokeStyle;
@@ -7,15 +9,22 @@ class PenLayer extends Layer {
     #miterLimit;
     #points;
 
-    constructor(id, name, visible, locked) {
-        super(id, name, visible, locked);
+    constructor(options = {}) {
+        super(
+            options.id,
+            options.name,
+            options.visible,
+            options.locked,
+            options.shadow,
+            options.filter,
+        );
         this.#type = "pen";
         this.#points = [];
-        this.strokeStyle = "#000000";
-        this.lineWidth = 1;
-        this.lineCap = ""; // Need constant or enum
-        this.lineJoin = ""; // Need constant or enum
-        this.miterLimit = 5;
+        this.strokeStyle = options.strokeStyle || "#000000";
+        this.lineWidth = options.lineWidth || 1;
+        this.lineCap = options.lineCap || defaultLineCap.butt;
+        this.lineJoin = options.lineJoin || defaultLineJoin.miter;
+        this.miterLimit = options.miterLimit || 10;
     }
 
     get type() {
@@ -81,7 +90,9 @@ class PenLayer extends Layer {
         return this.#points;
     }
 
-    addPoint(x, y) {}
+    addPoint(x, y) {
+        this.#points.push({ x, y });
+    }
 }
 
 export default PenLayer;

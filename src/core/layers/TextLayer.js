@@ -1,3 +1,4 @@
+import { defaultFonts, resizeType } from "../CoreConstants";
 import Layer from "./Layer";
 
 class TextLayer extends Layer {
@@ -10,17 +11,24 @@ class TextLayer extends Layer {
     #fontFamily;
     #fillStyle;
 
-    constructor(id, name, visible, locked) {
-        super(id, name, visible, locked);
+    constructor(options = {}) {
+        super(
+            options.id,
+            options.name,
+            options.visible,
+            options.locked,
+            options.shadow,
+            options.filter,
+        );
         this.#type = "text";
-        this.value = "";
-        this.x = 0;
-        this.y = 0;
-        this.width = 0;
-        this.height = 0;
-        this.fontSize = 12;
-        this.fontFamily = ""; // Need constant or enum
-        this.fillStyle = "#000000";
+        this.value = options.value || "";
+        this.x = options.x || 0;
+        this.y = options.y || 0;
+        this.width = options.width || 0;
+        this.height = options.height || 0;
+        this.fontSize = options.fontSize || 12;
+        this.fontFamily = options.fontFamily || defaultFonts[0];
+        this.fillStyle = options.fillStyle || "#000000";
     }
 
     set value(value) {
@@ -105,6 +113,31 @@ class TextLayer extends Layer {
 
     get fillStyle() {
         return this.#fillStyle;
+    }
+
+    resize(type, mouseStartPosition, mousePosition, elementDimension) {
+        let posType = type === resizeType.right ? "x" : "y";
+        let dimenType = type === resizeType.right ? "width" : "height";
+        let scale = this.fontSize / this[dimenType];
+        let diff = mousePosition[posType] - mouseStartPosition[posType];
+        let resizedValue = (elementDimension + diff) * scale;
+        this.fontSize = resizedValue;
+    }
+
+    updateDimensions(canvasRef) {
+        const context = canvasRef.getContext("2d");
+        context.font = `${this.fontSize}px ${this.fontFamily}`;
+        const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
+            context.measureText(this.value);
+        let updatedDimension = {
+            width: width,
+            height:
+                actualBoundingBoxAscent && actualBoundingBoxDescent
+                    ? actualBoundingBoxAscent + actualBoundingBoxDescent
+                    : this.fontSize * 1.2,
+        };
+        this.width = updatedDimension.width;
+        this.height = updatedDimension.height;
     }
 }
 

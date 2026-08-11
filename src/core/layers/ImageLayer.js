@@ -12,18 +12,25 @@ class ImageLayer extends Layer {
     #flipX;
     #flipY;
 
-    constructor(id, name, visible, locked) {
-        super(id, name, visible, locked);
+    constructor(options = {}) {
+        super(
+            options.id,
+            options.name,
+            options.visible,
+            options.locked,
+            options.shadow,
+            options.filter,
+        );
         this.#type = "image";
-        this.x = 0;
-        this.y = 0;
-        this.width = 0;
-        this.height = 0;
-        this.image = null;
-        this.src = "";
-        this.rotate = 0;
-        this.flipX = false;
-        this.flipY = false;
+        this.x = options.x || 0;
+        this.y = options.y || 0;
+        this.width = options.width || 0;
+        this.height = options.height || 0;
+        this.image = options.image || null;
+        this.src = options.src || null;
+        this.rotate = options.rotate || 0;
+        this.flipX = options.flipX || false;
+        this.flipY = options.flipY || false;
     }
 
     get type() {

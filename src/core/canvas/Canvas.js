@@ -1,3 +1,7 @@
+/*
+Canvas class stores the canvas's properties and methods
+*/
+
 class Canvas {
     #width;
     #height;
@@ -43,8 +47,6 @@ class Canvas {
     get backgroundColor() {
         return this.#backgroundColor;
     }
-
-    resize() {}
 }
 
 export default Canvas;
