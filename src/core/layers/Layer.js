@@ -11,11 +11,6 @@ class Layer {
     #filter;
 
     constructor(id, name, visible, locked, shadow, filter) {
-        if (!id) throw new Error("Layer id cannot be undefined");
-        if (!name) throw new Error("Layer name cannot be undefined");
-        if (!visible) throw new Error("Layer visible cannot be undefined");
-        if (!locked) throw new Error("Layer locked cannot be undefined");
-
         this.id = id;
         this.name = name;
         this.visible = visible;
@@ -32,7 +27,7 @@ class Layer {
     }
 
     set id(value) {
-        if (!String(value).trim()) {
+        if (!id || !String(value).trim()) {
             throw new Error(`Layer ID is not valid -> [${value}]`);
         }
         this.#id = value;
@@ -43,7 +38,7 @@ class Layer {
     }
 
     set name(value) {
-        if (!String(value).trim()) {
+        if (!name || !String(value).trim()) {
             throw new Error(`Layer name is not valid -> [${value}]`);
         }
         this.#name = value;
@@ -97,23 +92,23 @@ class Layer {
         return this.#filter;
     }
 
-    move(mouseStartPosition, mousePosition, elementPosition) {
+    move(mouseStartPosition, mousePosition) {
         let deltaX = mousePosition.x - mouseStartPosition.x;
         let deltaY = mousePosition.y - mouseStartPosition.y;
         let draggedPosition = {
-            x: deltaX + elementPosition.x,
-            y: deltaY + elementPosition.y,
+            x: deltaX + this.x,
+            y: deltaY + this.y,
         };
         this.x = draggedPosition.x;
         this.y = draggedPosition.y;
     }
 
-    resize(type, mouseStartPosition, mousePosition, elementDimension) {
+    resize(type, mouseStartPosition, mousePosition) {
         let posType = type === resizeType.right ? "x" : "y";
-        let dimenType = type === resizeType.right ? "w" : "h";
+        let dimenType = type === resizeType.right ? "width" : "height";
         let diff = mousePosition[posType] - mouseStartPosition[posType];
-        let resizedDimension = elementDimension[dimenType] + diff;
-        this[posType] = resizedDimension;
+        let resizedDimension = this[dimenType] + diff;
+        this[dimenType] = resizedDimension;
     }
 }
 

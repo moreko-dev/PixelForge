@@ -1,17 +1,24 @@
-import Layer from "../Layer";
+import Layer from "./Layer";
 
-class Shape extends Layer {
+class ShapeLayer extends Layer {
     #type;
     #strokeStyle;
     #fillStyle;
     #lineWidth;
 
-    constructor(id, name, visible, locked) {
-        super(id, name, visible, locked);
+    constructor(options = {}) {
+        super(
+            options.id,
+            options.name,
+            options.visible,
+            options.locked,
+            options.shadow,
+            options.filter,
+        );
         this.#type = "shape";
-        this.strokeStyle = "#000000";
-        this.fillStyle = "#ffffff";
-        this.lineWidth = 1;
+        this.strokeStyle = options.strokeStyle || "#000000";
+        this.fillStyle = options.fillStyle || "#ffffff";
+        this.lineWidth = options.lineWidth || 1;
     }
 
     get type() {
@@ -54,4 +61,4 @@ class Shape extends Layer {
     }
 }
 
-export default Shape;
+export default ShapeLayer;

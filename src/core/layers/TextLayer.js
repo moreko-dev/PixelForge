@@ -115,12 +115,12 @@ class TextLayer extends Layer {
         return this.#fillStyle;
     }
 
-    resize(type, mouseStartPosition, mousePosition, elementDimension) {
+    resize(type, mouseStartPosition, mousePosition) {
         let posType = type === resizeType.right ? "x" : "y";
         let dimenType = type === resizeType.right ? "width" : "height";
         let scale = this.fontSize / this[dimenType];
         let diff = mousePosition[posType] - mouseStartPosition[posType];
-        let resizedValue = (elementDimension + diff) * scale;
+        let resizedValue = (this[dimenType] + diff) * scale;
         this.fontSize = resizedValue;
     }
 
