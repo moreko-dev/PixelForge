@@ -93,7 +93,7 @@ class ImageLayer extends Layer {
     }
 
     set src(value) {
-        if (!String(src).trim()) {
+        if (!String(value).trim()) {
             throw new Error(`ImageLayer src is not valid -> [${value}]`);
         }
         this.#src = value;
@@ -111,7 +111,7 @@ class ImageLayer extends Layer {
     }
 
     get rotate() {
-        this.#rotate;
+        return this.#rotate;
     }
 
     set flipX(value) {

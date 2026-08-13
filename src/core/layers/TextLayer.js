@@ -109,6 +109,7 @@ class TextLayer extends Layer {
         if (!String(value).trim()) {
             throw new Error(`TextLayer fontStyle is not valid -> [${value}]`);
         }
+        this.#fillStyle = value;
     }
 
     get fillStyle() {

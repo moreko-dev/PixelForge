@@ -87,10 +87,10 @@ class LineShape extends ShapeLayer {
         let posType = type === resizeType.right ? "x" : "y";
         let resizePoint =
             type === resizeType.right
-                ? Math.max(sx, ex) === sx
+                ? Math.max(this.sx, this.ex) === this.sx
                     ? "sx"
                     : "ex"
-                : Math.max(sy, ey) === sy
+                : Math.max(this.sy, this.ey) === this.sy
                   ? "sy"
                   : "ey";
         let diff = mousePosition[posType] - mouseStartPosition[posType];

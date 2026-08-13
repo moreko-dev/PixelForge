@@ -1,5 +1,5 @@
 export const pictureType = { png: "png", jpeg: "jpeg" };
-export const defaultCanvas = { width: 500, height: 500, bdColor: "#ffffff" };
+export const defaultCanvas = { width: 500, height: 500, bgColor: "#ffffff" };
 export const defaultShadow = {
     color: "#000000",
     blur: 0,

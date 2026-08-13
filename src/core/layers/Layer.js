@@ -48,7 +48,7 @@ class Layer {
     }
 
     set id(value) {
-        if (!id || !String(value).trim()) {
+        if (!value || !String(value).trim()) {
             throw new Error(`Layer ID is not valid -> [${value}]`);
         }
         this.#id = value;
@@ -59,7 +59,7 @@ class Layer {
     }
 
     set name(value) {
-        if (!name || !String(value).trim()) {
+        if (!value || !String(value).trim()) {
             throw new Error(`Layer name is not valid -> [${value}]`);
         }
         this.#name = value;
