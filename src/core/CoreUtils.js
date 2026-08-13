@@ -52,3 +52,7 @@ export function getActualMousePosition(canvas, event) {
 export function calculateRadius(sx, sy, cx, cy) {
     return Math.abs(cx >= cy ? sx - cx : sy - cy);
 }
+
+export function deg2Rad(deg) {
+    return deg * (Math.PI / 180);
+}

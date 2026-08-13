@@ -1,5 +1,5 @@
 import { getActualMousePosition } from "../CoreUtils.js";
-import Tool from "./Tool";
+import Tool from "./Tool.js";
 
 class RectangleTool extends Tool {
     #isDragging = false;

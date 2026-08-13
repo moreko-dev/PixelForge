@@ -1,13 +1,22 @@
 class Filter {
+    #grayscale;
+    #brightness;
+    #contrast;
+    #blur;
+    ["#hue-rotate"];
+    #saturate;
+    #sepia;
+    #opacity;
+
     constructor(filters = {}) {
-        this.grayscale = filters.grayscale || 0;
-        this.brightness = filters.brightness || 100;
-        this.contrast = filters.contrast || 100;
-        this.blur = filters.blur || 0;
-        this["hue-rotate"] = filters.hueRotate || 0;
-        this.saturate = filters.saturate || 100;
-        this.sepia = filters.sepia || 0;
-        this.opacity = filters.opacity || 100;
+        this.#grayscale = filters.grayscale || 0;
+        this.#brightness = filters.brightness || 100;
+        this.#contrast = filters.contrast || 100;
+        this.#blur = filters.blur || 0;
+        this["#hue-rotate"] = filters.hueRotate || 0;
+        this.#saturate = filters.saturate || 100;
+        this.#sepia = filters.sepia || 0;
+        this.#opacity = filters.opacity || 100;
     }
 
     set grayscale(value) {
@@ -107,6 +116,19 @@ class Filter {
         this.saturate = 100;
         this.sepia = 0;
         this.opacity = 100;
+    }
+
+    getFilters() {
+        return {
+            grayscale: this.grayscale,
+            brightness: this.brightness,
+            contrast: this.contrast,
+            blur: this.blur,
+            ["hue-rotate"]: this["hue-rotate"],
+            saturate: this.saturate,
+            sepia: this.sepia,
+            opacity: this.opacity,
+        };
     }
 }
 

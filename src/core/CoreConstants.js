@@ -53,3 +53,53 @@ export const shapeType = {
     LINE: "line",
     CIRCLE: "circle",
 };
+export const filters = [
+    {
+        name: "grayscale",
+        minValue: 0,
+        maxValue: 100,
+        unit: "%",
+    },
+    {
+        name: "brightness",
+        minValue: 0,
+        maxValue: 100,
+        unit: "%",
+    },
+    {
+        name: "contrast",
+        minValue: 0,
+        maxValue: 100,
+        unit: "%",
+    },
+    {
+        name: "blur",
+        minValue: 0,
+        maxValue: 10,
+        unit: "px",
+    },
+    {
+        name: "hue-rotate",
+        minValue: 0,
+        maxValue: 360,
+        unit: "deg",
+    },
+    {
+        name: "saturate",
+        minValue: 0,
+        maxValue: 100,
+        unit: "%",
+    },
+    {
+        name: "sepia",
+        minValue: 0,
+        maxValue: 100,
+        unit: "%",
+    },
+    {
+        name: "opacity",
+        minValue: 0,
+        maxValue: 100,
+        unit: "%",
+    },
+];

@@ -1,4 +1,4 @@
-import { defaultLineCap, defaultLineJoin } from "../CoreConstants";
+import { defaultLineCap, defaultLineJoin } from "../CoreConstants.js";
 
 class PenLayer extends Layer {
     #type;

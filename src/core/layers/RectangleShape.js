@@ -1,30 +1,30 @@
-import ShapeLayer from "./ShapeLayer";
+import ShapeLayer from "./ShapeLayer.js";
 
 class RectangleShape extends ShapeLayer {
-    #type;
+    #shapeType;
     #x;
     #y;
     #width;
     #height;
 
     constructor(options = {}) {
-        super(
-            options.id,
-            options.name,
-            options.visible,
-            options.locked,
-            options.shadow,
-            options.filter,
-        );
-        this.#type = "rect";
+        super({
+            id: options.id,
+            name: options.name,
+            visible: options.visible,
+            locked: options.locked,
+            shadow: options.shadow,
+            filter: options.filter,
+        });
+        this.#shapeType = "rect";
         this.x = options.x || 0;
         this.y = options.y || 0;
         this.width = options.width || 0;
         this.height = options.height || 0;
     }
 
-    get type() {
-        return this.#type;
+    get shapeType() {
+        return this.#shapeType;
     }
 
     set x(value) {

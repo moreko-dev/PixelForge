@@ -1,5 +1,5 @@
-import Canvas from "../canvas/Canvas";
-import { defaultCanvas } from "../CoreConstants";
+import Canvas from "../canvas/Canvas.js";
+import { defaultCanvas } from "../CoreConstants.js";
 import {
     downloadFile,
     generateProjectName,

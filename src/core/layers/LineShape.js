@@ -1,27 +1,31 @@
-import { resizeType } from "../CoreConstants";
-import ShapeLayer from "./ShapeLayer";
+import { resizeType } from "../CoreConstants.js";
+import ShapeLayer from "./ShapeLayer.js";
 
 class LineShape extends ShapeLayer {
-    #type;
+    #shapeType;
     #sx;
     #sy;
     #ex;
     #ey;
 
     constructor(options = {}) {
-        super(
-            options.id,
-            options.name,
-            options.visible,
-            options.locked,
-            options.shadow,
-            options.filter,
-        );
-        this.#type = "line";
+        super({
+            id: options.id,
+            name: options.name,
+            visible: options.visible,
+            locked: options.locked,
+            shadow: options.shadow,
+            filter: options.filter,
+        });
+        this.#shapeType = "line";
         this.sx = options.sx || 0;
         this.sy = options.sy || 0;
         this.ex = options.ex || 0;
         this.ey = options.ey || 0;
+    }
+
+    get shapeType() {
+        return this.#shapeType;
     }
 
     set sx(value) {

@@ -1,5 +1,5 @@
-import { defaultFonts, resizeType } from "../CoreConstants";
-import Layer from "./Layer";
+import { defaultFonts, resizeType } from "../CoreConstants.js";
+import Layer from "./Layer.js";
 
 class TextLayer extends Layer {
     #value;

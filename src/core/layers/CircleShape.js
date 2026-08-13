@@ -1,25 +1,29 @@
-import { resizeType } from "../CoreConstants";
-import ShapeLayer from "./ShapeLayer";
+import { resizeType } from "../CoreConstants.js";
+import ShapeLayer from "./ShapeLayer.js";
 
 class CircleShape extends ShapeLayer {
-    #type;
+    #shapeType;
     #x;
     #y;
     #radius;
 
     constructor(options = {}) {
-        super(
-            options.id,
-            options.name,
-            options.visible,
-            options.locked,
-            options.shadow,
-            options.filter,
-        );
-        this.#type = "circle";
+        super({
+            id: options.id,
+            name: options.name,
+            visible: options.visible,
+            locked: options.locked,
+            shadow: options.shadow,
+            filter: options.filter,
+        });
+        this.#shapeType = "circle";
         this.x = options.x || 0;
         this.y = options.y || 0;
         this.radius = options.radius || 0;
+    }
+
+    get shapeType() {
+        return this.#shapeType;
     }
 
     set x(value) {

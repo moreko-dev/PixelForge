@@ -1,7 +1,7 @@
-import { defaultFilters, defaultShadow } from "../CoreConstants";
-import BoundingBox from "../selection/BoundingBox";
-import Filter from "./Filter";
-import Shadow from "./Shadow";
+import { defaultFilters, defaultShadow } from "../CoreConstants.js";
+import BoundingBox from "../selection/BoundingBox.js";
+import Filter from "./Filter.js";
+import Shadow from "./Shadow.js";
 
 class Layer {
     #id;
