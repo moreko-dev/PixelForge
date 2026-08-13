@@ -1,9 +1,5 @@
 class Camera {
-    #zoom;
-
-    constructor(zoom) {
-        this.zoom = zoom;
-    }
+    #zoom = 1;
 
     set zoom(value) {
         if (value < 0) {
@@ -16,9 +12,15 @@ class Camera {
         return this.#zoom;
     }
 
-    zoomIn() {}
+    zoomIn() {
+        let newZoom = Math.min(this.zoom + 0.1, 4);
+        this.zoom = newZoom;
+    }
 
-    zoomOut() {}
+    zoomOut() {
+        let newZoom = Math.max(this.zoom - 0.1, 0.2);
+        this.zoom = newZoom;
+    }
 }
 
 export default Camera;

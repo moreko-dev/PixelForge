@@ -1,3 +1,4 @@
+import { resizeType } from "../CoreConstants";
 import ShapeLayer from "./ShapeLayer";
 
 class LineShape extends ShapeLayer {
@@ -83,7 +84,26 @@ class LineShape extends ShapeLayer {
     }
 
     resize(type, mouseStartPosition, mousePosition) {
-        return false;
+        let posType = type === resizeType.right ? "x" : "y";
+        let resizePoint =
+            type === resizeType.right
+                ? Math.max(sx, ex) === sx
+                    ? "sx"
+                    : "ex"
+                : Math.max(sy, ey) === sy
+                  ? "sy"
+                  : "ey";
+        let diff = mousePosition[posType] - mouseStartPosition[posType];
+        this[resizePoint] += diff;
+    }
+
+    getBounds() {
+        let x, y, width, height;
+        x = Math.min(this.sx, this.ex);
+        y = Math.min(this.sy, this.ey);
+        width = Math.abs(this.ex - this.sx);
+        height = Math.abs(this.ey - this.sy);
+        return { x, y, width, height };
     }
 }
 

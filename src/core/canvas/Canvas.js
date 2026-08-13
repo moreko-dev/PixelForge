@@ -1,7 +1,3 @@
-/*
-Canvas class stores the canvas's properties and methods
-*/
-
 class Canvas {
     #width;
     #height;

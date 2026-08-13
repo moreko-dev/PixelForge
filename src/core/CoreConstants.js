@@ -42,3 +42,14 @@ export const defaultLineJoin = {
     round: "round",
     bevel: "bevel",
 };
+export const layerType = {
+    IMAGE_LAYER: "image",
+    TEXT_LAYER: "text",
+    PEN_LAYER: "pen",
+    SHAPE_LAYER: "shape",
+};
+export const shapeType = {
+    RECT: "rect",
+    LINE: "line",
+    CIRCLE: "circle",
+};

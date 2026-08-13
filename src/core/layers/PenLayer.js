@@ -18,6 +18,7 @@ class PenLayer extends Layer {
             options.shadow,
             options.filter,
         );
+        super.boundingBox = null;
         this.#type = "pen";
         this.#points = [];
         this.strokeStyle = options.strokeStyle || "#000000";
@@ -86,12 +87,15 @@ class PenLayer extends Layer {
         return this.#miterLimit;
     }
 
-    get points() {
-        return this.#points;
+    set points(value) {
+        if (!Array.isArray(value)) {
+            throw new Error(`PenTool points is not valid object -> [${value}]`);
+        }
+        this.#points = value;
     }
 
-    addPoint(x, y) {
-        this.#points.push({ x, y });
+    get points() {
+        return this.#points;
     }
 }
 

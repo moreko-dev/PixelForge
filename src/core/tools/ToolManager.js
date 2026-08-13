@@ -1,9 +1,9 @@
 import Tool from "./Tool";
 
 class ToolManager {
-    #currentTool;
+    static #currentTool;
 
-    set currentTool(value) {
+    static set currentTool(value) {
         if (!(value instanceof Tool)) {
             throw new Error(
                 `ToolManager currentTool is not valid object -> [${value}]`,
@@ -12,7 +12,7 @@ class ToolManager {
         this.#currentTool = value;
     }
 
-    get currentTool() {
+    static get currentTool() {
         return this.#currentTool;
     }
 }

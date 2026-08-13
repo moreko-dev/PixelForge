@@ -6,10 +6,6 @@ import {
     normalizeFileName,
 } from "../CoreUtils";
 
-/*
-Project class stores the project's properties and methods
-*/
-
 class Project {
     #isProjectCreated;
     #name;

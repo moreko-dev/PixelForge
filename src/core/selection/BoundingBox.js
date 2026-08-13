@@ -4,11 +4,11 @@ class BoundingBox {
     #width;
     #height;
 
-    constructor(x = 0, y = 0, width = 0, height = 0) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    constructor(options = {}) {
+        this.x = options.x || 0;
+        this.y = options.y || 0;
+        this.width = options.width || 0;
+        this.height = options.height || 0;
     }
 
     set x(value) {
@@ -55,7 +55,12 @@ class BoundingBox {
         return this.#height;
     }
 
-    updateBounds() {}
+    update(options) {
+        this.x = options.x || 0;
+        this.y = options.y || 0;
+        this.width = options.width || 0;
+        this.height = options.height || 0;
+    }
 }
 
 export default BoundingBox;

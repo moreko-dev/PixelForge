@@ -61,6 +61,14 @@ class CircleShape extends ShapeLayer {
         let resizedDimension = this.radius * 2 + diff;
         this.radius = resizedDimension / 2;
     }
+
+    getBounds() {
+        let x, y, width, height;
+        x = this.x - this.radius;
+        y = this.y - this.radius;
+        width = height = this.radius * 2;
+        return { x, y, width, height };
+    }
 }
 
 export default CircleShape;

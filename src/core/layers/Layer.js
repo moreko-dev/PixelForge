@@ -1,4 +1,5 @@
 import { defaultFilters, defaultShadow } from "../CoreConstants";
+import BoundingBox from "../selection/BoundingBox";
 import Filter from "./Filter";
 import Shadow from "./Shadow";
 
@@ -9,6 +10,7 @@ class Layer {
     #locked;
     #shadow;
     #filter;
+    #boundingBox;
 
     constructor(id, name, visible, locked, shadow, filter) {
         this.id = id;
@@ -24,6 +26,25 @@ class Layer {
                 defaultShadow.offsetY,
             );
         this.filter = filter || new Filter(defaultFilters);
+        this.#boundingBox = new BoundingBox({
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+        });
+    }
+
+    set boundingBox(value) {
+        if (!(value instanceof BoundingBox)) {
+            throw new Error(
+                `Layer boundingBox is not a valid object -> [${value}]`,
+            );
+        }
+        this.#boundingBox = value;
+    }
+
+    get boundingBox() {
+        return this.#boundingBox;
     }
 
     set id(value) {
@@ -109,6 +130,15 @@ class Layer {
         let diff = mousePosition[posType] - mouseStartPosition[posType];
         let resizedDimension = this[dimenType] + diff;
         this[dimenType] = resizedDimension;
+    }
+
+    getBounds(canvasRef) {
+        return {
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height,
+        };
     }
 }
 
