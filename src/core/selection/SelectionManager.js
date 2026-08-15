@@ -1,10 +1,12 @@
 import { layerType } from "../CoreConstants.js";
 import { hitTest } from "../CoreUtils.js";
+import { checkValidStringOrThrow } from "../CoreValidation.js";
 
 class SelectionManager {
     #selectedItem;
 
     set selectedItem(value) {
+        checkValidStringOrThrow(value, "SelectionManager selected-item");
         this.#selectedItem = value;
     }
 

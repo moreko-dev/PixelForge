@@ -1,3 +1,5 @@
+import { checkNegativeValueOrThrow } from "../CoreValidation.js";
+
 class BoundingBox {
     #x;
     #y;
@@ -12,9 +14,7 @@ class BoundingBox {
     }
 
     set x(value) {
-        if (value < 0) {
-            throw new Error("BoundingBox x cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "BoundingBox x");
         this.#x = value;
     }
 
@@ -23,9 +23,7 @@ class BoundingBox {
     }
 
     set y(value) {
-        if (value < 0) {
-            throw new Error("BoundingBox y cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "BoundingBox y");
         this.#y = value;
     }
 
@@ -34,9 +32,7 @@ class BoundingBox {
     }
 
     set width(value) {
-        if (value < 0) {
-            throw new Error("BoundingBox width cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "BoundingBox width");
         this.#width = value;
     }
 
@@ -45,9 +41,7 @@ class BoundingBox {
     }
 
     set height(value) {
-        if (value < 0) {
-            throw new Error("BoundingBox height cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "BoundingBox height");
         this.#height = value;
     }
 

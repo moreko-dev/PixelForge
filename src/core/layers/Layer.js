@@ -1,4 +1,9 @@
 import { defaultFilters, defaultShadow } from "../CoreConstants.js";
+import {
+    checkInstanceOfOrThrow,
+    checkTypeOfOrThrow,
+    checkValidStringOrThrow,
+} from "../CoreValidation.js";
 import BoundingBox from "../selection/BoundingBox.js";
 import Filter from "./Filter.js";
 import Shadow from "./Shadow.js";
@@ -26,7 +31,7 @@ class Layer {
                 defaultShadow.offsetY,
             );
         this.filter = filter || new Filter(defaultFilters);
-        this.#boundingBox = new BoundingBox({
+        this.boundingBox = new BoundingBox({
             x: 0,
             y: 0,
             width: 0,
@@ -35,11 +40,7 @@ class Layer {
     }
 
     set boundingBox(value) {
-        if (!(value instanceof BoundingBox)) {
-            throw new Error(
-                `Layer boundingBox is not a valid object -> [${value}]`,
-            );
-        }
+        checkInstanceOfOrThrow(value, BoundingBox, "Layer boundingBox");
         this.#boundingBox = value;
     }
 
@@ -48,9 +49,7 @@ class Layer {
     }
 
     set id(value) {
-        if (!value || !String(value).trim()) {
-            throw new Error(`Layer ID is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "Layer id");
         this.#id = value;
     }
 
@@ -59,9 +58,7 @@ class Layer {
     }
 
     set name(value) {
-        if (!value || !String(value).trim()) {
-            throw new Error(`Layer name is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "Layer name");
         this.#name = value;
     }
 
@@ -70,9 +67,7 @@ class Layer {
     }
 
     set visible(value) {
-        if (typeof value !== "boolean") {
-            throw new Error("Layer visibility should have a boolean value");
-        }
+        checkTypeOfOrThrow(value, "boolean", "Layer visibility");
         this.#visible = value;
     }
 
@@ -81,9 +76,7 @@ class Layer {
     }
 
     set locked(value) {
-        if (typeof value !== "boolean") {
-            throw new Error("Layer locked should have a boolean value");
-        }
+        checkTypeOfOrThrow(value, "boolean", "Layer locked");
         this.#locked = value;
     }
 
@@ -92,9 +85,7 @@ class Layer {
     }
 
     set shadow(value) {
-        if (!(value instanceof Shadow)) {
-            throw new Error(`Layer shadow is not valid object -> [${value}]`);
-        }
+        checkInstanceOfOrThrow(value, Shadow, "Layer shadow");
         this.#shadow = value;
     }
 
@@ -103,9 +94,7 @@ class Layer {
     }
 
     set filter(value) {
-        if (!(value instanceof Filter)) {
-            throw new Error(`Layer filter is not valid object -> [${value}]`);
-        }
+        checkInstanceOfOrThrow(value, Filter, "Layer filter");
         this.#filter = value;
     }
 
@@ -116,20 +105,15 @@ class Layer {
     move(mouseStartPosition, mousePosition) {
         let deltaX = mousePosition.x - mouseStartPosition.x;
         let deltaY = mousePosition.y - mouseStartPosition.y;
-        let draggedPosition = {
-            x: deltaX + this.x,
-            y: deltaY + this.y,
-        };
-        this.x = draggedPosition.x;
-        this.y = draggedPosition.y;
+        this.x += deltaX;
+        this.y += deltaY;
     }
 
     resize(type, mouseStartPosition, mousePosition) {
         let posType = type === resizeType.right ? "x" : "y";
         let dimenType = type === resizeType.right ? "width" : "height";
         let diff = mousePosition[posType] - mouseStartPosition[posType];
-        let resizedDimension = this[dimenType] + diff;
-        this[dimenType] = resizedDimension;
+        this[dimenType] += diff;
     }
 
     getBounds(canvasRef) {

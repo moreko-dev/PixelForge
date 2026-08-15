@@ -1,3 +1,5 @@
+import { checkNegativeValueOrThrow } from "../CoreValidation.js";
+
 class Filter {
     #grayscale;
     #brightness;
@@ -20,9 +22,7 @@ class Filter {
     }
 
     set grayscale(value) {
-        if (value < 0) {
-            throw new Error("Filter grayscale cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Filter grayscale");
         this.#grayscale = value;
     }
 
@@ -31,9 +31,7 @@ class Filter {
     }
 
     set brightness(value) {
-        if (value < 0) {
-            throw new Error("Filter brightness cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Filter brightness");
         this.#brightness = value;
     }
 
@@ -42,9 +40,7 @@ class Filter {
     }
 
     set contrast(value) {
-        if (value < 0) {
-            throw new Error("Filter contrast cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Filter contrast");
         this.#contrast = value;
     }
 
@@ -53,9 +49,7 @@ class Filter {
     }
 
     set blur(value) {
-        if (value < 0) {
-            throw new Error("Filter blur cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Filter blur");
         this.#blur = value;
     }
 
@@ -64,9 +58,7 @@ class Filter {
     }
 
     set ["hue-rotate"](value) {
-        if (value < 0) {
-            throw new Error("Filter hueRotate cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Filter hue-rotate");
         this["#hue-rotate"] = value;
     }
 
@@ -75,9 +67,7 @@ class Filter {
     }
 
     set saturate(value) {
-        if (value < 0) {
-            throw new Error("Filter saturate cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Filter saturate");
         this.#saturate = value;
     }
 
@@ -86,9 +76,7 @@ class Filter {
     }
 
     set sepia(value) {
-        if (value < 0) {
-            throw new Error("Filter sepia cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Filter sepia");
         this.#sepia = value;
     }
 
@@ -97,9 +85,7 @@ class Filter {
     }
 
     set opacity(value) {
-        if (value < 0) {
-            throw new Error("Filter opacity cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Filter opacity");
         this.#opacity = value;
     }
 

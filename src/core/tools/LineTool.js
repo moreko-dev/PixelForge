@@ -26,6 +26,7 @@ class LineTool extends Tool {
         [this.#lineBounds.ex, this.#lineBounds.ey] = [mouseX, mouseY];
         // Draw
         const context = canvasRef.getContext("2d");
+        context.save();
         context.clearRect(0, 0, canvasRef.width, canvasRef.height);
         context.beginPath();
         context.moveTo(this.#lineBounds.sx, this.#lineBounds.sy);
@@ -35,9 +36,9 @@ class LineTool extends Tool {
         context.restore();
     }
 
-    onMouseUp() {
+    onMouseUp(createLayerCallback) {
         this.#isDragging = false;
-        // Create layer
+        createLayerCallback(this.#lineBounds);
         this.#lineBounds = { sx: 0, sy: 0, ex: 0, ey: 0 };
     }
 }

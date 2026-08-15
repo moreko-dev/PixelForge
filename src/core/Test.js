@@ -1,10 +1,11 @@
-import RectangleShape from "./layers/RectangleShape.js";
+class Test {
+    test0 = "test0";
+    test1 = "test1";
+    test2 = "test2";
+}
 
-const rectangle = new RectangleShape({
-    id: "12",
-    name: "test",
-    visible: true,
-    locked: false,
-});
-console.log(rectangle.type);
-console.log(rectangle.shapeType);
+const test = new Test();
+
+const json = JSON.stringify(test);
+console.log(json);
+console.log(JSON.parse(json));

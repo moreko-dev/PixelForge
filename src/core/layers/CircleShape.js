@@ -1,4 +1,5 @@
-import { resizeType } from "../CoreConstants.js";
+import { resizeType, shapeType } from "../CoreConstants.js";
+import { checkNegativeValueOrThrow } from "../CoreValidation.js";
 import ShapeLayer from "./ShapeLayer.js";
 
 class CircleShape extends ShapeLayer {
@@ -16,7 +17,7 @@ class CircleShape extends ShapeLayer {
             shadow: options.shadow,
             filter: options.filter,
         });
-        this.#shapeType = "circle";
+        this.#shapeType = shapeType.CIRCLE;
         this.x = options.x || 0;
         this.y = options.y || 0;
         this.radius = options.radius || 0;
@@ -27,9 +28,7 @@ class CircleShape extends ShapeLayer {
     }
 
     set x(value) {
-        if (value < 0) {
-            throw new Error("Circle x cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "CircleShape x");
         this.#x = value;
     }
 
@@ -38,9 +37,7 @@ class CircleShape extends ShapeLayer {
     }
 
     set y(value) {
-        if (value < 0) {
-            throw new Error("Circle y cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "CircleShape y");
         this.#y = value;
     }
 
@@ -49,9 +46,7 @@ class CircleShape extends ShapeLayer {
     }
 
     set radius(value) {
-        if (value < 0) {
-            throw new Error("Circle radius cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "CircleShape radius");
         this.#radius = value;
     }
 
@@ -62,8 +57,7 @@ class CircleShape extends ShapeLayer {
     resize(type, mouseStartPosition, mousePosition) {
         let posType = type === resizeType.right ? "x" : "y";
         let diff = mousePosition[posType] - mouseStartPosition[posType];
-        let resizedDimension = this.radius * 2 + diff;
-        this.radius = resizedDimension / 2;
+        this.radius = (this.radius * 2 + diff) / 2;
     }
 
     getBounds() {

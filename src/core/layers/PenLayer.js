@@ -1,4 +1,13 @@
-import { defaultLineCap, defaultLineJoin } from "../CoreConstants.js";
+import {
+    defaultLineCap,
+    defaultLineJoin,
+    layerType,
+} from "../CoreConstants.js";
+import {
+    checkInstanceOfOrThrow,
+    checkNegativeValueOrThrow,
+    checkValidStringOrThrow,
+} from "../CoreValidation.js";
 
 class PenLayer extends Layer {
     #type;
@@ -19,7 +28,7 @@ class PenLayer extends Layer {
             options.filter,
         );
         super.boundingBox = null;
-        this.#type = "pen";
+        this.#type = layerType.PEN_LAYER;
         this.#points = [];
         this.strokeStyle = options.strokeStyle || "#000000";
         this.lineWidth = options.lineWidth || 1;
@@ -33,9 +42,7 @@ class PenLayer extends Layer {
     }
 
     set strokeStyle(value) {
-        if (!String(value).trim()) {
-            throw new Error(`PenLayer strokeStyle is not valid -> [${value}`);
-        }
+        checkValidStringOrThrow(value, "PenLayer stroke-style");
         this.#strokeStyle = value;
     }
 
@@ -44,9 +51,7 @@ class PenLayer extends Layer {
     }
 
     set lineWidth(value) {
-        if (value < 0) {
-            throw new Error("PenLayer lineWidth cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "PenLayer line-width");
         this.#lineWidth = value;
     }
 
@@ -55,9 +60,7 @@ class PenLayer extends Layer {
     }
 
     set lineCap(value) {
-        if (!String(value).trim()) {
-            throw new Error(`PenLayer lineCap is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "PenLayer line-cap");
         this.#lineCap = value;
     }
 
@@ -66,9 +69,7 @@ class PenLayer extends Layer {
     }
 
     set lineJoin(value) {
-        if (!String(value).trim()) {
-            throw new Error(`PenLayer lineJoin is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "PenLayer line-join");
         this.#lineJoin = value;
     }
 
@@ -77,9 +78,7 @@ class PenLayer extends Layer {
     }
 
     set miterLimit(value) {
-        if (value < 0) {
-            throw new Error("PenLayer miterLimit cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "PenLayer mitter-limit");
         this.#miterLimit = value;
     }
 
@@ -88,9 +87,7 @@ class PenLayer extends Layer {
     }
 
     set points(value) {
-        if (!Array.isArray(value)) {
-            throw new Error(`PenTool points is not valid object -> [${value}]`);
-        }
+        checkInstanceOfOrThrow(value, Array, "PenLayer points");
         this.#points = value;
     }
 

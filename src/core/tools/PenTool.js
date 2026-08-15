@@ -32,9 +32,9 @@ class PenTool extends Tool {
         context.stroke();
     }
 
-    onMouseUp(canvasRef) {
+    onMouseUp(canvasRef, createLayerCallback) {
         this.#isDragging = false;
-        // Create layer
+        createLayerCallback(this.#points);
         this.#points = [];
         const context = canvasRef.getContext("2d");
         context.closePath();

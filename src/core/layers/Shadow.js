@@ -1,3 +1,8 @@
+import {
+    checkNegativeValueOrThrow,
+    checkValidStringOrThrow,
+} from "../CoreValidation.js";
+
 class Shadow {
     #color;
     #blur;
@@ -12,9 +17,7 @@ class Shadow {
     }
 
     set color(value) {
-        if (!String(value).trim()) {
-            throw new Error(`Shadow color is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "Shadow color");
         this.#color = value;
     }
 
@@ -23,9 +26,7 @@ class Shadow {
     }
 
     set blur(value) {
-        if (value < 0) {
-            throw new Error("Shadow blur cannot be negative");
-        }
+        checkValidStringOrThrow(value, "Shadow blur");
         this.#blur = value;
     }
 
@@ -34,9 +35,7 @@ class Shadow {
     }
 
     set offsetX(value) {
-        if (value < 0) {
-            throw new Error("Shadow offsetX cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Shadow offsetX");
         this.#offsetX = value;
     }
 
@@ -45,9 +44,7 @@ class Shadow {
     }
 
     set offsetY(value) {
-        if (value < 0) {
-            throw new Error("Shadow offsetY cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Shadow offsetY");
         this.#offsetY = value;
     }
 

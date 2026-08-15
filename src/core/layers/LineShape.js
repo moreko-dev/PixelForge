@@ -1,4 +1,5 @@
-import { resizeType } from "../CoreConstants.js";
+import { resizeType, shapeType } from "../CoreConstants.js";
+import { checkNegativeValueOrThrow } from "../CoreValidation.js";
 import ShapeLayer from "./ShapeLayer.js";
 
 class LineShape extends ShapeLayer {
@@ -17,7 +18,7 @@ class LineShape extends ShapeLayer {
             shadow: options.shadow,
             filter: options.filter,
         });
-        this.#shapeType = "line";
+        this.#shapeType = shapeType.LINE;
         this.sx = options.sx || 0;
         this.sy = options.sy || 0;
         this.ex = options.ex || 0;
@@ -29,9 +30,7 @@ class LineShape extends ShapeLayer {
     }
 
     set sx(value) {
-        if (value < 0) {
-            throw new Error("Line sx cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "LineShape sx");
         this.#sx = value;
     }
 
@@ -40,9 +39,7 @@ class LineShape extends ShapeLayer {
     }
 
     set sy(value) {
-        if (value < 0) {
-            throw new Error("Line sy cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "LineShape sy");
         this.#sy = value;
     }
 
@@ -51,9 +48,7 @@ class LineShape extends ShapeLayer {
     }
 
     set ex(value) {
-        if (value < 0) {
-            throw new Error("Line ex cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "LineShape ex");
         this.#ex = value;
     }
 
@@ -62,9 +57,7 @@ class LineShape extends ShapeLayer {
     }
 
     set ey(value) {
-        if (value < 0) {
-            throw new Error("Line ey cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "LineShape ey");
         this.#ey = value;
     }
 
@@ -75,16 +68,10 @@ class LineShape extends ShapeLayer {
     move(mouseStartPosition, mousePosition) {
         let deltaX = mousePosition.x - mouseStartPosition.x;
         let deltaY = mousePosition.y - mouseStartPosition.y;
-        let draggedPosition = {
-            sx: deltaX + this.sx,
-            sy: deltaY + this.sy,
-            ex: deltaX + this.ex,
-            ey: deltaY + this.ey,
-        };
-        this.sx = draggedPosition.sx;
-        this.sy = draggedPosition.sy;
-        this.ex = draggedPosition.ex;
-        this.ey = draggedPosition.ey;
+        this.sx += deltaX;
+        this.sy += deltaY;
+        this.ex += deltaX;
+        this.ey += deltaY;
     }
 
     resize(type, mouseStartPosition, mousePosition) {

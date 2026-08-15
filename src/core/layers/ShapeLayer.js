@@ -1,3 +1,8 @@
+import { layerType } from "../CoreConstants.js";
+import {
+    checkNegativeValueOrThrow,
+    checkValidStringOrThrow,
+} from "../CoreValidation.js";
 import Layer from "./Layer.js";
 
 class ShapeLayer extends Layer {
@@ -15,7 +20,7 @@ class ShapeLayer extends Layer {
             options.shadow,
             options.filter,
         );
-        this.#type = "shape";
+        this.#type = layerType.SHAPE_LAYER;
         this.strokeStyle = options.strokeStyle || "#000000";
         this.fillStyle = options.fillStyle || "#ffffff";
         this.lineWidth = options.lineWidth || 1;
@@ -26,11 +31,7 @@ class ShapeLayer extends Layer {
     }
 
     set strokeStyle(value) {
-        if (!String(value).trim()) {
-            throw new Error(
-                `ShapeLayer strokeStyle is not valid -> [${value}]`,
-            );
-        }
+        checkValidStringOrThrow(value, "ShapeLayer stroke-style");
         this.#strokeStyle = value;
     }
 
@@ -39,9 +40,7 @@ class ShapeLayer extends Layer {
     }
 
     set fillStyle(value) {
-        if (!String(value).trim()) {
-            throw new Error(`ShapeLayer fillStyle is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "ShapeLayer fill-style");
         this.#fillStyle = value;
     }
 
@@ -50,9 +49,7 @@ class ShapeLayer extends Layer {
     }
 
     set lineWidth(value) {
-        if (value < 0) {
-            throw new Error("ShapeLayer lineWidth cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "ShapeLayer line-width");
         this.#lineWidth = value;
     }
 

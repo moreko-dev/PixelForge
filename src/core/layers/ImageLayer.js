@@ -1,3 +1,10 @@
+import { layerType } from "../CoreConstants.js";
+import {
+    checkInstanceOfOrThrow,
+    checkNegativeValueOrThrow,
+    checkTypeOfOrThrow,
+    checkValidStringOrThrow,
+} from "../CoreValidation.js";
 import Layer from "./Layer.js";
 
 class ImageLayer extends Layer {
@@ -21,7 +28,7 @@ class ImageLayer extends Layer {
             options.shadow,
             options.filter,
         );
-        this.#type = "image";
+        this.#type = layerType.IMAGE_LAYER;
         this.x = options.x || 0;
         this.y = options.y || 0;
         this.width = options.width || 0;
@@ -38,9 +45,7 @@ class ImageLayer extends Layer {
     }
 
     set x(value) {
-        if (value < 0) {
-            throw new Error("ImageLayer x property cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "ImageLayer x");
         this.#x = value;
     }
 
@@ -49,9 +54,7 @@ class ImageLayer extends Layer {
     }
 
     set y(value) {
-        if (value < 0) {
-            throw new Error("ImageLayer y property cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "ImageLayer y");
         this.#y = value;
     }
 
@@ -60,9 +63,7 @@ class ImageLayer extends Layer {
     }
 
     set width(value) {
-        if (value < 0) {
-            throw new Error("ImageLayer width cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "ImageLayer width");
         this.#width = value;
     }
 
@@ -71,9 +72,7 @@ class ImageLayer extends Layer {
     }
 
     set height(value) {
-        if (value < 0) {
-            throw new Error("ImageLayer height cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "ImageLayer height");
         this.#height = value;
     }
 
@@ -82,9 +81,7 @@ class ImageLayer extends Layer {
     }
 
     set image(value) {
-        if (!value || !(value instanceof Image)) {
-            throw new Error(`ImageLayer image is not valid -> [${value}]`);
-        }
+        checkInstanceOfOrThrow(value, Image, "ImageLayer image");
         this.#image = value;
     }
 
@@ -93,9 +90,7 @@ class ImageLayer extends Layer {
     }
 
     set src(value) {
-        if (!String(value).trim()) {
-            throw new Error(`ImageLayer src is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "ImageLayer src");
         this.#src = value;
     }
 
@@ -104,9 +99,7 @@ class ImageLayer extends Layer {
     }
 
     set rotate(value) {
-        if (value < 0) {
-            throw new Error("ImageLayer rotate cannot be negative");
-        }
+        checkTypeOfOrThrow(value, "number", "ImageLayer rotate");
         this.#rotate = value;
     }
 
@@ -115,9 +108,7 @@ class ImageLayer extends Layer {
     }
 
     set flipX(value) {
-        if (typeof value !== "boolean") {
-            throw new Error("ImageLayer flipX should have a boolean value");
-        }
+        checkTypeOfOrThrow(value, "boolean", "ImageLayer flipX");
         this.#flipX = value;
     }
 
@@ -126,9 +117,7 @@ class ImageLayer extends Layer {
     }
 
     set flipY(value) {
-        if (typeof value !== "boolean") {
-            throw new Error("ImageLayer flipY should have a boolean value");
-        }
+        checkTypeOfOrThrow(value, "boolean", "ImageLayer flipY");
         this.#flipY = value;
     }
 

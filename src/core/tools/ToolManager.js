@@ -1,14 +1,11 @@
+import { checkInstanceOfOrThrow } from "../CoreValidation.js";
 import Tool from "./Tool.js";
 
 class ToolManager {
     static #currentTool;
 
     static set currentTool(value) {
-        if (!(value instanceof Tool)) {
-            throw new Error(
-                `ToolManager currentTool is not valid object -> [${value}]`,
-            );
-        }
+        checkInstanceOfOrThrow(value, Tool, "ToolManager current-tool");
         this.#currentTool = value;
     }
 

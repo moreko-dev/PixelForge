@@ -1,3 +1,8 @@
+import {
+    checkNegativeValueOrThrow,
+    checkValidStringOrThrow,
+} from "../CoreValidation.js";
+
 class Canvas {
     #width;
     #height;
@@ -10,9 +15,7 @@ class Canvas {
     }
 
     set width(value) {
-        if (value < 0) {
-            throw new Error("Canvas width cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Canvas width");
         this.#width = value;
     }
 
@@ -21,9 +24,7 @@ class Canvas {
     }
 
     set height(value) {
-        if (value < 0) {
-            throw new Error("Canvas height cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "Canvas height");
         this.#height = value;
     }
 
@@ -32,16 +33,20 @@ class Canvas {
     }
 
     set backgroundColor(value) {
-        if (!String(value).trim()) {
-            throw new Error(
-                `Canvas bgColor should have a valid value -> [${value}]`,
-            );
-        }
+        checkValidStringOrThrow(value, "Canvas bgColor");
         this.#backgroundColor = value;
     }
 
     get backgroundColor() {
         return this.#backgroundColor;
+    }
+
+    toJSON() {
+        return {
+            width: this.width,
+            height: this.height,
+            bgColor: this.backgroundColor,
+        };
     }
 }
 

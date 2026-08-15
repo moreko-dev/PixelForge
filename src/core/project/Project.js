@@ -4,7 +4,12 @@ import {
     downloadFile,
     generateProjectName,
     normalizeFileName,
-} from "../CoreUtils";
+} from "../CoreUtils.js";
+import {
+    checkInstanceOfOrThrow,
+    checkTypeOfOrThrow,
+    checkValidStringOrThrow,
+} from "../CoreValidation.js";
 
 class Project {
     #isProjectCreated;
@@ -13,24 +18,20 @@ class Project {
     #layers;
 
     constructor(options = {}) {
-        this.isProjectCreated = options?.isProjectCreated ?? false;
-        this.name = options?.name ?? generateProjectName(6);
+        this.isProjectCreated = options.isProjectCreated || false;
+        this.name = options.name || generateProjectName(6);
         this.canvas =
-            options?.canvas ??
+            options.canvas ||
             new Canvas(
                 defaultCanvas.width,
                 defaultCanvas.height,
                 defaultCanvas.bgColor,
             );
-        this.layers = options?.layers ?? [];
+        this.layers = options.layers || [];
     }
 
     set isProjectCreated(value) {
-        if (typeof value !== "boolean") {
-            throw new Error(
-                "Project isProjectCreated should have a boolean value",
-            );
-        }
+        checkTypeOfOrThrow(value, "boolean", "Project isProjectCreated");
         this.#isProjectCreated = value;
     }
 
@@ -39,9 +40,7 @@ class Project {
     }
 
     set name(value) {
-        if (!String(value).trim()) {
-            throw new Error(`Project name is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "Project name");
         this.#name = value;
     }
 
@@ -50,11 +49,7 @@ class Project {
     }
 
     set canvas(value) {
-        if (!(value instanceof Canvas)) {
-            throw new Error(
-                `Project canvas is not a valid object -> [${value}]`,
-            );
-        }
+        checkInstanceOfOrThrow(value, Canvas, "Project canvas");
         this.#canvas = value;
     }
 
@@ -63,9 +58,7 @@ class Project {
     }
 
     set layers(value) {
-        if (!Array.isArray(value)) {
-            throw new Error(`Project layers is not valid -> [${value}]`);
-        }
+        checkInstanceOfOrThrow(value, Array, "Project layers");
         this.#layers = value;
     }
 
@@ -74,11 +67,7 @@ class Project {
     }
 
     save(fileName = this.name) {
-        if (!String(fileName).trim()) {
-            throw new Error(
-                `Project save()->name is not valid -> [${fileName}}`,
-            );
-        }
+        checkValidStringOrThrow(fileName, "Project save() - file-name");
         this.name = fileName;
         fileName = normalizeFileName(fileName, "json");
         let projectJson = JSON.stringify(this, null, 2);
@@ -121,7 +110,7 @@ class Project {
         return {
             isProjectCreated: this.isProjectCreated,
             name: this.name,
-            canvas: this.canvas,
+            canvas: this.canvas.toJSON(),
             layers: this.layers,
         };
     }

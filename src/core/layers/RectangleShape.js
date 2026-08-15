@@ -1,3 +1,5 @@
+import { shapeType } from "../CoreConstants.js";
+import { checkNegativeValueOrThrow } from "../CoreValidation.js";
 import ShapeLayer from "./ShapeLayer.js";
 
 class RectangleShape extends ShapeLayer {
@@ -16,7 +18,7 @@ class RectangleShape extends ShapeLayer {
             shadow: options.shadow,
             filter: options.filter,
         });
-        this.#shapeType = "rect";
+        this.#shapeType = shapeType.RECT;
         this.x = options.x || 0;
         this.y = options.y || 0;
         this.width = options.width || 0;
@@ -28,9 +30,7 @@ class RectangleShape extends ShapeLayer {
     }
 
     set x(value) {
-        if (value < 0) {
-            throw new Error("Rectangle x cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "RectangleShape x");
         this.#x = value;
     }
 
@@ -39,9 +39,7 @@ class RectangleShape extends ShapeLayer {
     }
 
     set y(value) {
-        if (value < 0) {
-            throw new Error("Rectangle y cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "RectangleShape y");
         this.#y = value;
     }
 
@@ -50,9 +48,7 @@ class RectangleShape extends ShapeLayer {
     }
 
     set width(value) {
-        if (value < 0) {
-            throw new Error("Rectangle width cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "RectangleShape width");
         this.#width = value;
     }
 
@@ -61,9 +57,7 @@ class RectangleShape extends ShapeLayer {
     }
 
     set height(value) {
-        if (value < 0) {
-            throw new Error("Rectangle height cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "RectangleShape height");
         this.#height = value;
     }
 

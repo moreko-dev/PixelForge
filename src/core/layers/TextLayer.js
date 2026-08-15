@@ -1,7 +1,12 @@
-import { defaultFonts, resizeType } from "../CoreConstants.js";
+import { defaultFonts, layerType, resizeType } from "../CoreConstants.js";
+import {
+    checkNegativeValueOrThrow,
+    checkValidStringOrThrow,
+} from "../CoreValidation.js";
 import Layer from "./Layer.js";
 
 class TextLayer extends Layer {
+    #type;
     #value;
     #x;
     #y;
@@ -20,7 +25,7 @@ class TextLayer extends Layer {
             options.shadow,
             options.filter,
         );
-        this.#type = "text";
+        this.#type = layerType.TEXT_LAYER;
         this.value = options.value || "";
         this.x = options.x || 0;
         this.y = options.y || 0;
@@ -29,6 +34,10 @@ class TextLayer extends Layer {
         this.fontSize = options.fontSize || 12;
         this.fontFamily = options.fontFamily || defaultFonts[0];
         this.fillStyle = options.fillStyle || "#000000";
+    }
+
+    get type() {
+        return this.#type;
     }
 
     set value(value) {
@@ -40,9 +49,7 @@ class TextLayer extends Layer {
     }
 
     set x(value) {
-        if (value < 0) {
-            throw new Error("TextLayer x cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "TextLayer x");
         this.#x = value;
     }
 
@@ -51,9 +58,7 @@ class TextLayer extends Layer {
     }
 
     set y(value) {
-        if (value < 0) {
-            throw new Error("TextLayer y cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "TextLayer y");
         this.#y = value;
     }
 
@@ -62,9 +67,7 @@ class TextLayer extends Layer {
     }
 
     set width(value) {
-        if (value < 0) {
-            throw new Error("TextLayer width cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "TextLayer width");
         this.#width = value;
     }
 
@@ -73,9 +76,7 @@ class TextLayer extends Layer {
     }
 
     set height(value) {
-        if (value < 0) {
-            throw new Error("TextLayer height cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "TextLayer height");
         this.#height = value;
     }
 
@@ -84,9 +85,7 @@ class TextLayer extends Layer {
     }
 
     set fontSize(value) {
-        if (value < 0) {
-            throw new Error("TextLayer fontSize cannot be negative");
-        }
+        checkNegativeValueOrThrow(value, "TextLayer font-size");
         this.#fontSize = value;
     }
 
@@ -95,9 +94,7 @@ class TextLayer extends Layer {
     }
 
     set fontFamily(value) {
-        if (!String(value).trim()) {
-            throw new Error(`TextLayer fontFamily is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "TextLayer font-family");
         this.#fontFamily = value;
     }
 
@@ -106,9 +103,7 @@ class TextLayer extends Layer {
     }
 
     set fillStyle(value) {
-        if (!String(value).trim()) {
-            throw new Error(`TextLayer fontStyle is not valid -> [${value}]`);
-        }
+        checkValidStringOrThrow(value, "TextLayer fill-style");
         this.#fillStyle = value;
     }
 
@@ -121,8 +116,7 @@ class TextLayer extends Layer {
         let dimenType = type === resizeType.right ? "width" : "height";
         let scale = this.fontSize / this[dimenType];
         let diff = mousePosition[posType] - mouseStartPosition[posType];
-        let resizedValue = (this[dimenType] + diff) * scale;
-        this.fontSize = resizedValue;
+        this.fontSize = (this[dimenType] + diff) * scale;
     }
 
     updateDimensions(canvasRef) {
@@ -130,15 +124,11 @@ class TextLayer extends Layer {
         context.font = `${this.fontSize}px ${this.fontFamily}`;
         const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
             context.measureText(this.value);
-        let updatedDimension = {
-            width: width,
-            height:
-                actualBoundingBoxAscent && actualBoundingBoxDescent
-                    ? actualBoundingBoxAscent + actualBoundingBoxDescent
-                    : this.fontSize * 1.2,
-        };
-        this.width = updatedDimension.width;
-        this.height = updatedDimension.height;
+        this.width = width;
+        this.height =
+            actualBoundingBoxAscent && actualBoundingBoxDescent
+                ? actualBoundingBoxAscent + actualBoundingBoxDescent
+                : this.fontSize * 1.2;
     }
 }
 

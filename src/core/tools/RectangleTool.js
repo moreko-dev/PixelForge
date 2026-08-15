@@ -40,9 +40,9 @@ class RectangleTool extends Tool {
         context.restore();
     }
 
-    onMouseUp() {
+    onMouseUp(createLayerCallback) {
         this.#isDragging = false;
-        // Create layer
+        createLayerCallback(this.#rectangleBounds);
         this.#rectangleBounds = { x: 0, y: 0, w: 0, h: 0 };
     }
 }

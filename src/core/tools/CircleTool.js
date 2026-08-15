@@ -31,6 +31,8 @@ class CircleTool extends Tool {
         );
         // Draw
         const context = canvasRef.getContext("2d");
+        context.save();
+        context.clearRect(0, 0, canvasRef.width, canvasRef.height);
         context.beginPath();
         context.arc(
             this.#circleBounds.x,
@@ -44,9 +46,9 @@ class CircleTool extends Tool {
         context.restore();
     }
 
-    onMouseUp() {
+    onMouseUp(createLayerCallback) {
         this.#isDragging = false;
-        // Create layer
+        createLayerCallback(this.#circleBounds);
         this.#circleBounds = { x: 0, y: 0, radius: 0 };
     }
 }
