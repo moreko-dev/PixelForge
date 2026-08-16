@@ -112,3 +112,7 @@ export function getRectTypeDraggedPosition(
         ey: deltaY + elementEY,
     };
 }
+
+export function checkProjectJsonSchema(json) {
+    
+}

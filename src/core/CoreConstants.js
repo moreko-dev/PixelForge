@@ -103,3 +103,21 @@ export const filters = [
         unit: "%",
     },
 ];
+export const validProjectSchema = {
+    type: "object",
+    required: ["isProjectCreated", "name", "canvas", "layers"],
+    properties: {
+        isProjectCreated: { type: "boolean" },
+        name: { type: "string" },
+        canvas: {
+            type: "object",
+            required: ["width", "height", "backgroundColor"],
+            properties: {
+                width: { type: "number" },
+                height: { type: "number" },
+                backgroundColor: { type: "string" },
+            },
+        },
+        layers: { type: "array" },
+    },
+};

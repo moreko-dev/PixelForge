@@ -1,6 +1,12 @@
-import Project from "./project/Project.js";
+class Test {
+    isTest = true;
+    secondTest = new SecondTest();
+}
 
-const project = new Project();
-console.log(project);
-console.log(project.isProjectCreated);
-console.log(project.canvas.width);
+class SecondTest {
+    isSecondTest = true;
+}
+
+const test = new Test();
+
+console.log(JSON.stringify(test, null, 2));

@@ -45,14 +45,6 @@ class Canvas {
     get backgroundColor() {
         return this.#backgroundColor;
     }
-
-    toJSON() {
-        return {
-            width: this.width,
-            height: this.height,
-            bgColor: this.backgroundColor,
-        };
-    }
 }
 
 export default Canvas;

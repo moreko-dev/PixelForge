@@ -104,15 +104,6 @@ class Project {
         this.canvas.backgroundColor = defaultCanvas.bgColor;
         this.layers = [];
     }
-
-    toJSON() {
-        return {
-            isProjectCreated: this.isProjectCreated,
-            name: this.name,
-            canvas: this.canvas.toJSON(),
-            layers: this.layers,
-        };
-    }
 }
 
 export default Project;
