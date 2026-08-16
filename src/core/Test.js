@@ -1,11 +1,6 @@
-class Test {
-    test0 = "test0";
-    test1 = "test1";
-    test2 = "test2";
-}
+import Project from "./project/Project.js";
 
-const test = new Test();
-
-const json = JSON.stringify(test);
-console.log(json);
-console.log(JSON.parse(json));
+const project = new Project();
+console.log(project);
+console.log(project.isProjectCreated);
+console.log(project.canvas.width);

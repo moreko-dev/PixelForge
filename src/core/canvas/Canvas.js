@@ -1,3 +1,4 @@
+import { defaultCanvas } from "../CoreConstants.js";
 import {
     checkNegativeValueOrThrow,
     checkValidStringOrThrow,
@@ -8,7 +9,11 @@ class Canvas {
     #height;
     #backgroundColor;
 
-    constructor(width, height, bgColor) {
+    constructor({
+        width = defaultCanvas.width,
+        height = defaultCanvas.height,
+        bgColor = defaultCanvas.bgColor,
+    } = {}) {
         this.width = width;
         this.height = height;
         this.backgroundColor = bgColor;

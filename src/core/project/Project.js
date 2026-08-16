@@ -17,17 +17,16 @@ class Project {
     #canvas;
     #layers;
 
-    constructor(options = {}) {
-        this.isProjectCreated = options.isProjectCreated || false;
-        this.name = options.name || generateProjectName(6);
-        this.canvas =
-            options.canvas ||
-            new Canvas(
-                defaultCanvas.width,
-                defaultCanvas.height,
-                defaultCanvas.bgColor,
-            );
-        this.layers = options.layers || [];
+    constructor({
+        isProjectCreated = false,
+        name = generateProjectName(),
+        canvas = new Canvas(),
+        layers = [],
+    } = {}) {
+        this.isProjectCreated = isProjectCreated;
+        this.name = name;
+        this.canvas = canvas;
+        this.layers = layers;
     }
 
     set isProjectCreated(value) {
