@@ -1,5 +1,6 @@
+import Ajv from "ajv";
 import Canvas from "../canvas/Canvas.js";
-import { defaultCanvas } from "../CoreConstants.js";
+import { defaultCanvas, layerType } from "../CoreConstants.js";
 import {
     downloadFile,
     generateProjectName,
@@ -10,6 +11,14 @@ import {
     checkTypeOfOrThrow,
     checkValidStringOrThrow,
 } from "../CoreValidation.js";
+import CircleShape from "../layers/CircleShape.js";
+import Filter from "../layers/Filter.js";
+import ImageLayer from "../layers/ImageLayer.js";
+import LineShape from "../layers/LineShape.js";
+import PenLayer from "../layers/PenLayer.js";
+import RectangleShape from "../layers/RectangleShape.js";
+import Shadow from "../layers/Shadow.js";
+import TextLayer from "../layers/TextLayer.js";
 
 class Project {
     #isProjectCreated;
@@ -103,6 +112,72 @@ class Project {
         this.canvas.height = defaultCanvas.height;
         this.canvas.backgroundColor = defaultCanvas.bgColor;
         this.layers = [];
+    }
+
+    static convertJson2Layers(json) {
+        const newLayers = [];
+        const projectLayers = json.layers;
+        projectLayers.forEach(
+            ({ type, shadow, filter, shapeType, src }, index) => {
+                let newLayer = null;
+                const layerShadow = new Shadow(
+                    shadow.color,
+                    shadow.blur,
+                    shadow.offsetX,
+                    shadow.offsetY,
+                );
+                const layerFilter = new Filter({ ...filter });
+                let layerData = {
+                    ...layer,
+                    shadow: layerShadow,
+                    filter: layerFilter,
+                };
+                const layerClasses = {
+                    [layerType.TEXT_LAYER]: TextLayer,
+                    [layerType.PEN_LAYER]: PenLayer,
+                };
+                const LayerClass = layerClasses[layer.type];
+                if (type === layerType.IMAGE_LAYER) {
+                    const image = new Image();
+                    image.src = src;
+                    image.onload = () => {
+                        newLayer = new ImageLayer({
+                            ...layerData,
+                            image: image,
+                        });
+                    };
+                } else if (type === layerType.SHAPE_LAYER) {
+                    const shapeClasses = {
+                        [shapeType.RECT]: RectangleShape,
+                        [shapeType.LINE]: LineShape,
+                        [shapeType.CIRCLE]: CircleShape,
+                    };
+                    const ShapeClass = shapeClasses[shapeType];
+                    if (ShapeClass) {
+                        newLayer = new ShapeClass({ ...layerData });
+                    } else {
+                        throw new Error(
+                            "Unknown shape layer type. Cannot read shape data",
+                        );
+                    }
+                } else if (LayerClass) {
+                    newLayer = new LayerClass({ ...layerData });
+                } else {
+                    throw new Error(
+                        "Unknown layer type. Cannot read layer data",
+                    );
+                }
+                newLayers.push(newLayer);
+            },
+        );
+        return newLayers;
+    }
+
+    static checkProjectJsonSchema(json, schema) {
+        const ajv = new Ajv();
+        const validate = ajv.compile(schema);
+        const isValid = validate(json);
+        return isValid ? true : false;
     }
 }
 

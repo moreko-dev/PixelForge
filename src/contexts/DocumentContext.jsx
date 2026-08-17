@@ -1,12 +1,14 @@
 import { createContext, useRef, useState } from "react";
 import Project from "../core/project/Project.js";
+import SelectionManager from "../core/selection/SelectionManager.js";
 
 export const DocumentContext = createContext();
 
 function DocumentProvider({ children }) {
     const projectState = useRef(new Project());
-    const [, forceUpdateProject] = useState(false);
-    const [selectedLayerID, setSelectedLayerID] = useState(null);
+    const [updateProject, forceUpdateProject] = useState(false);
+    const selectionState = useRef(new SelectionManager());
+    const [selectionUpdate, forceSelectionUpdate] = useState(false);
     const projectCanvasRef = useRef(null);
     const documentViewRef = useRef(null);
     const isDrawing = useRef(false);
@@ -15,9 +17,11 @@ function DocumentProvider({ children }) {
         <DocumentContext.Provider
             value={{
                 projectState: projectState.current,
+                updateProject,
                 forceUpdateProject,
-                selectedLayerID,
-                setSelectedLayerID,
+                selectionState,
+                selectionUpdate,
+                forceSelectionUpdate,
                 projectCanvasRef,
                 documentViewRef,
                 isDrawing,
