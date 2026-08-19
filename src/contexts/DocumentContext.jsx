@@ -1,14 +1,14 @@
 import { createContext, useRef, useState } from "react";
-import Project from "../core/project/Project.js";
-import SelectionManager from "../core/selection/SelectionManager.js";
+import Project from "../core/project/Project";
+import SelectionManager from "../core/selection/SelectionManager";
 
 export const DocumentContext = createContext();
 
 function DocumentProvider({ children }) {
     const projectState = useRef(new Project());
-    const [updateProject, forceUpdateProject] = useState(false);
-    const selectionState = useRef(new SelectionManager());
-    const [selectionUpdate, forceSelectionUpdate] = useState(false);
+    const [, forceUpdateProject] = useState(false);
+    const selectionManager = useRef(new SelectionManager());
+    const [, forceUpdateSelection] = useState(false);
     const projectCanvasRef = useRef(null);
     const documentViewRef = useRef(null);
     const isDrawing = useRef(false);
@@ -17,14 +17,12 @@ function DocumentProvider({ children }) {
         <DocumentContext.Provider
             value={{
                 projectState: projectState.current,
-                updateProject,
                 forceUpdateProject,
-                selectionState,
-                selectionUpdate,
-                forceSelectionUpdate,
+                selectionManager: selectionManager.current,
+                forceUpdateSelection,
                 projectCanvasRef,
                 documentViewRef,
-                isDrawing,
+                isDrawing: isDrawing.current,
             }}
         >
             {children}

@@ -1,5 +1,10 @@
 export const pictureType = { png: "png", jpeg: "jpeg" };
-export const defaultCanvas = { width: 500, height: 500, bgColor: "#ffffff" };
+export const defaultCanvas = {
+    width: 500,
+    height: 500,
+    bgColor: "#ffffff",
+    scale: 1,
+};
 export const defaultShadow = {
     color: "#000000",
     blur: 0,
@@ -116,6 +121,7 @@ export const validProjectSchema = {
                 width: { type: "number" },
                 height: { type: "number" },
                 backgroundColor: { type: "string" },
+                scale: { type: "number" },
             },
         },
         layers: { type: "array" },

@@ -1,48 +1,173 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { DocumentContext } from "../../../../contexts/DocumentContext";
+import Canvas from "../../../../core/canvas/Canvas";
 import Renderer from "../../../../core/canvas/Renderer";
+import { layerType } from "../../../../core/CoreConstants";
+import { getActualMousePosition, hitTest } from "../../../../core/CoreUtils";
+import { HANDLER_BORDER } from "../../../../data/Constants";
 
 function DocumentViewContainer() {
     const {
         projectState,
-        updateProject,
         projectCanvasRef,
-        selectionState,
-        selectionUpdate,
-        forceSelectionUpdate,
+        documentViewRef,
+        selectionManager,
+        forceUpdateSelection,
+        forceUpdateProject,
+        isDrawing,
     } = useContext(DocumentContext);
+    const documentElementHandler = useRef(null);
+    const isDragging = useRef(false);
+    const mouseDragStartPosition = useRef({ x: 0, y: 0 });
+    const isHandlerGrabbed = useRef(false);
+    const grabbedHandler = useRef(null);
 
     useEffect(() => {
         Renderer.render(
-            projectCanvasRef,
+            projectCanvasRef.current,
             projectState.canvas,
             projectState.layers,
         );
-    }, [updateProject]);
+    }, [projectState]);
 
     useEffect(() => {
-        if (selectionState.selectedItem) {
+        if (selectionManager.selectedItem) {
             const selectedLayer = projectState.layers.find(
-                (item) => item.id === selectionState.selectedItem,
+                (l) => l.id === selectionManager.selectedItem,
             );
             const { x, y, width, height } = selectedLayer.boundingBox;
+            const canvasBounds = Canvas.getCanvasBoundingBox(
+                projectCanvasRef.current,
+            );
+            documentElementHandler.current.style.top = `${canvasBounds.y + y - HANDLER_BORDER * 2}px`;
+            documentElementHandler.current.style.left = `${canvasBounds.x + x - HANDLER_BORDER * 2}px`;
+            documentElementHandler.current.style.width = `${width + HANDLER_BORDER}px`;
+            documentElementHandler.current.style.height = `${height + HANDLER_BORDER}px`;
+            documentElementHandler.current.style.scale =
+                projectCanvasRef.current.style.scale ?? 1;
         }
-        // if (selectedLayerID) {
-        //             const selectedLayer = documentState.layers.find(
-        //                 (item) => item.id === selectedLayerID,
-        //             );
-        //             const { x, y, width, height } = selectedLayer.layer;
-        //             const canvasBounds = getStartPointOfCanvas(
-        //                 documentCanvasRef.current,
-        //             );
-        //             documentElementHandlerRef.current.style.top = `${canvasBounds.y + y - HANDLER_BORDER * 2}px`;
-        //             documentElementHandlerRef.current.style.left = `${canvasBounds.x + x - HANDLER_BORDER * 2}px`;
-        //             documentElementHandlerRef.current.style.width = `${width + HANDLER_BORDER}px`;
-        //             documentElementHandlerRef.current.style.height = `${height + HANDLER_BORDER}px`;
-        //             documentElementHandlerRef.current.style.scale =
-        //                 documentState.canvas.styles.scale ?? 1;
-        //         }
-    }, [selectedLayerID, updateProject]);
+    }, [selectionManager, projectState]);
+
+    const canvasMouseDownHandler = (event) => {
+        isDragging.current = true;
+        const { x: mouseX, y: mouseY } = getActualMousePosition(
+            projectCanvasRef.current,
+            event,
+        );
+        for (let i = projectState.layers.length - 1; i >= 0; i--) {
+            const layer = projectState.layers[i];
+            if (layer.type === layerType.PEN_LAYER) continue;
+            const layerBounds = layer.boundingBox;
+            if (
+                hitTest(
+                    layerBounds.x,
+                    layerBounds.y,
+                    layerBounds.width,
+                    layerBounds.height,
+                    mouseX,
+                    mouseY,
+                )
+            ) {
+                selectionManager.selectedItem = layer.id;
+                [
+                    mouseDragStartPosition.current.x,
+                    mouseDragStartPosition.current.y,
+                ] = [mouseX, mouseY];
+                return;
+            }
+        }
+        selectionManager.selectedItem = null;
+        grabbedHandler.current = null;
+    };
+
+    const canvasMouseMoveHandler = (event) => {
+        const mouseDragCurrentPosition = getActualMousePosition(
+            projectCanvasRef.current,
+            event,
+        );
+        if (selectionManager.selectedItem && !isDrawing) {
+            if (isHandlerGrabbed.current) {
+                const selectedLayer = projectState.layers.find(
+                    (l) => l.id === selectionManager.selectedItem,
+                );
+                selectedLayer.resize(
+                    grabbedHandler.current,
+                    mouseDragStartPosition.current,
+                    mouseDragCurrentPosition,
+                );
+                if (selectedLayer.type === layerType.TEXT_LAYER) {
+                    selectedLayer.updateDimensions(projectCanvasRef.current);
+                }
+                selectedLayer.boundingBox.update(selectedLayer.getBounds());
+            } else if (isDragging.current) {
+                const selectedLayer = projectState.layers.find(
+                    (l) => l.id === selectionManager.selectedItem,
+                );
+                // if any problem occurs while moving,
+                // save the element position in mouseDown
+                selectedLayer.move(
+                    mouseDragStartPosition,
+                    mouseDragCurrentPosition,
+                );
+                selectedLayer.boundingBox.update(selectedLayer.getBounds());
+            }
+        }
+    };
+
+    const canvasMouseUpHandler = () => {
+        isHandlerGrabbed.current = false;
+        grabbedHandler.current = null;
+        isDragging.current = false;
+        mouseDragStartPosition.current = { x: 0, y: 0 };
+    };
+
+    const handlerMouseDownHandler = (event) => {
+        isHandlerGrabbed.current = true;
+        grabbedHandler.current = event.target.dataset.name;
+    };
+
+    return (
+        <div className="document-view-container" ref={documentViewRef}>
+            <canvas
+                id="canvas"
+                className="document-view-canvas"
+                width={projectState.canvas.width}
+                height={projectState.canvas.height}
+                style={{
+                    backgroundColor: projectState.canvas.backgroundColor,
+                    scale: projectState.canvas.scale,
+                    border: "1px solid #000000",
+                }}
+                ref={projectCanvasRef}
+                onMouseDown={canvasMouseDownHandler}
+                onMouseMove={canvasMouseMoveHandler}
+                onMouseUp={canvasMouseUpHandler}
+            ></canvas>
+            <div
+                className={`document-element-handler ${selectionManager.selectedItem ? "" : "hidden"}`}
+                ref={documentElementHandler}
+            >
+                {[layerType.PEN_LAYER].includes(
+                    projectState.layers.find(
+                        (l) => l.id === selectionManager.selectedItem,
+                    ).type,
+                ) && (
+                    <>
+                        <div
+                            className="element-handler right"
+                            data-name="right"
+                            onMouseDown={handlerMouseDownHandler}
+                        ></div>
+                        <div
+                            className="element-handler bottom"
+                            data-name="bottom"
+                            onMouseDown={handlerMouseDownHandler}
+                        ></div>
+                    </>
+                )}
+            </div>
+        </div>
+    );
 }
 
 // import { useContext, useEffect, useRef } from "react";

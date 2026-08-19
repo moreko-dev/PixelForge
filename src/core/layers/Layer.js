@@ -116,7 +116,7 @@ class Layer {
         this[dimenType] += diff;
     }
 
-    getBounds(canvasRef) {
+    getBounds() {
         return {
             x: this.x,
             y: this.y,
