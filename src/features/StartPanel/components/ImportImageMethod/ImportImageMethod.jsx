@@ -55,7 +55,7 @@ function ImportImageMethod() {
                     });
                 };
             };
-            fileReader.onerror = (fileReaderError) => {
+            fileReader.onerror = () => {
                 toast.error("File load failed.", { id: loadingToastID });
             };
         } else {

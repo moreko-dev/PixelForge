@@ -1,4 +1,6 @@
 import { createContext, useRef, useState } from "react";
+import Camera from "../core/canvas/Camera";
+import HistoryManager from "../core/history/HistoryManager";
 import Project from "../core/project/Project";
 import SelectionManager from "../core/selection/SelectionManager";
 
@@ -8,7 +10,8 @@ function DocumentProvider({ children }) {
     const projectState = useRef(new Project());
     const [, forceUpdateProject] = useState(false);
     const selectionManager = useRef(new SelectionManager());
-    const [, forceUpdateSelection] = useState(false);
+    const cameraState = useRef(new Camera());
+    const historyState = useRef(new HistoryManager());
     const projectCanvasRef = useRef(null);
     const documentViewRef = useRef(null);
     const isDrawing = useRef(false);
@@ -19,7 +22,8 @@ function DocumentProvider({ children }) {
                 projectState: projectState.current,
                 forceUpdateProject,
                 selectionManager: selectionManager.current,
-                forceUpdateSelection,
+                cameraState: cameraState.current,
+                historyState: historyState.current,
                 projectCanvasRef,
                 documentViewRef,
                 isDrawing: isDrawing.current,

@@ -83,10 +83,11 @@ class Project {
         const blob = new Blob([projectJson], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         downloadFile(url, fileName);
+        URL.revokeObjectURL(url);
         return true;
     }
 
-    download(canvasRef, fileName, pictureType) {
+    download(canvasRef, fileName, pictureType, onAfterLoad = () => {}) {
         const tempImage = new Image();
         tempImage.src = canvasRef.toDataURL();
         tempImage.onload = () => {
@@ -101,6 +102,7 @@ class Project {
             // Restore canvas
             context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             context.drawImage(tempImage, 0, 0);
+            onAfterLoad();
             return true;
         };
     }

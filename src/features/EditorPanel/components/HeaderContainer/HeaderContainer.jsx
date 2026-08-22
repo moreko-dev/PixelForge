@@ -3,15 +3,15 @@ import DownloadProjectButton from "./components/DownloadProjectButton/DownloadPr
 import SaveProjectButton from "./components/SaveProjectButton/SaveProjectButton";
 import "./HeaderContainer.css";
 
-function HeaderContainer({ projectName, setProjectName }) {
+function HeaderContainer(/* { projectName, setProjectName } */) {
     return (
         <div className="header-container">
             <span className="header-container__title">PixelForge</span>
             <div className="white-space"></div>
             <div style={{ display: "flex", gap: "0.25rem" }}>
                 <SaveProjectButton
-                    projectName={projectName}
-                    setProjectName={setProjectName}
+                // projectName={projectName}
+                // setProjectName={setProjectName}
                 />
                 <DownloadProjectButton />
             </div>

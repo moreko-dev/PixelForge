@@ -3,10 +3,8 @@ import toast from "react-hot-toast";
 import { MdOutlineTextFields } from "react-icons/md";
 import Modal from "../../../../../components/Modal/Modal";
 import { DocumentContext } from "../../../../../contexts/DocumentContext";
-import { UndoRedoContext } from "../../../../../contexts/UndoRedoContext";
-import { defaultTextValues, layersType } from "../../../../../data/Constants";
-import { randomID } from "../../../../../utils/Functions";
-import { getTextLayerBounds } from "../../../../../utils/Utils";
+import { generateID } from "../../../../../core/CoreUtils";
+import TextLayer from "../../../../../core/layers/TextLayer";
 
 function AddTextModalContent({ value, onChange }) {
     return (
@@ -25,9 +23,8 @@ function AddTextModalContent({ value, onChange }) {
 
 function AddTextButton() {
     const [addTextModalShow, setAddTextModalShow] = useState(false);
-    const [newText, setNewText] = useState("");
-    const { saveNewChange } = useContext(UndoRedoContext);
-    const { documentCanvasRef, documentState, setDocumentState } =
+    const [text, setText] = useState("");
+    const { projectCanvasRef, projectState, forceUpdateProject } =
         useContext(DocumentContext);
 
     const addTextButtonHandler = () => {
@@ -36,40 +33,30 @@ function AddTextButton() {
 
     const addTextModalOnClose = () => {
         setAddTextModalShow(false);
-        setNewText("");
+        setText("");
     };
 
     const addTextModalOnSubmit = () => {
-        if (!newText) {
+        if (!text) {
             toast.error("Text value is empty.");
             return;
         }
-        saveNewChange();
-        const layerID = randomID(6);
-        const layer = {
+        const layerID = generateID();
+        const textLayer = new TextLayer({
             id: layerID,
-            type: layersType.TEXT_LAYER,
-            properties: {
-                ...defaultTextValues,
-                value: newText,
-            },
-        };
-        const { x, y, w, h } = getTextLayerBounds(
-            documentCanvasRef.current,
-            layer.properties,
-        );
-        setDocumentState({
-            ...documentState,
-            layers: [
-                ...documentState.layers,
-                { ...layer, layer: { x, y, width: w, height: h } },
-            ],
+            name: `Text-${layerID}`,
+            visible: true,
+            locked: false,
+            value: text,
         });
+        textLayer.updateDimensions(projectCanvasRef);
+        textLayer.boundingBox.update(textLayer.getBounds());
+        forceUpdateProject((prev) => !prev);
         addTextModalOnClose();
     };
 
     const addTextModalTextValueInputHandler = (event) => {
-        setNewText(event.target.value);
+        setText(event.target.value);
     };
 
     return (
@@ -82,7 +69,7 @@ function AddTextButton() {
                     headerContent="Add new text"
                     bodyContent={
                         <AddTextModalContent
-                            value={newText}
+                            value={text}
                             onChange={addTextModalTextValueInputHandler}
                         />
                     }
@@ -96,3 +83,102 @@ function AddTextButton() {
 }
 
 export default AddTextButton;
+
+// import { useContext, useState } from "react";
+// import toast from "react-hot-toast";
+// import { MdOutlineTextFields } from "react-icons/md";
+// import Modal from "../../../../../components/Modal/Modal";
+// import { DocumentContext } from "../../../../../contexts/DocumentContext";
+// import { UndoRedoContext } from "../../../../../contexts/UndoRedoContext";
+// import { defaultTextValues, layersType } from "../../../../../data/Constants";
+// import { randomID } from "../../../../../utils/Functions";
+// import { getTextLayerBounds } from "../../../../../utils/Utils";
+
+// function AddTextModalContent({ value, onChange }) {
+//     return (
+//         <div className="modal-body__wrapper">
+//             <span className="desc">Add new text to canvas:</span>
+//             <input
+//                 type="text"
+//                 className="modal-body__input"
+//                 placeholder="Enter any text..."
+//                 value={value}
+//                 onChange={onChange}
+//             />
+//         </div>
+//     );
+// }
+
+// function AddTextButton() {
+//     const [addTextModalShow, setAddTextModalShow] = useState(false);
+//     const [newText, setNewText] = useState("");
+//     const { saveNewChange } = useContext(UndoRedoContext);
+//     const { documentCanvasRef, documentState, setDocumentState } =
+//         useContext(DocumentContext);
+
+//     const addTextButtonHandler = () => {
+//         setAddTextModalShow(true);
+//     };
+
+//     const addTextModalOnClose = () => {
+//         setAddTextModalShow(false);
+//         setNewText("");
+//     };
+
+//     const addTextModalOnSubmit = () => {
+//         if (!newText) {
+//             toast.error("Text value is empty.");
+//             return;
+//         }
+//         saveNewChange();
+//         const layerID = randomID(6);
+//         const layer = {
+//             id: layerID,
+//             type: layersType.TEXT_LAYER,
+//             properties: {
+//                 ...defaultTextValues,
+//                 value: newText,
+//             },
+//         };
+//         const { x, y, w, h } = getTextLayerBounds(
+//             documentCanvasRef.current,
+//             layer.properties,
+//         );
+//         setDocumentState({
+//             ...documentState,
+//             layers: [
+//                 ...documentState.layers,
+//                 { ...layer, layer: { x, y, width: w, height: h } },
+//             ],
+//         });
+//         addTextModalOnClose();
+//     };
+
+//     const addTextModalTextValueInputHandler = (event) => {
+//         setNewText(event.target.value);
+//     };
+
+//     return (
+//         <>
+//             <button className="button round" onClick={addTextButtonHandler}>
+//                 <MdOutlineTextFields />
+//             </button>
+//             {addTextModalShow && (
+//                 <Modal
+//                     headerContent="Add new text"
+//                     bodyContent={
+//                         <AddTextModalContent
+//                             value={newText}
+//                             onChange={addTextModalTextValueInputHandler}
+//                         />
+//                     }
+//                     onClose={addTextModalOnClose}
+//                     onSubmit={addTextModalOnSubmit}
+//                     submitText="Add"
+//                 />
+//             )}
+//         </>
+//     );
+// }
+
+// export default AddTextButton;

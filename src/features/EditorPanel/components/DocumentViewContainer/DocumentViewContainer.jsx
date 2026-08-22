@@ -12,7 +12,6 @@ function DocumentViewContainer() {
         projectCanvasRef,
         documentViewRef,
         selectionManager,
-        forceUpdateSelection,
         forceUpdateProject,
         isDrawing,
     } = useContext(DocumentContext);
