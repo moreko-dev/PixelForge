@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { LuLayers } from "react-icons/lu";
-
 import "./LayersProperties.css";
 import LayersList from "./components/LayersList/LayersList";
 

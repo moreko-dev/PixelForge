@@ -11,14 +11,7 @@ class Filter {
     #opacity;
 
     constructor(filters = {}) {
-        this.#grayscale = filters.grayscale || 0;
-        this.#brightness = filters.brightness || 100;
-        this.#contrast = filters.contrast || 100;
-        this.#blur = filters.blur || 0;
-        this["#hue-rotate"] = filters.hueRotate || 0;
-        this.#saturate = filters.saturate || 100;
-        this.#sepia = filters.sepia || 0;
-        this.#opacity = filters.opacity || 100;
+        this.setFilters(filters);
     }
 
     set grayscale(value) {
@@ -102,6 +95,17 @@ class Filter {
         this.saturate = 100;
         this.sepia = 0;
         this.opacity = 100;
+    }
+
+    setFilters(filters = {}) {
+        this.#grayscale = filters.grayscale || 0;
+        this.#brightness = filters.brightness || 100;
+        this.#contrast = filters.contrast || 100;
+        this.#blur = filters.blur || 0;
+        this["#hue-rotate"] = filters.hueRotate || 0;
+        this.#saturate = filters.saturate || 100;
+        this.#sepia = filters.sepia || 0;
+        this.#opacity = filters.opacity || 100;
     }
 
     getFilters() {

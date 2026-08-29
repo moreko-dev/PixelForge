@@ -1,35 +1,21 @@
 import { useContext } from "react";
 import { DocumentContext } from "../../../../../../../../../../../../../contexts/DocumentContext";
-import { UndoRedoContext } from "../../../../../../../../../../../../../contexts/UndoRedoContext";
 
 function ImageSize({ layerID }) {
-    const { documentState, setDocumentState } =
+    const { projectState, forceUpdateProject, historyState } =
         useContext(DocumentContext);
-    const { saveNewChange } = useContext(UndoRedoContext);
-    let layerProps = documentState.layers.find(
-        (item) => item.id === layerID,
-    ).properties;
+    let layerProps = projectState.layers.find((l) => l.id === layerID);
 
     const imageSizePropertiesHandler = (name, value) => {
-        saveNewChange();
-        const layersArray = documentState.layers.slice();
-        const layerIndex = layersArray.findIndex((item) => item.id === layerID);
-        layersArray.splice(layerIndex, 1, {
-            ...layersArray[layerIndex],
-            properties: {
-                ...layersArray[layerIndex].properties,
-                [name]: value,
-            },
-            layer: {
-                ...layersArray[layerIndex].layer,
-                [name]: value,
-            },
-        });
-        setDocumentState({
-            ...documentState,
-            layers: layersArray,
-        });
-        layerProps = layersArray[layerIndex].properties;
+        historyState.pushState(projectState);
+        const layerIndex = projectState.layers.findIndex(
+            (l) => l.id === layerID,
+        );
+        const currentLayer = projectState.layers[layerIndex];
+        currentLayer[name] = value;
+        currentLayer.boundingBox = currentLayer.getBounds();
+        forceUpdateProject((prev) => !prev);
+        layerProps = currentLayer;
     };
 
     return (
