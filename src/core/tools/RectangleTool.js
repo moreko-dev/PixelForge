@@ -1,9 +1,15 @@
+import { toolsType } from "../CoreConstants.js";
 import { getActualMousePosition } from "../CoreUtils.js";
 import Tool from "./Tool.js";
 
 class RectangleTool extends Tool {
+    #name = toolsType.RECT;
     #isDragging = false;
     #rectangleBounds = { x: 0, y: 0, w: 0, h: 0 };
+
+    get name() {
+        return this.#name;
+    }
 
     onMouseDown(canvasRef, event) {
         this.#isDragging = true;

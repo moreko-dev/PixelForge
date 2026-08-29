@@ -17,6 +17,9 @@ class LineShape extends ShapeLayer {
             locked: options.locked,
             shadow: options.shadow,
             filter: options.filter,
+            strokeStyle: options.strokeStyle,
+            fillStyle: options.fillStyle,
+            lineWidth: options.lineWidth,
         });
         this.#shapeType = shapeType.LINE;
         this.sx = options.sx || 0;

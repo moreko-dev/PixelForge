@@ -1,9 +1,15 @@
+import { toolsType } from "../CoreConstants.js";
 import { getActualMousePosition } from "../CoreUtils.js";
 import Tool from "../tools/Tool.js";
 
 class LineTool extends Tool {
+    #name = toolsType.LINE;
     #isDragging = false;
     #lineBounds = { sx: 0, sy: 0, ex: 0, ey: 0 };
+
+    get name() {
+        return this.#name;
+    }
 
     onMouseDown(canvasRef, event) {
         this.#isDragging = true;

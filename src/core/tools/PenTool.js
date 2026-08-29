@@ -1,8 +1,14 @@
+import { toolsType } from "../CoreConstants.js";
 import Tool from "./Tool.js";
 
 class PenTool extends Tool {
+    #name = toolsType.PEN;
     #isDragging = false;
     #points = [];
+
+    get name() {
+        return this.#name;
+    }
 
     onMouseDown(canvasRef, event) {
         this.#isDragging = true;

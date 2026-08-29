@@ -127,3 +127,9 @@ export const validProjectSchema = {
         layers: { type: "array" },
     },
 };
+export const toolsType = {
+    PEN: "pen",
+    RECT: "rect",
+    LINE: "line",
+    CIRCLE: "circle",
+};

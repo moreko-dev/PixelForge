@@ -1,9 +1,15 @@
+import { toolsType } from "../CoreConstants.js";
 import { calculateRadius, getActualMousePosition } from "../CoreUtils.js";
 import Tool from "../tools/Tool.js";
 
 class CircleTool extends Tool {
+    #name = toolsType.CIRCLE;
     #isDragging = false;
     #circleBounds = { x: 0, y: 0, radius: 0 };
+
+    get name() {
+        return this.#name;
+    }
 
     onMouseDown(canvasRef, event) {
         this.#isDragging = true;
