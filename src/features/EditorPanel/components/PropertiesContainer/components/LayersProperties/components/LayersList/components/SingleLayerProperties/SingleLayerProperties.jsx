@@ -31,7 +31,12 @@ function RemoveLayerModalContent({ id, type }) {
 function SingleLayerProperties({ layer }) {
     const [showProps, setShowProps] = useState(false);
     const [removeLayerModalShow, setRemoveLayerModalShow] = useState(false);
-    const { documentState, setDocumentState } = useContext(DocumentContext);
+    const {
+        documentState,
+        setDocumentState,
+        selectedLayerID,
+        setSelectedLayerID,
+    } = useContext(DocumentContext);
 
     const toggleShowProps = () => {
         setShowProps(!showProps);
@@ -51,6 +56,7 @@ function SingleLayerProperties({ layer }) {
             (item) => item.id === layer.id,
         );
         layersArray.splice(currentLayerIndex, 1);
+        if (layer.id === selectedLayerID) setSelectedLayerID(null);
         setDocumentState({
             ...documentState,
             layers: layersArray,

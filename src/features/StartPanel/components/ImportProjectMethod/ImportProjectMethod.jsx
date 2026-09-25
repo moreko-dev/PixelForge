@@ -1,9 +1,9 @@
 import { useContext, useRef } from "react";
 import toast from "react-hot-toast";
+import { HiOutlineFolderOpen } from "react-icons/hi2";
 import { DocumentContext } from "../../../../contexts/DocumentContext";
 import { layersType } from "../../../../data/Constants";
 import { checkJSONFileSchema } from "../../../../utils/Utils";
-import { HiOutlineFolderOpen } from "react-icons/hi2";
 
 function ImportProjectMethod() {
     const { documentState, setDocumentState } = useContext(DocumentContext);
@@ -64,11 +64,16 @@ function ImportProjectMethod() {
     return (
         <>
             <button
-                className="start-panel__method-button"
+                className="start-panel__method-button secondary"
                 onClick={importProjectButtonHandler}
             >
                 <HiOutlineFolderOpen />
-                Continue from existing projects
+                <span className="start-panel__method-button-title">
+                    Open project
+                </span>
+                <span className="start-panel__method-button-desc">
+                    Open an existing project
+                </span>
             </button>
             <input
                 type="file"

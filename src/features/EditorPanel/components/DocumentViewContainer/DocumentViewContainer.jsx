@@ -1,14 +1,59 @@
 import { useContext, useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 import { DocumentContext } from "../../../../contexts/DocumentContext";
-import { filtersObj, layersType, shapeTypes } from "../../../../data/Constants";
+import {
+    filtersObj,
+    HANDLER_BORDER,
+    layersType,
+    shapeTypes,
+} from "../../../../data/Constants";
 import { deg2Rad } from "./../../../../utils/Functions";
+import {
+    getCircleLayerBounds,
+    getDraggedPosition,
+    getMousePosition,
+    getRectTypeDraggedPosition,
+    getStartPointOfCanvas,
+    getTextLayerBounds,
+    hitTest,
+} from "./../../../../utils/Utils";
 import "./DocumentViewContainer.css";
 
 function DocumentViewContainer() {
-    const draggedElementRef = useRef(null);
-    const offsetRef = useRef({ x: 0, y: 0 });
-    const { documentState, setDocumentState, documentCanvasRef, isDrawing } =
-        useContext(DocumentContext);
+    const {
+        documentState,
+        setDocumentState,
+        documentCanvasRef,
+        documentViewContainerRef,
+        isDrawing,
+        selectedLayerID,
+        setSelectedLayerID,
+    } = useContext(DocumentContext);
+    const documentElementHandlerRef = useRef(null);
+    const isDragging = useRef(false);
+    const mouseStartPositionRef = useRef({ x: 0, y: 0 });
+    const elementStartPositionRef = useRef({ x: 0, y: 0, ex: 0, ey: 0 });
+    const isHandlerGrabbed = useRef(false);
+    const grabbedHandler = useRef(null);
+    const mouseGrabbedPositionRef = useRef({ x: 0, y: 0, cw: 0, ch: 0 });
+    const currentSelectedLayer = documentState.layers.find(
+        (item) => item.id === selectedLayerID,
+    );
+    const rectEndPositionRef = useRef({ ex: 0, ey: 0 });
+
+    const isRectType = (layer) => {
+        return (
+            layer.type === layersType.SHAPE_LAYER &&
+            [shapeTypes.LINE, shapeTypes.RECT].includes(layer.properties.type)
+        );
+    };
+
+    const isCircleType = (layer) => {
+        return (
+            layer.type === layersType.SHAPE_LAYER &&
+            layer.properties.type === shapeTypes.CIRCLE
+        );
+    };
 
     useEffect(() => {
         const canvasContext = documentCanvasRef.current.getContext("2d");
@@ -134,14 +179,14 @@ function DocumentViewContainer() {
                 if (shapeProperties.type === shapeTypes.RECT) {
                     // Render rect
                     canvasContext.fillRect(
-                        shapeProperties.x,
-                        shapeProperties.y,
+                        shapeProperties.sx,
+                        shapeProperties.sy,
                         shapeProperties.width,
                         shapeProperties.height,
                     );
                     canvasContext.strokeRect(
-                        shapeProperties.x,
-                        shapeProperties.y,
+                        shapeProperties.sx,
+                        shapeProperties.sy,
                         shapeProperties.width,
                         shapeProperties.height,
                     );
@@ -171,6 +216,10 @@ function DocumentViewContainer() {
                     canvasContext.fill();
                     canvasContext.stroke();
                     canvasContext.closePath();
+                } else {
+                    toast.error(
+                        `Unknown shape type! [${shapeProperties.type}]`,
+                    );
                 }
             } else {
                 toast.error(`Unknown layer type! [${layer.id}: ${layerType}]`);
@@ -180,8 +229,303 @@ function DocumentViewContainer() {
         }
     }, [documentState]);
 
+    useEffect(() => {
+        if (selectedLayerID) {
+            const selectedLayer = documentState.layers.find(
+                (item) => item.id === selectedLayerID,
+            );
+            const { x, y, width, height } = selectedLayer.layer;
+            const canvasBounds = getStartPointOfCanvas(
+                documentCanvasRef.current,
+            );
+            documentElementHandlerRef.current.style.top = `${canvasBounds.y + y - HANDLER_BORDER * 2}px`;
+            documentElementHandlerRef.current.style.left = `${canvasBounds.x + x - HANDLER_BORDER * 2}px`;
+            documentElementHandlerRef.current.style.width = `${width + HANDLER_BORDER}px`;
+            documentElementHandlerRef.current.style.height = `${height + HANDLER_BORDER}px`;
+            documentElementHandlerRef.current.style.scale =
+                documentState.canvas.styles.scale ?? 1;
+        }
+    }, [selectedLayerID, documentState]);
+
+    const canvasMouseDownHandler = (event) => {
+        isDragging.current = true;
+        const { x, y } = getMousePosition(documentCanvasRef.current, event);
+        for (let i = documentState.layers.length - 1; i >= 0; i--) {
+            const item = documentState.layers[i];
+            if (item.type === layersType.BRUSH_LAYER) continue;
+            const layerProps = item.properties;
+            const layerBounds = item.layer;
+            if (
+                hitTest(
+                    layerBounds.x,
+                    layerBounds.y,
+                    layerBounds.width,
+                    layerBounds.height,
+                    x,
+                    y,
+                )
+            ) {
+                setSelectedLayerID(item.id);
+                [
+                    mouseStartPositionRef.current.x,
+                    mouseStartPositionRef.current.y,
+                ] = [x, y];
+                if (isRectType(item)) {
+                    elementStartPositionRef.current.x = layerProps.sx;
+                    elementStartPositionRef.current.y = layerProps.sy;
+                    elementStartPositionRef.current.ex = layerProps.ex;
+                    elementStartPositionRef.current.ey = layerProps.ey;
+                } else {
+                    [
+                        elementStartPositionRef.current.x,
+                        elementStartPositionRef.current.y,
+                    ] = [layerProps.x, layerProps.y];
+                }
+
+                return;
+            }
+        }
+        setSelectedLayerID(null);
+        grabbedHandler.current = null;
+    };
+
+    const canvasMouseMoveHandler = (event) => {
+        if (selectedLayerID && isHandlerGrabbed.current && !isDrawing.current) {
+            const { x: cx, y: cy } = getMousePosition(
+                documentCanvasRef.current,
+                event,
+            );
+            let selectedLayer = documentState.layers.find(
+                (item) => item.id === selectedLayerID,
+            );
+            let diff;
+            if (grabbedHandler.current === "right") {
+                if (selectedLayer.type === layersType.IMAGE_LAYER) {
+                    diff = cx - mouseGrabbedPositionRef.current.x;
+                    selectedLayer = {
+                        ...selectedLayer,
+                        properties: {
+                            ...selectedLayer.properties,
+                            width: mouseGrabbedPositionRef.current.cw + diff,
+                        },
+                        layer: {
+                            ...selectedLayer.layer,
+                            width: mouseGrabbedPositionRef.current.cw + diff,
+                        },
+                    };
+                } else if (selectedLayer.type === layersType.TEXT_LAYER) {
+                    let scale =
+                        selectedLayer.properties.fontSize /
+                        selectedLayer.layer.width;
+                    diff = cx - mouseGrabbedPositionRef.current.x;
+                    selectedLayer = {
+                        ...selectedLayer,
+                        properties: {
+                            ...selectedLayer.properties,
+                            fontSize:
+                                (mouseGrabbedPositionRef.current.cw + diff) *
+                                scale,
+                        },
+                    };
+                    const {
+                        x: tx,
+                        y: ty,
+                        w: tw,
+                        h: th,
+                    } = getTextLayerBounds(
+                        documentCanvasRef.current,
+                        selectedLayer.properties,
+                    );
+                    selectedLayer = {
+                        ...selectedLayer,
+                        layer: {
+                            x: tx,
+                            y: ty,
+                            width: tw,
+                            height: th,
+                        },
+                    };
+                } else if (selectedLayer.type === layersType.SHAPE_LAYER) {
+                    const shapeType = selectedLayer.properties.type;
+                    if (shapeType === shapeTypes.RECT) {
+                        diff = cx - mouseGrabbedPositionRef.current.x;
+                        selectedLayer = {
+                            ...selectedLayer,
+                            properties: {
+                                ...selectedLayer.properties,
+                                width:
+                                    mouseGrabbedPositionRef.current.cw + diff,
+                                ex: rectEndPositionRef.current.ex + diff,
+                            },
+                            layer: {
+                                ...selectedLayer.layer,
+                                width:
+                                    mouseGrabbedPositionRef.current.cw + diff,
+                            },
+                        };
+                    }
+                }
+            } else if (grabbedHandler.current === "bottom") {
+                if (selectedLayer.type === layersType.IMAGE_LAYER) {
+                    diff = cy - mouseGrabbedPositionRef.current.y;
+                    selectedLayer = {
+                        ...selectedLayer,
+                        properties: {
+                            ...selectedLayer.properties,
+                            height: mouseGrabbedPositionRef.current.ch + diff,
+                        },
+                        layer: {
+                            ...selectedLayer.layer,
+                            height: mouseGrabbedPositionRef.current.ch + diff,
+                        },
+                    };
+                } else if (selectedLayer.type === layersType.SHAPE_LAYER) {
+                    const shapeType = selectedLayer.properties.type;
+                    if (shapeType === shapeTypes.RECT) {
+                        diff = cy - mouseGrabbedPositionRef.current.y;
+                        selectedLayer = {
+                            ...selectedLayer,
+                            properties: {
+                                ...selectedLayer.properties,
+                                height:
+                                    mouseGrabbedPositionRef.current.ch + diff,
+                                ey: rectEndPositionRef.current.ey + diff,
+                            },
+                            layer: {
+                                ...selectedLayer.layer,
+                                height:
+                                    mouseGrabbedPositionRef.current.ch + diff,
+                            },
+                        };
+                    }
+                }
+            }
+            const layerArray = documentState.layers.slice();
+            const layerIndex = layerArray.findIndex(
+                (item) => item.id === selectedLayerID,
+            );
+            layerArray.splice(layerIndex, 1, selectedLayer);
+            setDocumentState({
+                ...documentState,
+                layers: layerArray,
+            });
+        } else if (
+            selectedLayerID &&
+            isDragging.current &&
+            !isDrawing.current
+        ) {
+            const { x, y } = getMousePosition(documentCanvasRef.current, event);
+            let selectedLayer = documentState.layers.find(
+                (item) => item.id === selectedLayerID,
+            );
+            let draggedPosition, circleLayerBounds;
+            if (isRectType(selectedLayer)) {
+                draggedPosition = getRectTypeDraggedPosition(
+                    x - mouseStartPositionRef.current.x,
+                    y - mouseStartPositionRef.current.y,
+                    elementStartPositionRef.current.x,
+                    elementStartPositionRef.current.y,
+                    elementStartPositionRef.current.ex,
+                    elementStartPositionRef.current.ey,
+                );
+            } else {
+                draggedPosition = getDraggedPosition(
+                    x - mouseStartPositionRef.current.x,
+                    y - mouseStartPositionRef.current.y,
+                    elementStartPositionRef.current.x,
+                    elementStartPositionRef.current.y,
+                );
+            }
+            if (isCircleType(selectedLayer)) {
+                circleLayerBounds = getCircleLayerBounds(
+                    selectedLayer.properties,
+                );
+            }
+            selectedLayer = {
+                ...selectedLayer,
+                properties: {
+                    ...selectedLayer.properties,
+                    ...(isRectType(selectedLayer)
+                        ? {
+                              sx: draggedPosition.x,
+                              sy: draggedPosition.y,
+                              ex: draggedPosition.ex,
+                              ey: draggedPosition.ey,
+                          }
+                        : {
+                              x: draggedPosition.x,
+                              y: draggedPosition.y,
+                          }),
+                },
+                layer: {
+                    ...selectedLayer.layer,
+                    x: isCircleType(selectedLayer)
+                        ? circleLayerBounds.x
+                        : draggedPosition.x,
+                    y: isCircleType(selectedLayer)
+                        ? circleLayerBounds.y
+                        : draggedPosition.y,
+                },
+            };
+            const layerArray = documentState.layers.slice();
+            const layerIndex = layerArray.findIndex(
+                (item) => item.id === selectedLayerID,
+            );
+            layerArray.splice(layerIndex, 1, selectedLayer);
+            setDocumentState({
+                ...documentState,
+                layers: layerArray,
+            });
+        }
+    };
+
+    const canvasMouseUpHandler = () => {
+        if (isHandlerGrabbed.current) isHandlerGrabbed.current = false;
+        isDragging.current = false;
+        mouseStartPositionRef.current = { x: 0, y: 0 };
+        elementStartPositionRef.current = { x: 0, y: 0, ex: 0, ey: 0 };
+    };
+
+    const handlerMouseDownHandler = (event) => {
+        isHandlerGrabbed.current = true;
+        grabbedHandler.current = event.target.dataset.name;
+        const { x, y } = getMousePosition(documentCanvasRef.current, event);
+        const selectedLayer = documentState.layers.find(
+            (item) => item.id === selectedLayerID,
+        );
+        [
+            mouseGrabbedPositionRef.current.x,
+            mouseGrabbedPositionRef.current.y,
+            mouseGrabbedPositionRef.current.cw,
+            mouseGrabbedPositionRef.current.ch,
+        ] = [
+            x,
+            y,
+            selectedLayer[
+                selectedLayer.type === layersType.TEXT_LAYER
+                    ? "layer"
+                    : "properties"
+            ].width,
+            selectedLayer[
+                selectedLayer.type === layersType.TEXT_LAYER
+                    ? "layer"
+                    : "properties"
+            ].height,
+        ];
+        if (selectedLayer.properties?.type === shapeTypes.RECT) {
+            [rectEndPositionRef.current.ex, rectEndPositionRef.current.ey] = [
+                selectedLayer.properties.ex,
+                selectedLayer.properties.ey,
+            ];
+        }
+    };
+
+    const handlerMouseUpHandler = () => {
+        isHandlerGrabbed.current = false;
+    };
+
     return (
-        <div className="document-view-container scrollable">
+        <div className="document-view-container" ref={documentViewContainerRef}>
             <canvas
                 id="canvas"
                 className="document-view-canvas"
@@ -189,7 +533,36 @@ function DocumentViewContainer() {
                 height={documentState.canvas.height ?? 500}
                 style={documentState.canvas.styles ?? {}}
                 ref={documentCanvasRef}
+                onMouseDown={canvasMouseDownHandler}
+                onMouseMove={canvasMouseMoveHandler}
+                onMouseUp={canvasMouseUpHandler}
             ></canvas>
+            <div
+                className={`document-element-handler ${selectedLayerID ? "" : "hidden"}`}
+                ref={documentElementHandlerRef}
+            >
+                {![shapeTypes.LINE, shapeTypes.CIRCLE].includes(
+                    currentSelectedLayer?.properties?.type,
+                ) && (
+                    <>
+                        <div
+                            className="element-handler right"
+                            data-name="right"
+                            onMouseDown={handlerMouseDownHandler}
+                            onMouseUp={handlerMouseUpHandler}
+                        ></div>
+                        {currentSelectedLayer?.type !==
+                            layersType.TEXT_LAYER && (
+                            <div
+                                className="element-handler bottom"
+                                data-name="bottom"
+                                onMouseDown={handlerMouseDownHandler}
+                                onMouseUp={handlerMouseUpHandler}
+                            ></div>
+                        )}
+                    </>
+                )}
+            </div>
         </div>
     );
 }

@@ -3,7 +3,7 @@ import { PiLineSegment } from "react-icons/pi";
 import { DocumentContext } from "../../../../../contexts/DocumentContext";
 import { defaultShapeValues, layersType } from "../../../../../data/Constants";
 import { randomID } from "../../../../../utils/Functions";
-import { getMousePosition } from "../../../../../utils/Utils";
+import { getLayerBounds, getMousePosition } from "../../../../../utils/Utils";
 
 function LineButton({ activeTool, setActiveTool }) {
     const TOOL_NAME = "line";
@@ -24,8 +24,8 @@ function LineButton({ activeTool, setActiveTool }) {
     const lineModeMouseMoveHandler = useCallback((event) => {
         if (!isDragging.current) return;
         const { x, y } = getMousePosition(documentCanvasRef.current, event);
-        const context = documentCanvasRef.current.getContext("2d");
         [lineRef.current.ex, lineRef.current.ey] = [x, y];
+        const context = documentCanvasRef.current.getContext("2d");
         context.clearRect(
             0,
             0,
@@ -44,16 +44,24 @@ function LineButton({ activeTool, setActiveTool }) {
         isDrawing.current = false;
         isDragging.current = false;
         const layerID = randomID(6);
+        const { x, y, w, h } = getLayerBounds(
+            lineRef.current.sx,
+            lineRef.current.sy,
+            lineRef.current.ex,
+            lineRef.current.ey,
+        );
         const newLayer = {
             id: layerID,
             type: layersType.SHAPE_LAYER,
             properties: {
                 ...defaultShapeValues,
+                type: TOOL_NAME,
                 sx: lineRef.current.sx,
                 sy: lineRef.current.sy,
                 ex: lineRef.current.ex,
                 ey: lineRef.current.ey,
             },
+            layer: { x, y, width: w, height: h },
         };
         setDocumentState((prev) => ({
             ...prev,

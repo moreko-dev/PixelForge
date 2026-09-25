@@ -10,7 +10,9 @@ function DocumentProvider({ children }) {
         layers: [],
     });
     const documentCanvasRef = useRef(null);
+    const documentViewContainerRef = useRef(null);
     const isDrawing = useRef(false);
+    const [selectedLayerID, setSelectedLayerID] = useState(null);
 
     return (
         <DocumentContext.Provider
@@ -18,7 +20,10 @@ function DocumentProvider({ children }) {
                 documentState,
                 setDocumentState,
                 documentCanvasRef,
+                documentViewContainerRef,
                 isDrawing,
+                selectedLayerID,
+                setSelectedLayerID,
             }}
         >
             {children}

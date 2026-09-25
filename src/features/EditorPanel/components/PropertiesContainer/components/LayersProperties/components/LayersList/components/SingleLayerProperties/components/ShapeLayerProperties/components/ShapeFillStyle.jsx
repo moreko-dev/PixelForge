@@ -1,4 +1,4 @@
-function ShapeFillStyle({ layerID, layerProps, handler }) {
+function ShapeFillStyle({ layerID, layerProps, handler, shapeType }) {
     return (
         <div className="property-section">
             <h3 className="property-section__title">Shape Fill</h3>
@@ -16,7 +16,9 @@ function ShapeFillStyle({ layerID, layerProps, handler }) {
                         className="property-wrapper__input"
                         value={layerProps.fillStyle}
                         onChange={(event) =>
-                            handler("fillStyle", event.target.value)
+                            handler(shapeType, {
+                                fillStyle: event.target.value,
+                            })
                         }
                     />
                 </div>

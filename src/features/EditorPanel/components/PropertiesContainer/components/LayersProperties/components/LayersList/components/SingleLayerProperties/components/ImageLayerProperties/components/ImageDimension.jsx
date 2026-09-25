@@ -19,6 +19,10 @@ function ImageDimension({ layerID }) {
                 ...layersArray[layerIndex].properties,
                 [name]: value,
             },
+            layer: {
+                ...layersArray[layerIndex].layer,
+                [name]: value,
+            },
         });
         setDocumentState({
             ...documentState,

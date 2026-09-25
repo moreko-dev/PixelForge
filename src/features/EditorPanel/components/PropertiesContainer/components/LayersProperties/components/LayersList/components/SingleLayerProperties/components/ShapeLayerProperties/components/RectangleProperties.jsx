@@ -1,17 +1,45 @@
+import { shapeTypes } from "../../../../../../../../../../../../../data/Constants";
+import ShapeFillStyle from "./ShapeFillStyle";
+import ShapeShadow from "./ShapeShadow";
+import ShapeStrokeStyle from "./ShapeStrokeStyle";
+
 function RectangleProperties({ layerID, layerProps, handler }) {
+    const rectangleDimensionHanlder = (event, diffType) => {
+        const prevSValue = diffType === "sx" ? layerProps.sx : layerProps.sy;
+        const newSValue = Number(event.target.value);
+        const sDiff = prevSValue - newSValue;
+        const prevEValue = diffType === "sx" ? layerProps.ex : layerProps.ey;
+        handler(shapeTypes.RECT, {
+            [diffType]: newSValue,
+            [diffType === "sx" ? "ex" : "ey"]: prevEValue - sDiff,
+        });
+    };
+
+    const rectangleSizeHandler = (event, diffType) => {
+        const prevValue =
+            diffType === "width" ? layerProps.width : layerProps.height;
+        const newValue = Number(event.target.value);
+        const diff = prevValue - newValue;
+        const prevEValue = diffType === "width" ? layerProps.ex : layerProps.ey;
+        handler(shapeTypes.RECT, {
+            [diffType]: newValue,
+            [diffType === "width" ? "ex" : "ey"]: prevEValue - diff,
+        });
+    };
+
     return (
         <>
             <div className="property-section">
                 <h3 className="property-section__title">Shape Dimension</h3>
                 <div className="property-section__content">
                     <div className="property-wrapper__sbs">
-                        {["x", "y"].map((item, index) => (
+                        {["sx", "sy"].map((item, index) => (
                             <div key={index} className="property-wrapper">
                                 <label
                                     htmlFor={`shape-${item}-${layerID}`}
                                     className="property-wrapper__label"
                                 >
-                                    {item}:
+                                    {item.charAt(1)}:
                                 </label>
                                 <input
                                     type="number"
@@ -19,10 +47,7 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                                     className="property-wrapper__input"
                                     value={layerProps[item]}
                                     onChange={(event) =>
-                                        handler(
-                                            item,
-                                            Number(event.target.value),
-                                        )
+                                        rectangleDimensionHanlder(event, item)
                                     }
                                 />
                             </div>
@@ -47,13 +72,31 @@ function RectangleProperties({ layerID, layerProps, handler }) {
                                 className="property-wrapper__input"
                                 value={layerProps[item]}
                                 onChange={(event) =>
-                                    handler(item, Number(event.target.value))
+                                    rectangleSizeHandler(event, item)
                                 }
                             />
                         </div>
                     ))}
                 </div>
             </div>
+            <ShapeFillStyle
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.RECT}
+            />
+            <ShapeStrokeStyle
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.RECT}
+            />
+            <ShapeShadow
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.RECT}
+            />
         </>
     );
 }

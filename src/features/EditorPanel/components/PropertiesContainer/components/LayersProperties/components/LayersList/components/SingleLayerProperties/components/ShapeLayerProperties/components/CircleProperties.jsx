@@ -1,3 +1,8 @@
+import { shapeTypes } from "../../../../../../../../../../../../../data/Constants";
+import ShapeFillStyle from "./ShapeFillStyle";
+import ShapeShadow from "./ShapeShadow";
+import ShapeStrokeStyle from "./ShapeStrokeStyle";
+
 function CircleProperties({ layerID, layerProps, handler }) {
     return (
         <>
@@ -19,10 +24,9 @@ function CircleProperties({ layerID, layerProps, handler }) {
                                     className="property-wrapper__input"
                                     value={layerProps[item]}
                                     onChange={(event) =>
-                                        handler(
-                                            item,
-                                            Number(event.target.value),
-                                        )
+                                        handler(shapeTypes.CIRCLE, {
+                                            [item]: Number(event.target.value),
+                                        })
                                     }
                                 />
                             </div>
@@ -46,12 +50,32 @@ function CircleProperties({ layerID, layerProps, handler }) {
                             className="property-wrapper__input"
                             value={layerProps.radius}
                             onChange={(event) =>
-                                handler("radius", Number(event.target.value))
+                                handler(shapeTypes.CIRCLE, {
+                                    radius: Number(event.target.value),
+                                })
                             }
                         />
                     </div>
                 </div>
             </div>
+            <ShapeFillStyle
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.CIRCLE}
+            />
+            <ShapeStrokeStyle
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.CIRCLE}
+            />
+            <ShapeShadow
+                layerID={layerID}
+                layerProps={layerProps}
+                handler={handler}
+                shapeType={shapeTypes.CIRCLE}
+            />
         </>
     );
 }

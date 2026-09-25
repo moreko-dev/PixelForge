@@ -1,5 +1,5 @@
-import { HiOutlineDocumentPlus } from "react-icons/hi2";
 import { useContext } from "react";
+import { HiOutlineDocumentPlus } from "react-icons/hi2";
 import { DocumentContext } from "../../../../contexts/DocumentContext";
 import { randomID } from "../../../../utils/Functions";
 
@@ -25,11 +25,16 @@ function EmptyDocumentMethod() {
 
     return (
         <button
-            className="start-panel__method-button"
+            className="start-panel__method-button primary"
             onClick={emptyDocumentButtonHandler}
         >
             <HiOutlineDocumentPlus />
-            Start with empty document
+            <span className="start-panel__method-button-title">
+                New project
+            </span>
+            <span className="start-panel__method-button-desc">
+                Start with blank document
+            </span>
         </button>
     );
 }

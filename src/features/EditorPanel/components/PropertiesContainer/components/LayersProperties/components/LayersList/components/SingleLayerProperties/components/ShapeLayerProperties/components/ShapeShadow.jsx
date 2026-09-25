@@ -1,4 +1,4 @@
-function ShapeShadow({ layerID, layerProps, handler }) {
+function ShapeShadow({ layerID, layerProps, handler, shapeType }) {
     return (
         <div className="property-section">
             <h3 className="property-section__title">Shape Shadow</h3>
@@ -16,7 +16,9 @@ function ShapeShadow({ layerID, layerProps, handler }) {
                         className="property-wrapper__input"
                         value={layerProps.shadowColor}
                         onChange={(event) =>
-                            handler("shadowColor", event.target.value)
+                            handler(shapeType, {
+                                shadowColor: event.target.value,
+                            })
                         }
                     />
                 </div>
@@ -33,7 +35,9 @@ function ShapeShadow({ layerID, layerProps, handler }) {
                         className="property-wrapper__input"
                         value={layerProps.shadowBlur}
                         onChange={(event) =>
-                            handler("shadowBlur", Number(event.target.value))
+                            handler(shapeType, {
+                                shadowBlur: Number(event.target.value),
+                            })
                         }
                     />
                 </div>
@@ -50,7 +54,9 @@ function ShapeShadow({ layerID, layerProps, handler }) {
                         className="property-wrapper__input"
                         value={layerProps.shadowOffsetX}
                         onChange={(event) =>
-                            handler("shadowOffsetX", Number(event.target.value))
+                            handler(shapeType, {
+                                shadowOffsetX: Number(event.target.value),
+                            })
                         }
                     />
                 </div>
@@ -67,7 +73,9 @@ function ShapeShadow({ layerID, layerProps, handler }) {
                         className="property-wrapper__input"
                         value={layerProps.shadowOffsetY}
                         onChange={(event) =>
-                            handler("shadowOffsetY", Number(event.target.value))
+                            handler(shapeType, {
+                                shadowOffsetY: Number(event.target.value),
+                            })
                         }
                     />
                 </div>
