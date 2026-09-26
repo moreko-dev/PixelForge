@@ -1,0 +1,133 @@
+:root {
+  /* Backgrounds */
+  --pf-background: var(--color-slate-50);
+  --pf-surface: var(--color-white);
+  --pf-surface-elevated: var(--color-white);
+  --pf-surface-hover: var(--color-slate-100);
+  --pf-surface-active: var(--color-slate-200);
+
+  /* Text */
+  --pf-text: var(--color-slate-950);
+  --pf-text-secondary: var(--color-slate-700);
+  --pf-text-muted: var(--color-slate-500);
+  --pf-text-subtle: var(--color-slate-400);
+  --pf-text-disabled: var(--color-slate-300);
+
+  /* Borders */
+  --pf-border: var(--color-slate-200);
+  --pf-border-subtle: var(--color-slate-100);
+  --pf-border-strong: var(--color-slate-300);
+
+  /* Primary — Cyan */
+  --pf-primary: var(--color-cyan-600);
+  --pf-primary-hover: var(--color-cyan-700);
+  --pf-primary-active: var(--color-cyan-800);
+  --pf-primary-muted: var(--color-cyan-50);
+  --pf-primary-foreground: var(--color-white);
+
+  /* Secondary accent — Sky */
+  --pf-secondary: var(--color-sky-600);
+  --pf-secondary-hover: var(--color-sky-700);
+  --pf-secondary-muted: var(--color-sky-50);
+
+  /* Accent — Violet */
+  --pf-accent: var(--color-violet-600);
+  --pf-accent-hover: var(--color-violet-700);
+  --pf-accent-muted: var(--color-violet-50);
+
+  /* Semantic */
+  --pf-success: var(--color-emerald-600);
+  --pf-success-hover: var(--color-emerald-700);
+  --pf-success-muted: var(--color-emerald-50);
+
+  --pf-warning: var(--color-amber-600);
+  --pf-warning-hover: var(--color-amber-700);
+  --pf-warning-muted: var(--color-amber-50);
+
+  --pf-danger: var(--color-red-600);
+  --pf-danger-hover: var(--color-red-700);
+  --pf-danger-muted: var(--color-red-50);
+
+  --pf-info: var(--color-blue-600);
+  --pf-info-hover: var(--color-blue-700);
+  --pf-info-muted: var(--color-blue-50);
+
+  /* Focus */
+  --pf-focus: var(--color-cyan-600);
+
+  /* Editor-specific */
+  --pf-canvas: var(--color-slate-100);
+  --pf-toolbar: var(--color-white);
+  --pf-panel: var(--color-white);
+  --pf-panel-elevated: var(--color-white);
+  --pf-control: var(--color-slate-100);
+  --pf-control-hover: var(--color-slate-200);
+  --pf-control-active: var(--color-slate-200);
+}
+
+[data-theme="dark"] {
+  /* Backgrounds */
+  --pf-background: var(--color-slate-950);
+  --pf-surface: var(--color-slate-900);
+  --pf-surface-elevated: var(--color-slate-800);
+  --pf-surface-hover: var(--color-slate-800);
+  --pf-surface-active: var(--color-slate-700);
+
+  /* Text */
+  --pf-text: var(--color-slate-50);
+  --pf-text-secondary: var(--color-slate-300);
+  --pf-text-muted: var(--color-slate-400);
+  --pf-text-subtle: var(--color-slate-500);
+  --pf-text-disabled: var(--color-slate-600);
+
+  /* Borders */
+  --pf-border: var(--color-slate-800);
+  --pf-border-subtle: var(--color-slate-800);
+  --pf-border-strong: var(--color-slate-700);
+
+  /* Primary — Cyan */
+  --pf-primary: var(--color-cyan-400);
+  --pf-primary-hover: var(--color-cyan-300);
+  --pf-primary-active: var(--color-cyan-500);
+  --pf-primary-muted: var(--color-cyan-950);
+  --pf-primary-foreground: var(--color-slate-950);
+
+  /* Secondary accent — Sky */
+  --pf-secondary: var(--color-sky-400);
+  --pf-secondary-hover: var(--color-sky-300);
+  --pf-secondary-muted: var(--color-sky-950);
+
+  /* Accent — Violet */
+  --pf-accent: var(--color-violet-400);
+  --pf-accent-hover: var(--color-violet-300);
+  --pf-accent-muted: var(--color-violet-950);
+
+  /* Semantic */
+  --pf-success: var(--color-emerald-400);
+  --pf-success-hover: var(--color-emerald-300);
+  --pf-success-muted: var(--color-emerald-950);
+
+  --pf-warning: var(--color-amber-400);
+  --pf-warning-hover: var(--color-amber-300);
+  --pf-warning-muted: var(--color-amber-950);
+
+  --pf-danger: var(--color-red-400);
+  --pf-danger-hover: var(--color-red-300);
+  --pf-danger-muted: var(--color-red-950);
+
+  --pf-info: var(--color-blue-400);
+  --pf-info-hover: var(--color-blue-300);
+  --pf-info-muted: var(--color-blue-950);
+
+  /* Focus */
+  --pf-focus: var(--color-cyan-400);
+
+  /* Editor-specific */
+  --pf-canvas: var(--color-slate-950);
+  --pf-toolbar: var(--color-slate-900);
+  --pf-panel: var(--color-slate-900);
+  --pf-panel-elevated: var(--color-slate-800);
+  --pf-control: var(--color-slate-800);
+  --pf-control-hover: var(--color-slate-700);
+  --pf-control-active: var(--color-slate-700);
+}

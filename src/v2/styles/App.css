@@ -1,0 +1,109 @@
+@import "tailwindcss";
+@import "./variables.css";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* =========================================================
+   Tailwind v4 Theme Tokens
+   ========================================================= */
+
+@theme inline {
+  /* Backgrounds */
+  --color-background: var(--pf-background);
+  --color-surface: var(--pf-surface);
+  --color-surface-elevated: var(--pf-surface-elevated);
+  --color-surface-hover: var(--pf-surface-hover);
+  --color-surface-active: var(--pf-surface-active);
+
+  /* Text */
+  --color-text: var(--pf-text);
+  --color-text-secondary: var(--pf-text-secondary);
+  --color-text-muted: var(--pf-text-muted);
+  --color-text-subtle: var(--pf-text-subtle);
+  --color-text-disabled: var(--pf-text-disabled);
+
+  /* Borders */
+  --color-border: var(--pf-border);
+  --color-border-subtle: var(--pf-border-subtle);
+  --color-border-strong: var(--pf-border-strong);
+
+  /* Primary */
+  --color-primary: var(--pf-primary);
+  --color-primary-hover: var(--pf-primary-hover);
+  --color-primary-active: var(--pf-primary-active);
+  --color-primary-muted: var(--pf-primary-muted);
+  --color-primary-foreground: var(--pf-primary-foreground);
+
+  /* Secondary */
+  --color-secondary: var(--pf-secondary);
+  --color-secondary-hover: var(--pf-secondary-hover);
+  --color-secondary-muted: var(--pf-secondary-muted);
+
+  /* Accent */
+  --color-accent: var(--pf-accent);
+  --color-accent-hover: var(--pf-accent-hover);
+  --color-accent-muted: var(--pf-accent-muted);
+
+  /* Semantic */
+  --color-success: var(--pf-success);
+  --color-success-hover: var(--pf-success-hover);
+  --color-success-muted: var(--pf-success-muted);
+
+  --color-warning: var(--pf-warning);
+  --color-warning-hover: var(--pf-warning-hover);
+  --color-warning-muted: var(--pf-warning-muted);
+
+  --color-danger: var(--pf-danger);
+  --color-danger-hover: var(--pf-danger-hover);
+  --color-danger-muted: var(--pf-danger-muted);
+
+  --color-info: var(--pf-info);
+  --color-info-hover: var(--pf-info-hover);
+  --color-info-muted: var(--pf-info-muted);
+
+  /* Focus */
+  --color-focus: var(--pf-focus);
+
+  /* Editor */
+  --color-canvas: var(--pf-canvas);
+  --color-toolbar: var(--pf-toolbar);
+  --color-panel: var(--pf-panel);
+  --color-panel-elevated: var(--pf-panel-elevated);
+  --color-control: var(--pf-control);
+  --color-control-hover: var(--pf-control-hover);
+  --color-control-active: var(--pf-control-active);
+}
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--pf-border-strong) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--pf-border-strong);
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--pf-primary);
+  }
+
+  *::-webkit-scrollbar-thumb:active {
+    background-color: var(--pf-primary-active);
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
