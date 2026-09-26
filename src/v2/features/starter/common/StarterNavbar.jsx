@@ -46,7 +46,7 @@ function NavbarMenuItem({ Icon, content, to }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex gap-2 items-center text-text-muted text-lg p-2 rounded-lg transition-colors duration-300 hover:text-focus select-none outline-none ${isActive ? "text-text! bg-secondary-muted pointer-events-none" : ""}`
+        `cursor-pointer flex gap-2 items-center text-text-muted text-lg p-2 rounded-lg transition-colors duration-300 hover:text-focus select-none outline-none ${isActive ? "text-text! bg-secondary-muted pointer-events-none" : ""}`
       }
     >
       {({ isActive }) => (

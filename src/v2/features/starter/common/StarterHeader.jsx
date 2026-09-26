@@ -1,15 +1,16 @@
 import { LuSun, LuUser } from "react-icons/lu";
+import { DefaultButton, PrimaryButton } from "../../../components/Buttons";
 
 function StarterHeader() {
   return (
-    <div className="flex justify-end gap-4 p-4 border-b border-b-border">
-      <button className="size-10 flex justify-center items-center rounded-full bg-border transition-colors duration-300 hover:bg-border-strong">
+    <div className="flex flex-row-reverse gap-4 p-4 border-b border-b-border">
+      <PrimaryButton className="cursor-pointer size-10 flex justify-center items-center rounded-full">
+        <LuUser />
+      </PrimaryButton>
+      <DefaultButton className="cursor-pointer size-10 flex justify-center items-center rounded-full">
         <LuSun />
         {/* <LuMoon /> */}
-      </button>
-      <button className="size-10 flex justify-center items-center rounded-full bg-secondary transition-colors duration-300 hover:bg-secondary-hover">
-        <LuUser />
-      </button>
+      </DefaultButton>
     </div>
   );
 }
