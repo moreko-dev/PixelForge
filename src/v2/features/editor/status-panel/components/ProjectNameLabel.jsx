@@ -1,0 +1,10 @@
+function ProjectNameLabel() {
+  return (
+    <div className="flex-1 flex gap-2 items-center">
+      <span className="inline-block size-2 bg-danger rounded-full"></span>
+      <span className="text-text-muted">untitled-123456</span>
+    </div>
+  );
+}
+
+export default ProjectNameLabel;
