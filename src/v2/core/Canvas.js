@@ -1,9 +1,24 @@
-import { checkNonNegativeIntegerOrThrow } from "./CoreValidator";
+import { canvasDefaultValues } from "./CoreConstants.js";
+import {
+  checkInstanceOfOrThrow,
+  checkNonNegativeIntegerOrThrow,
+} from "./CoreValidator";
+import Background from "./background/Background.js";
 
 class Canvas {
   #width;
   #height;
   #background;
+
+  constructor({
+    width = canvasDefaultValues.width,
+    height = canvasDefaultValues.height,
+    background = canvasDefaultValues.background,
+  } = {}) {
+    this.width = width;
+    this.height = height;
+    this.background = background;
+  }
 
   set width(value) {
     checkNonNegativeIntegerOrThrow(value, "Canvas.width");
@@ -23,8 +38,21 @@ class Canvas {
     return this.#height;
   }
 
-  set background() {
-    // Background should be a class
+  set background(value) {
+    checkInstanceOfOrThrow(value, Background, "Canvas.background");
+    this.#background = value;
+  }
+
+  get background() {
+    return this.#background;
+  }
+
+  toJSON() {
+    return {
+      width: this.width,
+      height: this.height,
+      background: this.background,
+    };
   }
 }
 

@@ -1,10 +1,10 @@
+import Canvas from "./Canvas.js";
 import { generateProjectName } from "./CoreUtils.js";
 import {
   checkArrayOrThrow,
   checkInstanceOfOrThrow,
   checkNonEmptyStringOrThrow,
 } from "./CoreValidator.js";
-import Canvas from "./Canvas.js";
 
 class Project {
   #name;

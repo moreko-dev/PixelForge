@@ -1,7 +1,11 @@
-import { Outlet } from "react-router";
+import { useContext } from "react";
+import { Navigate, Outlet } from "react-router";
+import ProjectContext from "../contexts/ProjectContext";
 
 function EditorLayout() {
-  return <Outlet />;
+  const { projectState } = useContext(ProjectContext);
+
+  return projectState.current ? <Outlet /> : <Navigate to="/" />;
 }
 
 export default EditorLayout;

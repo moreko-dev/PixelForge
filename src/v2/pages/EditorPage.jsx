@@ -1,7 +1,7 @@
-import CanvasViewerPanel from "../features/editor/CanvasViewerPanel";
-import PropertiesPanel from "../features/editor/properties-panel/PropertiesPanel";
-import StatusPanel from "../features/editor/status-panel/StatusPanel";
-import ToolsPanel from "../features/editor/ToolsPanel";
+import CanvasViewerPanel from "./../features/editor/canvas-viewer-panel/CanvasViewerPanel";
+import PropertiesPanel from "./../features/editor/properties-panel/PropertiesPanel";
+import StatusPanel from "./../features/editor/status-panel/StatusPanel";
+import ToolsPanel from "./../features/editor/tools-panel/ToolsPanel";
 
 function EditorPage() {
   return (

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
-import StarterHeader from "../features/starter/common/StarterHeader";
-import StarterNavbar from "../features/starter/common/StarterNavbar";
+import StarterHeader from "./components/starter-layout/header/StarterHeader";
+import StarterNavbar from "./components/starter-layout/navbar/StarterNavbar";
 
 function StarterLayout() {
   return (

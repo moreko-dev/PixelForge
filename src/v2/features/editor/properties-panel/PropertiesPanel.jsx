@@ -1,6 +1,6 @@
 import { Tabs } from "../../../components/Tabs";
-import CanvasTabContent from "./components/CanvasTabContent";
-import LayersTabContent from "./components/LayersTabContent";
+import CanvasTabContent from "./components/canvas-content/CanvasTabContent";
+import LayersTabContent from "./components/layers-content/LayersTabContent";
 
 const tabsData = [
   {

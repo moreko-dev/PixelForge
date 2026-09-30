@@ -1,5 +1,5 @@
-import { PrimaryLineButton } from "../../../components/Buttons";
-import HomeActionCenter from "./HomeActionCenter";
+import { PrimaryLineButton } from "../../../../components/Buttons";
+import HomeActionCenter from "./../common/HomeActionCenter";
 
 function HomeRecentProjects() {
   return (
