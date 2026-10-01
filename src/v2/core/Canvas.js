@@ -29,6 +29,10 @@ class Canvas {
     return this.#width;
   }
 
+  setWidth(value) {
+    this.width = value;
+  }
+
   set height(value) {
     checkNonNegativeIntegerOrThrow(value, "Canvas.height");
     this.#height = value;
@@ -36,6 +40,10 @@ class Canvas {
 
   get height() {
     return this.#height;
+  }
+
+  setHeight(value) {
+    this.height = value;
   }
 
   set background(value) {

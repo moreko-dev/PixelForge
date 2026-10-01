@@ -18,6 +18,10 @@ class LinearGradient extends GradientBackground {
   get angle() {
     return this.#angle;
   }
+
+  setAngle(value) {
+    this.angle = value;
+  }
 }
 
 export default LinearGradient;

@@ -27,37 +27,31 @@ const canvasStylesFields = [
 ];
 
 function CanvasTabContent() {
-  const { projectState, setProjectState } = useContext(ProjectContext);
+  const { projectState, forceUpdate } = useContext(ProjectContext);
 
   const canvasDimensionStates = [
     {
-      value: projectState.canvas.width,
+      value: projectState.current.canvas.width,
       onChange: (event) => {
-        setProjectState((prev) => {
-          prev.canvas.width = Number(event.target.value);
-          return prev;
-        });
+        projectState.current.canvas.setWidth(Number(event.target.value));
+        forceUpdate();
       },
     },
     {
-      value: projectState.canvas.height,
+      value: projectState.current.canvas.height,
       onChange: (event) => {
-        setProjectState((prev) => {
-          prev.canvas.height = Number(event.target.value);
-          return prev;
-        });
+        projectState.current.canvas.setHeight(Number(event.target.value));
+        forceUpdate();
       },
     },
   ];
 
   const canvasStylesStates = [
     {
-      value: projectState.canvas.background.color,
+      value: projectState.current.canvas.background.color,
       onChange: (event) => {
-        setProjectState((prev) => {
-          prev.canvas.background.color = event.target.value;
-          return prev;
-        });
+        projectState.current.canvas.background.setColor(event.target.value);
+        forceUpdate();
       },
     },
   ];

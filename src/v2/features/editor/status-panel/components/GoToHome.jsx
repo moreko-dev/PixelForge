@@ -31,17 +31,17 @@ function GoToHome() {
   const { removeProject } = useContext(ProjectContext);
   const [modalShow, setModalShow] = useState(false);
 
-  const handleModalOnClose = () => setModalShow(false);
+  const handleModalClose = () => setModalShow(false);
 
-  const handleModalOnOpen = () => setModalShow(true);
+  const handleModalOpen = () => setModalShow(true);
 
-  const handleGoToHomeOnClick = () => removeProject();
+  const handleGoToHomeClick = () => removeProject();
 
   return (
     <div>
       <DangerButton
         className="size-9 flex items-center justify-center rounded-full cursor-pointer"
-        onClick={handleModalOnOpen}
+        onClick={handleModalOpen}
       >
         <LuHouse />
       </DangerButton>
@@ -51,11 +51,11 @@ function GoToHome() {
           content={<GoToHomeModalContent />}
           actions={
             <GoToHomeModalActions
-              onClose={handleModalOnClose}
-              onSubmit={handleGoToHomeOnClick}
+              onClose={handleModalClose}
+              onSubmit={handleGoToHomeClick}
             />
           }
-          onClose={handleModalOnClose}
+          onClose={handleModalClose}
         />
       )}
     </div>

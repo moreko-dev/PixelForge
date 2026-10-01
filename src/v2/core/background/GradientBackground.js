@@ -13,17 +13,13 @@ class GradientBackground extends Background {
 
   constructor({ gradientType, stops = [] } = {}) {
     super({ type: backgroundTypes.GRADIENT });
-    this.gradientType = gradientType;
-    this.stops = stops;
-  }
-
-  set gradientType(value) {
     checkOneOfOrThrow(
-      value,
+      gradientType,
       Object.values(gradientTypes),
       "GradientBackground.type",
     );
-    this.#gradientType = value;
+    this.#gradientType = gradientType;
+    this.stops = stops;
   }
 
   get gradientType() {

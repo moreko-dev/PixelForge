@@ -1,6 +1,6 @@
+import { useState } from "react";
 import {
   LuCircle,
-  LuImage,
   LuMinus,
   LuMousePointer2,
   LuPaintbrush,
@@ -8,29 +8,34 @@ import {
   LuType,
 } from "react-icons/lu";
 import { ToolsButton } from "../../../components/Buttons";
+import ImageTool from "./components/ImageTool";
 
 const toolButtonItems = [
-  { Icon: LuMousePointer2, name: "Select" },
-  { Icon: LuImage, name: "Image" },
-  { Icon: LuType, name: "Text" },
-  { Icon: LuPaintbrush, name: "Brush" },
-  { Icon: LuSquare, name: "Rectangle" },
-  { Icon: LuMinus, name: "Line" },
-  { Icon: LuCircle, name: "Circle" },
+  { id: "select", Icon: LuMousePointer2, name: "Select" },
+  { id: "text", Icon: LuType, name: "Text" },
+  { id: "brush", Icon: LuPaintbrush, name: "Brush" },
+  { id: "rectangle", Icon: LuSquare, name: "Rectangle" },
+  { id: "line", Icon: LuMinus, name: "Line" },
+  { id: "circle", Icon: LuCircle, name: "Circle" },
 ];
 
 function ToolsPanel() {
+  const [acitveButton, setActiveButton] = useState(toolButtonItems[0].id);
+
   return (
     <div className="bg-surface p-4 border-t border-t-border border-r border-r-border flex flex-col gap-2">
       {toolButtonItems.map((item, index) => (
         <ToolsButton
           key={index}
-          className="rounded-lg py-2 px-4 flex gap-2 items-center cursor-pointer"
+          className="select-none rounded-lg py-2 px-4 flex gap-2 items-center cursor-pointer"
+          active={item.id === acitveButton}
+          onClick={() => setActiveButton(item.id)}
         >
           <item.Icon />
           {item.name}
         </ToolsButton>
       ))}
+      <ImageTool />
     </div>
   );
 }

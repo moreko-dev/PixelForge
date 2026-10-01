@@ -4,14 +4,20 @@ const ProjectContext = createContext();
 
 export function ProjectProvider({ children }) {
   const projectState = useRef(null);
-  const [, forceUpdate] = useState(0);
+  const [, updator] = useState(false);
 
   const createProject = (project) => {
     projectState.current = project;
+    forceUpdate();
   };
 
   const removeProject = () => {
     projectState.current = null;
+    forceUpdate();
+  };
+
+  const forceUpdate = () => {
+    updator((prev) => !prev);
   };
 
   return (

@@ -1,10 +1,7 @@
 export function DefaultButton({ children, className, ...props }) {
   return (
     <button
-      className={`
-        bg-border border border-border-strong transition-colors duration-300 hover:bg-border-strong
-        ${className}
-    `}
+      className={`bg-border border border-border-strong transition-colors duration-300 hover:bg-border-strong ${className}`}
       {...props}
     >
       {children}
@@ -26,10 +23,7 @@ export function ToolsButton({ children, className, active = false, ...props }) {
 export function PrimaryButton({ children, className, ...props }) {
   return (
     <button
-      className={`
-        bg-primary text-primary-foreground transition-colors duration-300 hover:bg-primary-hover disabled:bg-primary-muted
-        ${className}
-    `}
+      className={`bg-primary text-primary-foreground transition-colors duration-300 hover:bg-primary-hover disabled:bg-primary-muted ${className}`}
       {...props}
     >
       {children}
@@ -48,13 +42,21 @@ export function PrimaryLineButton({ children, className, ...props }) {
   );
 }
 
+export function SecondaryButton({ children, className, ...props }) {
+  return (
+    <button
+      className={`bg-secondary transition-colors duration-300 hover:bg-secondary-hover disabled:bg-secondary-muted ${className}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
+
 export function DangerButton({ children, className, ...props }) {
   return (
     <button
-      className={`
-        bg-danger transition-colors duration-300 hover:bg-danger-hover disabled:bg-danger-muted
-        ${className}
-    `}
+      className={`bg-danger transition-colors duration-300 hover:bg-danger-hover disabled:bg-danger-muted ${className}`}
       {...props}
     >
       {children}

@@ -19,6 +19,10 @@ class ColorBackground extends Background {
     return this.#color;
   }
 
+  setColor(value) {
+    this.color = value;
+  }
+
   toJSON() {
     return {
       type: this.type,

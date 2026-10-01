@@ -153,14 +153,14 @@ function CreateNewButton() {
     },
   });
 
-  const handleModalOnClose = () => setModalShow(false);
+  const handleModalClose = () => setModalShow(false);
 
-  const handleModalOnOpen = () => {
+  const handleModalOpen = () => {
     dispatch({ type: "reset" });
     setModalShow(true);
   };
 
-  const handleModalOnSubmit = () => {
+  const handleModalSubmit = () => {
     try {
       const project = new Project({
         name: formState.name,
@@ -183,7 +183,7 @@ function CreateNewButton() {
     <>
       <DefaultButton
         className="cursor-pointer flex gap-2 items-center px-6 py-2 rounded-full"
-        onClick={handleModalOnOpen}
+        onClick={handleModalOpen}
       >
         <FiPlusSquare /> Create new
       </DefaultButton>
@@ -195,11 +195,11 @@ function CreateNewButton() {
           }
           actions={
             <CreateNewModalActions
-              onClose={handleModalOnClose}
-              onSubmit={handleModalOnSubmit}
+              onClose={handleModalClose}
+              onSubmit={handleModalSubmit}
             />
           }
-          onClose={handleModalOnClose}
+          onClose={handleModalClose}
         />
       )}
     </>

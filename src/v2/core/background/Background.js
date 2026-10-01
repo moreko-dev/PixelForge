@@ -4,13 +4,9 @@ import { checkOneOfOrThrow } from "../CoreValidator";
 class Background {
   #type;
 
-  constructor({type} = {}) {
-    this.type = type;
-  }
-
-  set type(value) {
-    checkOneOfOrThrow(value, Object.values(backgroundTypes), "Background.type");
-    this.#type = value;
+  constructor({ type } = {}) {
+    checkOneOfOrThrow(type, Object.values(backgroundTypes), "Background.type");
+    this.#type = type;
   }
 
   get type() {

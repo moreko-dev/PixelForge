@@ -30,6 +30,10 @@ class Project {
     return this.#name;
   }
 
+  setName(value) {
+    this.name = value;
+  }
+
   set canvas(value) {
     checkInstanceOfOrThrow(value, Canvas, "Project.canvas");
     this.#canvas = value;

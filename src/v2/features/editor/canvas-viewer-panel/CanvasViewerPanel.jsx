@@ -7,10 +7,10 @@ function CanvasViewerPanel() {
   return (
     <div className="grid place-items-center overflow-auto">
       <canvas
-        width={projectState.canvas.width}
-        height={projectState.canvas.height}
+        width={projectState.current.canvas.width}
+        height={projectState.current.canvas.height}
         style={{
-          backgroundColor: projectState.canvas.background.color,
+          backgroundColor: projectState.current.canvas.background.color,
         }}
       ></canvas>
     </div>
