@@ -17,7 +17,7 @@ const tabsData = [
 
 function PropertiesPanel() {
   return (
-    <div className="min-w-75 bg-surface border-l border-t border-l-border border-t-border">
+    <div className="min-w-75 bg-surface border-l border-t border-l-border border-t-border overflow-y-auto">
       <Tabs tabs={tabsData} defaultTab="canvas" className="h-full" />
     </div>
   );

@@ -1,11 +1,14 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import toast from "react-hot-toast";
 import { LuImage } from "react-icons/lu";
 import { ToolsButton } from "../../../../components/Buttons";
 import { loadImage } from "../../../../utils/Utils";
+import ProjectContext from "./../../../../contexts/ProjectContext";
+import ImageLayer from "./../../../../core/layers/ImageLayer";
 
 function ImageTool() {
   const fileInputRef = useRef(null);
+  const { projectState, forceUpdate } = useContext(ProjectContext);
 
   const handleImportImageClick = () => {
     fileInputRef.current.click();
@@ -23,6 +26,14 @@ function ImageTool() {
     }
     try {
       const image = await loadImage(selectedImage);
+      const imageLayer = new ImageLayer({
+        image: image,
+        src: image.src,
+        width: image.width,
+        height: image.height,
+      });
+      projectState.current.addLayer(imageLayer);
+      forceUpdate();
       toast.success("Image imported successfuly.", {
         id: loadingToast,
       });

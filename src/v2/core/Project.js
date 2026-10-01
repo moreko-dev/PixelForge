@@ -1,9 +1,11 @@
 import Canvas from "./Canvas.js";
+import { layerTypes } from "./CoreConstants.js";
 import { generateProjectName } from "./CoreUtils.js";
 import {
   checkArrayOrThrow,
   checkInstanceOfOrThrow,
   checkNonEmptyStringOrThrow,
+  checkOneOfOrThrow,
 } from "./CoreValidator.js";
 
 class Project {
@@ -50,6 +52,23 @@ class Project {
 
   get layers() {
     return this.#layers;
+  }
+
+  addLayer(newLayer) {
+    checkOneOfOrThrow(
+      newLayer.type,
+      Object.values(layerTypes),
+      "addLayer().layerType",
+    );
+    this.layers.push(newLayer);
+  }
+
+  removeLayer(index) {
+    this.layers.splice(index, 1);
+  }
+
+  getLayer(index) {
+    return this.layers[index];
   }
 
   toJSON() {
