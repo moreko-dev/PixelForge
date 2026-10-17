@@ -1,0 +1,450 @@
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --brand: #00cccc;
+  --brand-hover: #00b8b8;
+  --brand-active: #009999;
+  --brand-soft: #e6ffff;
+  --brand-foreground: #003b3b;
+
+  /* App surfaces */
+  --background: #f5f7fa;
+  --workspace: #e8ecf2;
+  --canvas-background: #dce2ea;
+
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #edf1f5;
+  --surface-hover: #f0f4f8;
+  --surface-active: #e5ebf1;
+  --surface-selected: #e0fafa;
+  --surface-disabled: #f1f3f5;
+
+  --sidebar: #f9fafc;
+  --toolbar: #ffffff;
+  --dialog: #ffffff;
+  --popover: #ffffff;
+  --tooltip: #202833;
+  --tooltip-foreground: #ffffff;
+
+  /* Text */
+  --foreground: #17212f;
+  --foreground-secondary: #455365;
+  --muted-foreground: #667487;
+  --subtle-foreground: #7b8797;
+  --disabled-foreground: #929ba8;
+  --inverse: #ffffff;
+
+  --link: #006b78;
+  --link-hover: #004f5a;
+
+  /* Primary action */
+  --primary: #00cccc;
+  --primary-hover: #00b8b8;
+  --primary-active: #009999;
+  --primary-foreground: #002d30;
+  --primary-disabled: #b8dcdd;
+
+  /* Secondary action */
+  --secondary: #e8edf3;
+  --secondary-hover: #dce4ed;
+  --secondary-active: #cdd7e3;
+  --secondary-foreground: #253346;
+  --secondary-disabled: #f0f2f5;
+
+  /* Ghost action */
+  --ghost-hover: #e9f0f5;
+  --ghost-active: #dde7ee;
+  --ghost-foreground: #344255;
+
+  /* Outline action */
+  --outline: #ffffff;
+  --outline-hover: #f0fafa;
+  --outline-active: #dff5f5;
+  --outline-border: #8a9aaa;
+  --outline-foreground: #253346;
+
+  /* Icon buttons */
+  --icon-button-hover: #e8eef4;
+  --icon-button-active: #d8e3ed;
+  --icon-button-foreground: #455365;
+  --icon-button-disabled: #aab3bf;
+
+  /* Destructive action */
+  --destructive: #c62828;
+  --destructive-hover: #a91f1f;
+  --destructive-active: #861818;
+  --destructive-foreground: #ffffff;
+  --destructive-soft: #fdecec;
+  --destructive-border: #e6a2a2;
+
+  /* Borders */
+  --border: #d5dde6;
+  --border-strong: #aab6c5;
+  --border-subtle: #e8edf2;
+  --border-disabled: #e8ebef;
+  --divider: #e1e6ed;
+
+  /* Focus */
+  --ring: #007f83;
+  --ring-offset: #ffffff;
+  --focus-shadow: 0 0 0 3px rgb(0 127 131 / 22%);
+
+  /* Inputs */
+  --input: #ffffff;
+  --input-foreground: #17212f;
+  --input-placeholder: #788597;
+  --input-border: #aab6c5;
+  --input-hover-border: #718397;
+  --input-focus-border: #007f83;
+  --input-disabled: #f0f2f5;
+  --input-disabled-foreground: #929ba8;
+  --input-readonly: #edf1f5;
+
+  /* Form controls */
+  --control: #ffffff;
+  --control-border: #8796a8;
+  --control-checked: #006f73;
+  --control-checked-foreground: #ffffff;
+  --control-hover: #e6f8f8;
+  --control-disabled: #e5e9ee;
+
+  /* Slider */
+  --slider-track: #d5dde6;
+  --slider-range: #008f95;
+  --slider-thumb: #ffffff;
+  --slider-thumb-border: #006f73;
+  --slider-thumb-focus: #007f83;
+
+  /* Toggle */
+  --toggle-track: #c8d1dc;
+  --toggle-track-hover: #b5c2d0;
+  --toggle-track-checked: #008f95;
+  --toggle-thumb: #ffffff;
+  --toggle-disabled: #e4e8ed;
+
+  /* Status colors */
+  --success: #247a45;
+  --success-foreground: #ffffff;
+  --success-soft: #e8f6ec;
+  --success-border: #a7d7b5;
+
+  --warning: #925500;
+  --warning-foreground: #ffffff;
+  --warning-soft: #fff4d9;
+  --warning-border: #e8cb87;
+
+  --error: #c62828;
+  --error-foreground: #ffffff;
+  --error-soft: #fdecec;
+  --error-border: #e6a2a2;
+
+  --info: #175ea8;
+  --info-foreground: #ffffff;
+  --info-soft: #eaf3ff;
+  --info-border: #aac9ee;
+
+  /* Image editor: selection and drag-and-drop */
+  --selection: #b8f5f5;
+  --selection-foreground: #173b42;
+  --selection-border: #007f83;
+
+  --dropzone: #e6ffff;
+  --dropzone-border: #007f83;
+  --dropzone-hover: #ccf7f7;
+  --dropzone-invalid: #fdecec;
+
+  /* Image canvas */
+  --checker-light: #ffffff;
+  --checker-dark: #d8dee6;
+  --image-boundary: #6d7a8c;
+  --image-boundary-active: #007f83;
+
+  /* Crop tool */
+  --crop-overlay: rgb(12 19 29 / 58%);
+  --crop-frame: #ffffff;
+  --crop-frame-accent: #00cccc;
+
+  /* Selection tool */
+  --selection-overlay: rgb(0 204 204 / 14%);
+  --selection-outline: #007f83;
+  --selection-handle: #ffffff;
+  --selection-handle-border: #006f73;
+
+  /* Guides and transform */
+  --guide: #00a8ad;
+  --guide-shadow: #ffffff;
+  --transform-handle: #ffffff;
+  --transform-handle-border: #007f83;
+  --transform-anchor: #00cccc;
+
+  /* Grid and rulers */
+  --grid-line: rgb(60 75 95 / 22%);
+  --ruler-background: #f1f4f8;
+  --ruler-foreground: #526174;
+  --ruler-mark: #aab6c5;
+
+  /* Overlays */
+  --overlay: rgb(18 27 40 / 40%);
+  --scrim: rgb(18 27 40 / 58%);
+
+  /* Shadows */
+  --shadow-color: 220 30% 15%;
+  --shadow-sm: 0 1px 2px rgb(30 45 65 / 7%);
+  --shadow-md: 0 4px 12px rgb(30 45 65 / 10%);
+  --shadow-lg: 0 12px 32px rgb(30 45 65 / 15%);
+  --shadow-xl: 0 24px 64px rgb(30 45 65 / 20%);
+
+  /* Notifications */
+  --toast: #ffffff;
+  --toast-foreground: #17212f;
+  --toast-border: #d5dde6;
+  --toast-shadow: 0 8px 28px rgb(30 45 65 / 14%);
+  --notification-dot: #c62828;
+
+  /* Loading indicators */
+  --skeleton: #e5eaf0;
+  --skeleton-highlight: #f6f8fa;
+  --spinner-track: #d5dde6;
+  --spinner-indicator: #007f83;
+  --progress-track: #e1e7ee;
+  --progress-indicator: #008f95;
+
+  /* Scrollbar */
+  --scrollbar-thumb: #c4cdd8;
+  --scrollbar-thumb-hover: #98a7b8;
+
+  /* Code and keyboard shortcuts */
+  --code-background: #edf1f5;
+  --code-foreground: #344255;
+  --kbd-background: #ffffff;
+  --kbd-foreground: #455365;
+  --kbd-border: #d5dde6;
+}
+
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Brand */
+  --brand: #00ffff;
+  --brand-hover: #66ffff;
+  --brand-active: #00dada;
+  --brand-soft: #10393d;
+  --brand-foreground: #002d30;
+
+  /* App surfaces */
+  --background: #11151b;
+  --workspace: #191f28;
+  --canvas-background: #222a35;
+
+  --surface: #1b222c;
+  --surface-raised: #232c38;
+  --surface-sunken: #151b23;
+  --surface-hover: #293442;
+  --surface-active: #334152;
+  --surface-selected: #12383d;
+  --surface-disabled: #202630;
+
+  --sidebar: #171d25;
+  --toolbar: #1d2530;
+  --dialog: #232c38;
+  --popover: #252f3b;
+  --tooltip: #f0f5fa;
+  --tooltip-foreground: #17212f;
+
+  /* Text */
+  --foreground: #f0f4f8;
+  --foreground-secondary: #c0cad6;
+  --muted-foreground: #9aa8b8;
+  --subtle-foreground: #8391a2;
+  --disabled-foreground: #687587;
+  --inverse: #17212f;
+
+  --link: #66e6e6;
+  --link-hover: #a3ffff;
+
+  /* Primary action */
+  --primary: #00dada;
+  --primary-hover: #66ffff;
+  --primary-active: #00b8b8;
+  --primary-foreground: #002d30;
+  --primary-disabled: #285356;
+
+  /* Secondary action */
+  --secondary: #303b49;
+  --secondary-hover: #3b4859;
+  --secondary-active: #465569;
+  --secondary-foreground: #e6edf5;
+  --secondary-disabled: #252d37;
+
+  /* Ghost action */
+  --ghost-hover: #293442;
+  --ghost-active: #334152;
+  --ghost-foreground: #d1dae5;
+
+  /* Outline action */
+  --outline: #202833;
+  --outline-hover: #263540;
+  --outline-active: #183d42;
+  --outline-border: #647487;
+  --outline-foreground: #e6edf5;
+
+  /* Icon buttons */
+  --icon-button-hover: #303b49;
+  --icon-button-active: #3b4859;
+  --icon-button-foreground: #c0cad6;
+  --icon-button-disabled: #647184;
+
+  /* Destructive action */
+  --destructive: #f87171;
+  --destructive-hover: #fca5a5;
+  --destructive-active: #ef4444;
+  --destructive-foreground: #3b1010;
+  --destructive-soft: #3a2025;
+  --destructive-border: #85434a;
+
+  /* Borders */
+  --border: #354151;
+  --border-strong: #536276;
+  --border-subtle: #293341;
+  --border-disabled: #2a323e;
+  --divider: #303a48;
+
+  /* Focus */
+  --ring: #00ffff;
+  --ring-offset: #1b222c;
+  --focus-shadow: 0 0 0 3px rgb(0 255 255 / 28%);
+
+  /* Inputs */
+  --input: #151b23;
+  --input-foreground: #f0f4f8;
+  --input-placeholder: #8391a2;
+  --input-border: #536276;
+  --input-hover-border: #7d8da1;
+  --input-focus-border: #00ffff;
+  --input-disabled: #202630;
+  --input-disabled-foreground: #687587;
+  --input-readonly: #232c38;
+
+  /* Form controls */
+  --control: #151b23;
+  --control-border: #738297;
+  --control-checked: #00dada;
+  --control-checked-foreground: #002d30;
+  --control-hover: #19363b;
+  --control-disabled: #303845;
+
+  /* Slider */
+  --slider-track: #3b4655;
+  --slider-range: #00dada;
+  --slider-thumb: #f0f4f8;
+  --slider-thumb-border: #00dada;
+  --slider-thumb-focus: #00ffff;
+
+  /* Toggle */
+  --toggle-track: #465365;
+  --toggle-track-hover: #58677b;
+  --toggle-track-checked: #00bfc3;
+  --toggle-thumb: #ffffff;
+  --toggle-disabled: #303845;
+
+  /* Status colors */
+  --success: #6edb91;
+  --success-foreground: #102a19;
+  --success-soft: #193527;
+  --success-border: #356a49;
+
+  --warning: #f4c56a;
+  --warning-foreground: #352400;
+  --warning-soft: #382e1c;
+  --warning-border: #75603a;
+
+  --error: #f87171;
+  --error-foreground: #3b1010;
+  --error-soft: #3a2025;
+  --error-border: #85434a;
+
+  --info: #7db9ff;
+  --info-foreground: #10253e;
+  --info-soft: #1c2e43;
+  --info-border: #3d5f85;
+
+  /* Image editor: selection and drag-and-drop */
+  --selection: #17474c;
+  --selection-foreground: #d8ffff;
+  --selection-border: #00ffff;
+
+  --dropzone: #183338;
+  --dropzone-border: #00ffff;
+  --dropzone-hover: #20474c;
+  --dropzone-invalid: #3a2025;
+
+  /* Image canvas */
+  --checker-light: #38424f;
+  --checker-dark: #28313d;
+  --image-boundary: #8a98aa;
+  --image-boundary-active: #00ffff;
+
+  /* Crop tool */
+  --crop-overlay: rgb(0 0 0 / 68%);
+  --crop-frame: #ffffff;
+  --crop-frame-accent: #00ffff;
+
+  /* Selection tool */
+  --selection-overlay: rgb(0 255 255 / 12%);
+  --selection-outline: #00ffff;
+  --selection-handle: #f0f4f8;
+  --selection-handle-border: #007f83;
+
+  /* Guides and transform */
+  --guide: #00ffff;
+  --guide-shadow: #17212f;
+  --transform-handle: #f0f4f8;
+  --transform-handle-border: #00ffff;
+  --transform-anchor: #00ffff;
+
+  /* Grid and rulers */
+  --grid-line: rgb(220 235 250 / 20%);
+  --ruler-background: #202833;
+  --ruler-foreground: #c0cad6;
+  --ruler-mark: #536276;
+
+  /* Overlays */
+  --overlay: rgb(0 0 0 / 48%);
+  --scrim: rgb(0 0 0 / 68%);
+
+  /* Shadows */
+  --shadow-color: 220 40% 3%;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 18%);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 25%);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 35%);
+  --shadow-xl: 0 24px 64px rgb(0 0 0 / 45%);
+
+  /* Notifications */
+  --toast: #252f3b;
+  --toast-foreground: #f0f4f8;
+  --toast-border: #465365;
+  --toast-shadow: 0 8px 28px rgb(0 0 0 / 35%);
+  --notification-dot: #f87171;
+
+  /* Loading indicators */
+  --skeleton: #303a48;
+  --skeleton-highlight: #414d5d;
+  --spinner-track: #354151;
+  --spinner-indicator: #00ffff;
+  --progress-track: #354151;
+  --progress-indicator: #00dada;
+
+  /* Scrollbar */
+  --scrollbar-thumb: #465365;
+  --scrollbar-thumb-hover: #64758a;
+
+  /* Code and keyboard shortcuts */
+  --code-background: #151b23;
+  --code-foreground: #d1dae5;
+  --kbd-background: #303b49;
+  --kbd-foreground: #e6edf5;
+  --kbd-border: #465365;
+}
