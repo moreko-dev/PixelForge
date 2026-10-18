@@ -7,7 +7,9 @@ function StarterPage() {
     <main className="w-full h-dvh grid gap-2 grid-cols-[300px_1fr] grid-rows-[auto_1fr] p-2">
       <Sidebar />
       <Header />
-      <Outlet />
+      <div className="p-4">
+        <Outlet />
+      </div>
     </main>
   );
 }
