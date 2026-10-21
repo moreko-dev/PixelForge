@@ -1,12 +1,8 @@
-import { DefaultButton } from "@src/components/buttons.js";
+import { SecondaryButton } from "@src/components/buttons.js";
 import { LuSearch } from "react-icons/lu";
 
 function SearchButton() {
-  return (
-    <DefaultButton>
-      <LuSearch />
-    </DefaultButton>
-  );
+  return <SecondaryButton icon={<LuSearch />} className="rounded-full!" />;
 }
 
 export default SearchButton;

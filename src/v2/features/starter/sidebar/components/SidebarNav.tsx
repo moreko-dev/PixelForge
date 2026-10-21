@@ -10,19 +10,20 @@ import { NavLink } from "react-router";
 type linkType = { to: string; text: string; Icon: IconType };
 const links: linkType[] = [
   { to: "/", text: "Home", Icon: LuHouse },
-  { to: "/templates", text: "Templates", Icon: LuLayoutTemplate },
+  // { to: "/templates", text: "Templates", Icon: LuLayoutTemplate },
   { to: "/projects", text: "Projects", Icon: LuFolderClosed },
-  { to: "/cloud", text: "Cloud", Icon: LuCloud },
+  // { to: "/cloud", text: "Cloud", Icon: LuCloud },
 ];
 
 function SidebarNav() {
   return (
     <div className="flex-1 flex flex-col gap-2 select-none">
-      {links.map((item) => (
+      {links.map((item, index) => (
         <NavLink
+          key={index}
           to={item.to}
           className={({ isActive }) =>
-            `flex gap-2 items-center text-foreground-secondary px-4 py-2 rounded transition-colors duration-400 hover:text-brand hover:bg-brand-soft ${isActive ? "text-brand! bg-brand-soft" : ""}`
+            `flex gap-2 items-center text-foreground-secondary px-4 py-2 rounded transition-colors duration-200 hover:text-brand hover:bg-brand-soft ${isActive ? "text-brand! bg-brand-soft" : ""}`
           }
         >
           <item.Icon />

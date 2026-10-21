@@ -1,13 +1,13 @@
+import HSeprator from "../components/HSeprator.js";
 import QuickActions from "../features/home/quick-actions/QuickActions.js";
 import RecentProjects from "../features/home/recent-projects/RecentProjects.js";
-import TopTemplates from "../features/home/top-templates/TopTemplates.js";
 
 function HomePage() {
   return (
     <>
       <QuickActions />
+      <HSeprator marginValue={8} />
       <RecentProjects />
-      <TopTemplates />
     </>
   );
 }

@@ -7,7 +7,7 @@ function StarterPage() {
     <main className="w-full h-dvh grid gap-2 grid-cols-[300px_1fr] grid-rows-[auto_1fr] p-2">
       <Sidebar />
       <Header />
-      <div className="p-4">
+      <div className="p-4 overflow-x-hidden overflow-y-auto">
         <Outlet />
       </div>
     </main>

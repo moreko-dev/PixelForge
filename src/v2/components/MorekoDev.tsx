@@ -1,6 +1,6 @@
 function MorekoDev() {
   return (
-    <div className="text-sm text-foreground-secondary flex items-center justify-between select-none">
+    <div className="text-sm text-muted-foreground flex items-center justify-between select-none">
       <span>
         Developed by{" "}
         <a

@@ -39,39 +39,39 @@
   --link: #006b78;
   --link-hover: #004f5a;
 
-  /* Primary action */
+  /* Primary action - used */
   --primary: #00cccc;
   --primary-hover: #00b8b8;
   --primary-active: #009999;
   --primary-foreground: #002d30;
   --primary-disabled: #b8dcdd;
 
-  /* Secondary action */
+  /* Secondary action - used */
   --secondary: #e8edf3;
   --secondary-hover: #dce4ed;
   --secondary-active: #cdd7e3;
   --secondary-foreground: #253346;
   --secondary-disabled: #f0f2f5;
 
-  /* Ghost action */
+  /* Ghost action - used */
   --ghost-hover: #e9f0f5;
   --ghost-active: #dde7ee;
   --ghost-foreground: #344255;
 
-  /* Outline action */
+  /* Outline action - used */
   --outline: #ffffff;
   --outline-hover: #f0fafa;
   --outline-active: #dff5f5;
   --outline-border: #8a9aaa;
   --outline-foreground: #253346;
 
-  /* Icon buttons */
+  /* Icon buttons - used */
   --icon-button-hover: #e8eef4;
   --icon-button-active: #d8e3ed;
   --icon-button-foreground: #455365;
   --icon-button-disabled: #aab3bf;
 
-  /* Destructive action */
+  /* Destructive action - used */
   --destructive: #c62828;
   --destructive-hover: #a91f1f;
   --destructive-active: #861818;
@@ -124,7 +124,7 @@
   --toggle-thumb: #ffffff;
   --toggle-disabled: #e4e8ed;
 
-  /* Status colors */
+  /* Status colors - used */
   --success: #247a45;
   --success-foreground: #ffffff;
   --success-soft: #e8f6ec;

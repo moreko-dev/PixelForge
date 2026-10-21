@@ -1,3 +1,5 @@
+import NotFoundPage from "@src/pages/NotFoundPage.js";
+import ProjectsPage from "@src/pages/ProjectsPage.js";
 import { createBrowserRouter, type RouteObject } from "react-router";
 import EditorPage from "../pages/EditorPage.js";
 import HomePage from "../pages/HomePage.js";
@@ -12,6 +14,10 @@ const routes: RouteObject[] = [
         index: true,
         element: <HomePage />,
       },
+      {
+        path: "projects",
+        element: <ProjectsPage />,
+      },
     ],
   },
   {
@@ -20,7 +26,7 @@ const routes: RouteObject[] = [
   },
   {
     path: "/*",
-    element: <>404: ROUTE_NOT_FOUND</>,
+    element: <NotFoundPage />,
   },
 ];
 
