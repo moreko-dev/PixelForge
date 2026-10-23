@@ -6,7 +6,7 @@ import ToolsBar from "@src/features/editor/tools-bar/ToolsBar.js";
 
 function EditorPage() {
   return (
-    <main className="p-2 w-full h-dvh grid grid-cols-[300px_1fr_300px] grid-rows-[auto_1fr_auto] gap-2 *:p-3 *:rounded">
+    <main className="p-2 w-full h-dvh grid grid-cols-[250px_1fr_300px] grid-rows-[auto_1fr_auto] gap-2 *:p-3 *:rounded">
       <Header />
       <ToolsBar />
       <CanvasViewer />
