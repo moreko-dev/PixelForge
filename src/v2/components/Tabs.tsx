@@ -9,9 +9,10 @@ type TabItemsType = {
 type TabsType = {
   tabItems: TabItemsType[];
   defaultTab?: string;
+  contentClass?: string;
 };
 
-function Tabs({ tabItems, defaultTab }: TabsType) {
+function Tabs({ tabItems, defaultTab, contentClass }: TabsType) {
   const firstTabItem = tabItems[0];
   if (!firstTabItem)
     throw new Error("[Tabs.jsx] -> tabItems should has an item!");
@@ -44,7 +45,7 @@ function Tabs({ tabItems, defaultTab }: TabsType) {
           </button>
         ))}
       </div>
-      <div className="p-4">{selectedItemContent}</div>
+      <div className={`p-2 ${contentClass}`}>{selectedItemContent}</div>
     </div>
   );
 }
