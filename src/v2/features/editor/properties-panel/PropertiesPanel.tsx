@@ -11,6 +11,7 @@ function PropertiesPanel() {
           { key: "canvas", label: "Canvas", content: <CanvasTabContent /> },
           { key: "layers", label: "Layers", content: <LayersTabContent /> },
         ]}
+        className="min-h-100 overflow-auto"
       />
       <Tabs
         tabItems={[
@@ -20,6 +21,7 @@ function PropertiesPanel() {
             content: <PropertiesTabContent />,
           },
         ]}
+        className="overflow-auto"
       />
     </div>
   );

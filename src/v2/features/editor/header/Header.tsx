@@ -5,6 +5,7 @@ import ExportButton from "./componets/ExportButton.js";
 import HomeButton from "./componets/HomeButton.js";
 import ReportBugButton from "./componets/ReportBugButton.js";
 import SettingsButton from "./componets/SettingsButton.js";
+import ThemeButton from "./componets/ThemeButton.js";
 
 function Header() {
   return (
@@ -26,6 +27,7 @@ function Header() {
         <VSeprator marginValue={1} />
         <ReportBugButton />
         <SettingsButton />
+        <ThemeButton />
         <VSeprator marginValue={1} />
         <HomeButton />
       </div>

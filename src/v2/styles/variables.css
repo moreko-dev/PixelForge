@@ -11,7 +11,6 @@
   /* App surfaces */
   --background: #f5f7fa;
   --workspace: #e8ecf2;
-  --canvas-background: #dce2ea;
 
   --surface: #ffffff;
   --surface-raised: #ffffff;
@@ -91,7 +90,7 @@
   --ring-offset: #ffffff;
   --focus-shadow: 0 0 0 3px rgb(0 127 131 / 22%);
 
-  /* Inputs */
+  /* Inputs - used */
   --input: #ffffff;
   --input-foreground: #17212f;
   --input-placeholder: #788597;
@@ -101,8 +100,9 @@
   --input-disabled: #f0f2f5;
   --input-disabled-foreground: #929ba8;
   --input-readonly: #edf1f5;
+  --input-invalid: #c62828;
 
-  /* Form controls */
+  /* Form controls - used */
   --control: #ffffff;
   --control-border: #8796a8;
   --control-checked: #006f73;
@@ -110,14 +110,14 @@
   --control-hover: #e6f8f8;
   --control-disabled: #e5e9ee;
 
-  /* Slider */
+  /* Slider - used */
   --slider-track: #d5dde6;
   --slider-range: #008f95;
   --slider-thumb: #ffffff;
   --slider-thumb-border: #006f73;
   --slider-thumb-focus: #007f83;
 
-  /* Toggle */
+  /* Toggle - used */
   --toggle-track: #c8d1dc;
   --toggle-track-hover: #b5c2d0;
   --toggle-track-checked: #008f95;
@@ -150,6 +150,7 @@
   --selection-foreground: #173b42;
   --selection-border: #007f83;
 
+  /* used */
   --dropzone: #e6ffff;
   --dropzone-border: #007f83;
   --dropzone-hover: #ccf7f7;
@@ -237,7 +238,6 @@
   /* App surfaces */
   --background: #11151b;
   --workspace: #191f28;
-  --canvas-background: #222a35;
 
   --surface: #1b222c;
   --surface-raised: #232c38;
@@ -327,6 +327,7 @@
   --input-disabled: #202630;
   --input-disabled-foreground: #687587;
   --input-readonly: #232c38;
+  --input-invalid: #f87171;
 
   /* Form controls */
   --control: #151b23;

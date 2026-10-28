@@ -9,10 +9,11 @@ type TabItemsType = {
 type TabsType = {
   tabItems: TabItemsType[];
   defaultTab?: string;
+  className?: string;
   contentClass?: string;
 };
 
-function Tabs({ tabItems, defaultTab, contentClass }: TabsType) {
+function Tabs({ tabItems, defaultTab, className, contentClass }: TabsType) {
   const firstTabItem = tabItems[0];
   if (!firstTabItem)
     throw new Error("[Tabs.jsx] -> tabItems should has an item!");
@@ -31,8 +32,8 @@ function Tabs({ tabItems, defaultTab, contentClass }: TabsType) {
   };
 
   return (
-    <div className="w-full h-full">
-      <div className="bg-surface-sunken border-b border-border-subtle select-none flex flex-nowrap overflow-x-auto scrollbar-hidden">
+    <div className={`w-full h-full ${className}`}>
+      <div className="sticky top-0 z-10 bg-surface-sunken border-b border-border-subtle select-none flex flex-nowrap overflow-x-auto scrollbar-hidden">
         {tabItems.map((item) => (
           <button
             key={item.key}

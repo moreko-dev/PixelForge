@@ -247,6 +247,50 @@ export const DestructiveButton = (props: DestructiveButtonProps) => {
 };
 DestructiveButton.displayName = "DestructiveButton";
 
+export const SuccessButton = createButton(
+  "SuccessButton",
+  cn(
+    "bg-success text-success-foreground shadow-sm",
+    "hover:bg-[color-mix(in_srgb,var(--success),black_12%)]",
+    "active:bg-[color-mix(in_srgb,var(--success),black_22%)]",
+    "focus-visible:outline-success",
+    "disabled:opacity-50 disabled:shadow-none",
+  ),
+);
+
+export const WarningButton = createButton(
+  "WarningButton",
+  cn(
+    "bg-warning text-warning-foreground shadow-sm",
+    "hover:bg-[color-mix(in_srgb,var(--warning),black_12%)]",
+    "active:bg-[color-mix(in_srgb,var(--warning),black_22%)]",
+    "focus-visible:outline-warning",
+    "disabled:opacity-50 disabled:shadow-none",
+  ),
+);
+
+export const ErrorButton = createButton(
+  "ErrorButton",
+  cn(
+    "bg-error text-error-foreground shadow-sm",
+    "hover:bg-[color-mix(in_srgb,var(--error),black_12%)]",
+    "active:bg-[color-mix(in_srgb,var(--error),black_22%)]",
+    "focus-visible:outline-error",
+    "disabled:opacity-50 disabled:shadow-none",
+  ),
+);
+
+export const InfoButton = createButton(
+  "InfoButton",
+  cn(
+    "bg-info text-info-foreground shadow-sm",
+    "hover:bg-[color-mix(in_srgb,var(--info),black_12%)]",
+    "active:bg-[color-mix(in_srgb,var(--info),black_22%)]",
+    "focus-visible:outline-info",
+    "disabled:opacity-50 disabled:shadow-none",
+  ),
+);
+
 export const IconButton = ({
   icon,
   size = "md",

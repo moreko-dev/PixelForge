@@ -6,7 +6,6 @@
   /* App surfaces */
   --color-background: var(--background);
   --color-workspace: var(--workspace);
-  --color-canvas-background: var(--canvas-background);
 
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
@@ -209,12 +208,13 @@
   --color-kbd-border: var(--kbd-border);
 }
 
+/*********************************/
+/* Scrollbar */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
-/* Chrome, Edge, Safari */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -244,26 +244,6 @@
   background: transparent;
 }
 
-.editor-workspace {
-  overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) transparent;
-}
-
-.sidebar,
-.layers-panel,
-.properties-panel {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) transparent;
-}
-
-.sidebar::-webkit-scrollbar,
-.layers-panel::-webkit-scrollbar,
-.properties-panel::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
 .scrollbar-hidden {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -272,8 +252,8 @@
 .scrollbar-hidden::-webkit-scrollbar {
   display: none;
 }
+/*********************************/
 
-/* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
   ::-webkit-scrollbar-thumb {
     transition: none;
@@ -285,100 +265,9 @@
   color: var(--selection-foreground);
 }
 
-:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
 :disabled,
 [aria-disabled="true"] {
   cursor: not-allowed;
-}
-
-:where(input, textarea, select) {
-  color: var(--input-foreground);
-  background: var(--input);
-  border-color: var(--input-border);
-}
-
-:where(input, textarea, select)::placeholder {
-  color: var(--input-placeholder);
-  opacity: 1;
-}
-
-:where(input, textarea, select):hover:not(:disabled):not([readonly]) {
-  border-color: var(--input-hover-border);
-}
-
-:where(input, textarea, select):focus-visible {
-  border-color: var(--input-focus-border);
-  outline: 2px solid var(--ring);
-  outline-offset: 1px;
-}
-
-:where(input, textarea, select)[aria-invalid="true"] {
-  border-color: var(--input-invalid);
-}
-
-:where(input, textarea, select)[aria-invalid="true"]:focus-visible {
-  outline-color: var(--input-invalid);
-}
-
-:where(input, textarea, select):disabled {
-  color: var(--input-disabled-foreground);
-  background: var(--input-disabled);
-  border-color: var(--border-disabled);
-}
-
-:where(input, textarea, select)[readonly] {
-  background: var(--input-readonly);
-}
-
-button,
-[role="button"] {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button:focus-visible,
-[role="button"]:focus-visible,
-[role="checkbox"]:focus-visible,
-[role="radio"]:focus-visible,
-[role="switch"]:focus-visible,
-[role="slider"]:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-/* Transparency checkerboard */
-.transparency-grid {
-  background-color: var(--checker-light);
-  background-image:
-    linear-gradient(45deg, var(--checker-dark) 25%, transparent 25%),
-    linear-gradient(-45deg, var(--checker-dark) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, var(--checker-dark) 75%),
-    linear-gradient(-45deg, transparent 75%, var(--checker-dark) 75%);
-  background-position:
-    0 0,
-    0 8px,
-    8px -8px,
-    -8px 0;
-  background-size: 16px 16px;
-}
-
-/* Restrained loading animation */
-@keyframes editor-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.loading-spinner {
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid var(--spinner-track);
-  border-top-color: var(--spinner-indicator);
-  border-radius: 50%;
-  animation: editor-spin 0.7s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
