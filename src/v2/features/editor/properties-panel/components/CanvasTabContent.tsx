@@ -4,6 +4,7 @@ function CanvasTabContent() {
   return (
     <div>
       <Form
+        formConfig={{ group: true }}
         formFields={[
           {
             groupName: "Canvas dimension",

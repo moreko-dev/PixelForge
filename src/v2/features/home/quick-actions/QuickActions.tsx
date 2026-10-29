@@ -1,8 +1,10 @@
 import { LuCloud, LuImage, LuLayoutTemplate, LuPlus } from "react-icons/lu";
 import HomeSection from "../../starter/home-section/HomeSection.js";
 import ActionCard from "./components/ActionCard.js";
+import CreateProjectActionCard from "./components/CreateProjectActionCard.js";
 
 function QuickActions() {
+
   return (
     <HomeSection
       title="Quick Actions"
@@ -15,12 +17,7 @@ function QuickActions() {
           Icon={LuImage}
           mode="success"
         />
-        <ActionCard
-          title="Create new"
-          desc="Start with a blank canvas."
-          Icon={LuPlus}
-          mode="error"
-        />
+        <CreateProjectActionCard />
         <ActionCard
           title="Templates"
           desc="Use pre-designed templates for quick editing."

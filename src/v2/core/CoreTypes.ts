@@ -23,7 +23,7 @@ export type FontFamilyType =
 export interface Project {
   isCreated: boolean;
   saveStatus: SaveStatusType;
-  projectName: string;
+  name: string;
   canvas: Canvas | null;
   layers: Layer[];
 }

@@ -8,8 +8,15 @@ type actionCardType = {
   desc: string;
   Icon: IconType;
   mode: StatusType;
+  onActionClick?: () => void;
 };
-function ActionCard({ title, desc, Icon, mode }: actionCardType) {
+function ActionCard({
+  title,
+  desc,
+  Icon,
+  mode,
+  onActionClick,
+}: actionCardType) {
   const modeClasses: Record<StatusType, string> = {
     success: "bg-success text-success-foreground border-success-border",
     error: "bg-error text-error-foreground border-error-border",
@@ -26,7 +33,11 @@ function ActionCard({ title, desc, Icon, mode }: actionCardType) {
         <span className="text-lg leading-none mt-4">{title}</span>
         <span className="text-sm mt-2 text-foreground-secondary">{desc}</span>
       </div>
-      <IconButton icon={<LuArrowRight />} className="self-center" />
+      <IconButton
+        icon={<LuArrowRight />}
+        className="self-center"
+        onClick={onActionClick}
+      />
     </div>
   );
 }

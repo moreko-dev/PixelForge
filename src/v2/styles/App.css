@@ -4,6 +4,7 @@
 
 @theme inline {
   /* App surfaces */
+  --color-overlay: var(--overlay);
   --color-background: var(--background);
   --color-workspace: var(--workspace);
 

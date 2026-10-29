@@ -354,6 +354,169 @@ TextInput.displayName = "TextInput";
 // NUMBER INPUT (value, unit, stepper, clamp) //
 // ***************************** //
 
+// export type NumberInputProps = Omit<
+//   React.InputHTMLAttributes<HTMLInputElement>,
+//   | "size"
+//   | "type"
+//   | "value"
+//   | "defaultValue"
+//   | "onChange"
+//   | "min"
+//   | "max"
+//   | "step"
+// > & {
+//   value: number | null;
+//   onValueChange: (value: number | null) => void;
+//   min?: number;
+//   max?: number;
+//   step?: number;
+//   precision?: number;
+//   unit?: string;
+//   size?: InputSize;
+//   invalid?: boolean;
+//   fullWidth?: boolean;
+//   hideStepper?: boolean;
+// };
+
+// /** `className` is applied to the root wrapper. */
+// export function NumberInput({
+//   value,
+//   onValueChange,
+//   min = 0,
+//   max = 10,
+//   step = 1,
+//   precision = 2,
+//   unit,
+//   size = "md",
+//   invalid = false,
+//   fullWidth = true,
+//   hideStepper = false,
+//   disabled,
+//   readOnly,
+//   className,
+//   onBlur,
+//   onKeyDown,
+//   ...rest
+// }: NumberInputProps) {
+//   const s = FIELD_SIZES[size];
+//   const stepPrecision = precision ?? decimalsOf(step);
+//   const [draft, setDraft] = useState(formatNumber(value, precision));
+
+//   useEffect(() => {
+//     setDraft(formatNumber(value, precision));
+//   }, [value, precision]);
+
+//   const commit = (text: string) => {
+//     const trimmed = text.trim();
+
+//     if (trimmed === "") {
+//       onValueChange(null);
+//       setDraft("");
+//       return;
+//     }
+
+//     const parsed = Number(trimmed);
+//     if (Number.isNaN(parsed)) {
+//       setDraft(formatNumber(value, precision));
+//       return;
+//     }
+
+//     const next = roundTo(clamp(parsed, min, max), precision);
+//     onValueChange(next);
+//     setDraft(formatNumber(next, precision));
+//   };
+
+//   const nudge = (direction: 1 | -1, multiplier = 1) => {
+//     const base = value ?? min ?? 0;
+//     const next = roundTo(
+//       clamp(base + direction * step * multiplier, min, max),
+//       stepPrecision,
+//     );
+//     onValueChange(next);
+//     setDraft(formatNumber(next, precision));
+//   };
+
+//   const atMin = value !== null && min !== undefined && value <= min;
+//   const atMax = value !== null && max !== undefined && value >= max;
+//   const showStepper = !hideStepper && !readOnly;
+
+//   return (
+//     <div
+//       className={cn(
+//         SHELL_BASE,
+//         fullWidth ? "flex w-full" : "inline-flex",
+//         s.field,
+//         shellState(invalid, disabled, readOnly),
+//         className,
+//       )}
+//     >
+//       {showStepper && (
+//         <button
+//           type="button"
+//           tabIndex={-1}
+//           disabled={disabled || atMin}
+//           onClick={() => nudge(-1)}
+//           className={cn(STEPPER_BUTTON, "border-r border-divider", s.stepper)}
+//         >
+//           <IconSlot node={<LuMinus />} size={s.icon} />
+//         </button>
+//       )}
+
+//       <input
+//         type="text"
+//         inputMode="decimal"
+//         value={draft}
+//         disabled={disabled}
+//         readOnly={readOnly}
+//         onChange={(e) => setDraft(e.target.value)}
+//         onBlur={(e) => {
+//           commit(e.target.value);
+//           onBlur?.(e);
+//         }}
+//         onKeyDown={(e) => {
+//           onKeyDown?.(e);
+//           if (e.defaultPrevented || readOnly) return;
+
+//           if (e.key === "Enter") {
+//             commit(draft);
+//           } else if (e.key === "ArrowUp") {
+//             e.preventDefault();
+//             nudge(1, e.shiftKey ? 10 : 1);
+//           } else if (e.key === "ArrowDown") {
+//             e.preventDefault();
+//             nudge(-1, e.shiftKey ? 10 : 1);
+//           }
+//         }}
+//         className={cn(SHELL_INNER_INPUT, s.padX, showStepper && "text-center")}
+//         {...rest}
+//       />
+
+//       {unit && (
+//         <span
+//           className={cn(
+//             "flex shrink-0 select-none items-center pr-2.5 text-muted-foreground",
+//             disabled && "text-input-disabled-foreground",
+//           )}
+//         >
+//           {unit}
+//         </span>
+//       )}
+
+//       {showStepper && (
+//         <button
+//           type="button"
+//           tabIndex={-1}
+//           disabled={disabled || atMax}
+//           onClick={() => nudge(1)}
+//           className={cn(STEPPER_BUTTON, "border-l border-divider", s.stepper)}
+//         >
+//           <IconSlot node={<LuPlus />} size={s.icon} />
+//         </button>
+//       )}
+//     </div>
+//   );
+// }
+// NumberInput.displayName = "NumberInput";
 export type NumberInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   | "size"
@@ -399,41 +562,14 @@ export function NumberInput({
   ...rest
 }: NumberInputProps) {
   const s = FIELD_SIZES[size];
-  const stepPrecision = precision ?? decimalsOf(step);
-  const [draft, setDraft] = useState(formatNumber(value, precision));
-
-  useEffect(() => {
-    setDraft(formatNumber(value, precision));
-  }, [value, precision]);
-
-  const commit = (text: string) => {
-    const trimmed = text.trim();
-
-    if (trimmed === "") {
-      onValueChange(null);
-      setDraft("");
-      return;
-    }
-
-    const parsed = Number(trimmed);
-    if (Number.isNaN(parsed)) {
-      setDraft(formatNumber(value, precision));
-      return;
-    }
-
-    const next = roundTo(clamp(parsed, min, max), precision);
-    onValueChange(next);
-    setDraft(formatNumber(next, precision));
-  };
 
   const nudge = (direction: 1 | -1, multiplier = 1) => {
     const base = value ?? min ?? 0;
     const next = roundTo(
       clamp(base + direction * step * multiplier, min, max),
-      stepPrecision,
+      precision,
     );
     onValueChange(next);
-    setDraft(formatNumber(next, precision));
   };
 
   const atMin = value !== null && min !== undefined && value <= min;
@@ -463,23 +599,29 @@ export function NumberInput({
       )}
 
       <input
-        type="text"
-        inputMode="decimal"
-        value={draft}
+        type="number"
+        min={min}
+        max={max}
+        step={step}
+        value={value ?? ""}
         disabled={disabled}
         readOnly={readOnly}
-        onChange={(e) => setDraft(e.target.value)}
+        onChange={(e) => {
+          const text = e.target.value;
+          onValueChange(text === "" ? null : Number(text));
+        }}
         onBlur={(e) => {
-          commit(e.target.value);
+          if (value !== null) {
+            const next = roundTo(clamp(value, min, max), precision);
+            if (next !== value) onValueChange(next);
+          }
           onBlur?.(e);
         }}
         onKeyDown={(e) => {
           onKeyDown?.(e);
           if (e.defaultPrevented || readOnly) return;
 
-          if (e.key === "Enter") {
-            commit(draft);
-          } else if (e.key === "ArrowUp") {
+          if (e.key === "ArrowUp") {
             e.preventDefault();
             nudge(1, e.shiftKey ? 10 : 1);
           } else if (e.key === "ArrowDown") {
@@ -487,7 +629,12 @@ export function NumberInput({
             nudge(-1, e.shiftKey ? 10 : 1);
           }
         }}
-        className={cn(SHELL_INNER_INPUT, s.padX, showStepper && "text-center")}
+        className={cn(
+          SHELL_INNER_INPUT,
+          s.padX,
+          "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
+          showStepper && "text-center",
+        )}
         {...rest}
       />
 

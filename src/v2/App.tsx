@@ -9,11 +9,14 @@ createRoot(document.getElementById("root")!).render(
   <ThemeProvider>
     <RouterProvider router={Router} />
     <Toaster
+      containerStyle={{
+        zIndex: 9999999,
+      }}
       toastOptions={{
         className:
-          "bg-toast text-toast-foreground border border-toast-border shadow shadow-toast-shadow",
+          "bg-toast! text-toast-foreground! border! border-toast-border! shadow! shadow-toast-shadow!",
       }}
-      position="top-left"
+      position="bottom-left"
     />
   </ThemeProvider>,
 );
