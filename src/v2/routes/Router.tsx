@@ -4,6 +4,7 @@ import { createBrowserRouter, type RouteObject } from "react-router";
 import EditorPage from "../pages/EditorPage.js";
 import HomePage from "../pages/HomePage.js";
 import StarterPage from "../pages/StarterPage.js";
+import EditorProtection from "./EditorProtection.js";
 
 const routes: RouteObject[] = [
   {
@@ -22,7 +23,11 @@ const routes: RouteObject[] = [
   },
   {
     path: "/editor",
-    element: <EditorPage />,
+    element: (
+      <EditorProtection>
+        <EditorPage />
+      </EditorProtection>
+    ),
   },
   {
     path: "/*",

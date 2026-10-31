@@ -7,8 +7,8 @@ type ModalPropsType = {
   actions?: React.ReactNode;
   actionCancelText?: string;
   actionSubmitText?: string;
-  onClose: () => void;
-  onSubmit: () => void;
+  onClose?: () => void;
+  onSubmit?: () => void;
 };
 
 function Modal({
@@ -30,7 +30,7 @@ function Modal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex gap-2 items-center justify-between p-2 border-b border-divider">
-          <span className="font-bold text-lg text-foreground truncate">
+          <span className="font-bold text-lg text-brand-active truncate">
             {title}
           </span>
           <IconButton

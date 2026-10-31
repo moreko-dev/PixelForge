@@ -139,7 +139,8 @@ const formatNumber = (n: number | null, precision?: number) => {
 
 const HEX_RE = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i;
 
-const normalizeHex = (input: string): string | null => {
+const normalizeHex = (input?: string | null): string | null => {
+  if (typeof input !== "string") return null;
   const match = HEX_RE.exec(input.trim());
   if (!match) return null;
   let hex = match[1]!.toLowerCase();
@@ -226,7 +227,7 @@ export function Field({
       <div className={cn("flex flex-col gap-1", className)}>
         <div className="flex items-center justify-between gap-3">
           {labelNode && (
-            <span className={`shrink-0 ${labelClassName}`}>{labelNode}</span>
+            <span className={cn("shrink-0", labelClassName)}>{labelNode}</span>
           )}
           <div className="min-w-0">{children}</div>
         </div>
@@ -350,173 +351,6 @@ export function TextInput({
 }
 TextInput.displayName = "TextInput";
 
-// ***************************** //
-// NUMBER INPUT (value, unit, stepper, clamp) //
-// ***************************** //
-
-// export type NumberInputProps = Omit<
-//   React.InputHTMLAttributes<HTMLInputElement>,
-//   | "size"
-//   | "type"
-//   | "value"
-//   | "defaultValue"
-//   | "onChange"
-//   | "min"
-//   | "max"
-//   | "step"
-// > & {
-//   value: number | null;
-//   onValueChange: (value: number | null) => void;
-//   min?: number;
-//   max?: number;
-//   step?: number;
-//   precision?: number;
-//   unit?: string;
-//   size?: InputSize;
-//   invalid?: boolean;
-//   fullWidth?: boolean;
-//   hideStepper?: boolean;
-// };
-
-// /** `className` is applied to the root wrapper. */
-// export function NumberInput({
-//   value,
-//   onValueChange,
-//   min = 0,
-//   max = 10,
-//   step = 1,
-//   precision = 2,
-//   unit,
-//   size = "md",
-//   invalid = false,
-//   fullWidth = true,
-//   hideStepper = false,
-//   disabled,
-//   readOnly,
-//   className,
-//   onBlur,
-//   onKeyDown,
-//   ...rest
-// }: NumberInputProps) {
-//   const s = FIELD_SIZES[size];
-//   const stepPrecision = precision ?? decimalsOf(step);
-//   const [draft, setDraft] = useState(formatNumber(value, precision));
-
-//   useEffect(() => {
-//     setDraft(formatNumber(value, precision));
-//   }, [value, precision]);
-
-//   const commit = (text: string) => {
-//     const trimmed = text.trim();
-
-//     if (trimmed === "") {
-//       onValueChange(null);
-//       setDraft("");
-//       return;
-//     }
-
-//     const parsed = Number(trimmed);
-//     if (Number.isNaN(parsed)) {
-//       setDraft(formatNumber(value, precision));
-//       return;
-//     }
-
-//     const next = roundTo(clamp(parsed, min, max), precision);
-//     onValueChange(next);
-//     setDraft(formatNumber(next, precision));
-//   };
-
-//   const nudge = (direction: 1 | -1, multiplier = 1) => {
-//     const base = value ?? min ?? 0;
-//     const next = roundTo(
-//       clamp(base + direction * step * multiplier, min, max),
-//       stepPrecision,
-//     );
-//     onValueChange(next);
-//     setDraft(formatNumber(next, precision));
-//   };
-
-//   const atMin = value !== null && min !== undefined && value <= min;
-//   const atMax = value !== null && max !== undefined && value >= max;
-//   const showStepper = !hideStepper && !readOnly;
-
-//   return (
-//     <div
-//       className={cn(
-//         SHELL_BASE,
-//         fullWidth ? "flex w-full" : "inline-flex",
-//         s.field,
-//         shellState(invalid, disabled, readOnly),
-//         className,
-//       )}
-//     >
-//       {showStepper && (
-//         <button
-//           type="button"
-//           tabIndex={-1}
-//           disabled={disabled || atMin}
-//           onClick={() => nudge(-1)}
-//           className={cn(STEPPER_BUTTON, "border-r border-divider", s.stepper)}
-//         >
-//           <IconSlot node={<LuMinus />} size={s.icon} />
-//         </button>
-//       )}
-
-//       <input
-//         type="text"
-//         inputMode="decimal"
-//         value={draft}
-//         disabled={disabled}
-//         readOnly={readOnly}
-//         onChange={(e) => setDraft(e.target.value)}
-//         onBlur={(e) => {
-//           commit(e.target.value);
-//           onBlur?.(e);
-//         }}
-//         onKeyDown={(e) => {
-//           onKeyDown?.(e);
-//           if (e.defaultPrevented || readOnly) return;
-
-//           if (e.key === "Enter") {
-//             commit(draft);
-//           } else if (e.key === "ArrowUp") {
-//             e.preventDefault();
-//             nudge(1, e.shiftKey ? 10 : 1);
-//           } else if (e.key === "ArrowDown") {
-//             e.preventDefault();
-//             nudge(-1, e.shiftKey ? 10 : 1);
-//           }
-//         }}
-//         className={cn(SHELL_INNER_INPUT, s.padX, showStepper && "text-center")}
-//         {...rest}
-//       />
-
-//       {unit && (
-//         <span
-//           className={cn(
-//             "flex shrink-0 select-none items-center pr-2.5 text-muted-foreground",
-//             disabled && "text-input-disabled-foreground",
-//           )}
-//         >
-//           {unit}
-//         </span>
-//       )}
-
-//       {showStepper && (
-//         <button
-//           type="button"
-//           tabIndex={-1}
-//           disabled={disabled || atMax}
-//           onClick={() => nudge(1)}
-//           className={cn(STEPPER_BUTTON, "border-l border-divider", s.stepper)}
-//         >
-//           <IconSlot node={<LuPlus />} size={s.icon} />
-//         </button>
-//       )}
-//     </div>
-//   );
-// }
-// NumberInput.displayName = "NumberInput";
 export type NumberInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   | "size"
@@ -528,8 +362,8 @@ export type NumberInputProps = Omit<
   | "max"
   | "step"
 > & {
-  value: number | null;
-  onValueChange: (value: number | null) => void;
+  value?: number | null;
+  onValueChange?: (value: number | null) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -543,8 +377,8 @@ export type NumberInputProps = Omit<
 
 /** `className` is applied to the root wrapper. */
 export function NumberInput({
-  value,
-  onValueChange,
+  value: valueProp,
+  onValueChange: onValueChangeProp,
   min = 0,
   max = 10,
   step = 1,
@@ -562,6 +396,11 @@ export function NumberInput({
   ...rest
 }: NumberInputProps) {
   const s = FIELD_SIZES[size];
+  const value =
+    typeof valueProp === "number" && !Number.isNaN(valueProp)
+      ? valueProp
+      : null;
+  const onValueChange = onValueChangeProp ?? (() => {});
 
   const nudge = (direction: 1 | -1, multiplier = 1) => {
     const base = value ?? min ?? 0;
@@ -1210,8 +1049,8 @@ Slider.displayName = "Slider";
 // ***************************** //
 
 export type ColorInputProps = {
-  value: string;
-  onValueChange: (value: string) => void;
+  value?: string;
+  onValueChange?: (value: string) => void;
   id?: string;
   size?: InputSize;
   invalid?: boolean;
@@ -1223,8 +1062,8 @@ export type ColorInputProps = {
 
 export function ColorInput({
   id,
-  value,
-  onValueChange,
+  value: valueProp,
+  onValueChange: onValueChangeProp,
   size = "md",
   invalid = false,
   disabled,
@@ -1233,6 +1072,8 @@ export function ColorInput({
   className,
 }: ColorInputProps) {
   const s = FIELD_SIZES[size];
+  const value = typeof valueProp === "string" ? valueProp : "";
+  const onValueChange = onValueChangeProp ?? (() => {});
   const [draft, setDraft] = useState(value);
 
   useEffect(() => {
@@ -1309,7 +1150,7 @@ ColorInput.displayName = "ColorInput";
 // ***************************** //
 
 export type FileDropzoneProps = {
-  onFiles: (files: File[]) => void;
+  onFiles?: (files: File[]) => void;
   accept?: string;
   multiple?: boolean;
   disabled?: boolean;
@@ -1332,7 +1173,7 @@ export function FileDropzone({
   const emit = (files: File[]) => {
     const accepted = files.filter((f) => matchesAccept(f, accept));
     if (accepted.length === 0) return;
-    onFiles(multiple ? accepted : accepted.slice(0, 1));
+    onFiles?.(multiple ? accepted : accepted.slice(0, 1));
   };
 
   return (

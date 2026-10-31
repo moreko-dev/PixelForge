@@ -198,6 +198,7 @@ function Form({
               <div className="flex flex-col gap-2 px-2">
                 {group.groupFields.map((item) => (
                   <FieldsRenderer
+                    key={item.id}
                     formState={formState}
                     dispatch={dispatch}
                     field={item}
@@ -235,7 +236,7 @@ function FieldsRenderer({
   field: FormFieldsUngroupType[number];
 }) {
   return (
-    <div key={item.id} className={`flex ${DIR_CN[item.dir]} mb-4`}>
+    <div className={`flex ${DIR_CN[item.dir]} mb-4`}>
       {item.fields.map(
         ({ id, key, label, type, hint, error, layout = "stack", config }) => (
           <Input.Field
