@@ -14,7 +14,7 @@ const ProjectContext = createContext<ProjectContextType>(null);
 
 export function ProjectProvider({ children }: { children: React.ReactNode }) {
   const [projectState, setProjectState] = useState<ProjectStateType>(null);
-  const [isDirty, setIsDirty] = useState<boolean>(true);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
 
   return (
     <ProjectContext.Provider

@@ -22,7 +22,7 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
     if (!projectName.trim()) return toast.error("Invalid Project Name!");
     if (canvasWidth <= 0 || canvasHeight <= 0)
-      return toast.error("Invalid Canvas width or height");
+      return toast.error("Invalid Canvas width or height!");
     if (!canvasBgColor.trim()) return toast.error("Invalid Canvas Background!");
 
     const newProject: Project = {

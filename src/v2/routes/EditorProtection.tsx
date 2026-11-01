@@ -1,5 +1,4 @@
-import { DestructiveButton, SecondaryButton } from "@src/components/buttons.js";
-import Modal from "@src/components/Modal.js";
+import LeaveEditorModal from "@src/features/shared/LeaveEditorModal.js";
 import useProject from "@src/hooks/useProject.js";
 import type React from "react";
 import { useEffect } from "react";
@@ -28,30 +27,12 @@ function EditorProtection({ children }: { children: React.ReactNode }) {
     <>
       {children}
       {blocker.state === "blocked" && (
-        <Modal
-          title="Exit without saving?"
+        <LeaveEditorModal
           onClose={() => blocker.reset()}
-          actions={
-            <div className="w-full flex items-center justify-end gap-2">
-              <DestructiveButton
-                appearance="soft"
-                className="rounded!"
-                onClick={() => blocker.proceed()}
-              >
-                Leave
-              </DestructiveButton>
-              <SecondaryButton
-                className="rounded!"
-                onClick={() => blocker.reset()}
-              >
-                Cancel
-              </SecondaryButton>
-            </div>
-          }
-        >
-          Are you sure to leave editor without saving? This action will reset
-          all your progress.
-        </Modal>
+          onSubmit={() => blocker.proceed()}
+          modalTitle="Exit without saving?"
+          modalText="Are you sure to leave editor without saving? This action will reset all your progress."
+        />
       )}
     </>
   ) : null;

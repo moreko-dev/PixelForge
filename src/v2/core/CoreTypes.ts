@@ -1,4 +1,4 @@
-export type SaveStatusType = "saved" | "unsaved";
+export type SaveStatusType = "saved" | "unsaved" | "changed";
 export type HexaColorType = `#${string}`;
 export type LayersType = "image" | "text" | "pen" | "shape";
 export type ShapesType = "line" | "rectangle" | "circle" | "polygon";
