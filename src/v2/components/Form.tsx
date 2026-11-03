@@ -17,6 +17,48 @@ type FormConfigType = {
 type ColorInputConfigProps = Omit<ColorInputProps, "value" | "onValueChange">;
 type NumberInputConfigProps = Omit<NumberInputProps, "value" | "onValueChange">;
 
+// type OnChangeDispatchType = React.ActionDispatch<
+//   [action: { type: string; payload: any }]
+// >;
+
+type NumberInputConfig = Omit<NumberInputConfigProps, "onChange"> & {
+  onChange?: (
+    value: number | null,
+    // dispatch: OnChangeDispatchType,
+  ) => void;
+};
+
+type ColorInputConfig = Omit<ColorInputConfigProps, "onChange"> & {
+  onChange?: (
+    value: string,
+    // dispatch: OnChangeDispatchType
+  ) => void;
+};
+
+type TextAreaInputConfig = Omit<TextAreaProps, "onChange"> & {
+  onChange?: (
+    value: string,
+    // e: React.ChangeEvent<HTMLTextAreaElement, HTMLTextAreaElement>,
+    // dispatch: OnChangeDispatchType,
+  ) => void;
+};
+
+type SelectInputConfig = Omit<SelectProps, "onChange"> & {
+  onChange?: (
+    value: string,
+    // e: React.ChangeEvent<HTMLSelectElement, HTMLSelectElement>,
+    // dispatch: OnChangeDispatchType,
+  ) => void;
+};
+
+type InputConfig = Omit<TextInputProps, "onChange"> & {
+  onChange?: (
+    value: string,
+    // e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
+    // dispatch: OnChangeDispatchType,
+  ) => void;
+};
+
 type FormFieldType =
   | {
       id?: string;
@@ -26,7 +68,7 @@ type FormFieldType =
       layout?: "inline" | "stack";
       hint?: string;
       error?: string;
-      config: NumberInputConfigProps;
+      config?: NumberInputConfig;
     }
   | {
       id?: string;
@@ -36,7 +78,7 @@ type FormFieldType =
       layout?: "inline" | "stack";
       hint?: string;
       error?: string;
-      config: ColorInputConfigProps;
+      config?: ColorInputConfig;
     }
   | {
       id?: string;
@@ -46,7 +88,7 @@ type FormFieldType =
       layout?: "inline" | "stack";
       hint?: string;
       error?: string;
-      config?: TextAreaProps;
+      config?: TextAreaInputConfig;
     }
   | {
       id?: string;
@@ -56,7 +98,7 @@ type FormFieldType =
       layout?: "inline" | "stack";
       hint?: string;
       error?: string;
-      config?: SelectProps;
+      config?: SelectInputConfig;
     }
   | {
       id?: string;
@@ -82,7 +124,7 @@ type FormFieldType =
       layout?: "inline" | "stack";
       hint?: string;
       error?: string;
-      config?: TextInputProps;
+      config?: InputConfig;
     }
   | {
       id?: string;
@@ -92,7 +134,7 @@ type FormFieldType =
       layout?: "inline" | "stack";
       hint?: string;
       error?: string;
-      config: {};
+      config?: {};
     };
 
 type FormDataType = Record<string, any>;
@@ -181,7 +223,7 @@ function Form({
               id: crypto.randomUUID(),
             })),
           })),
-    [formFields, formConfig.group],
+    [],
   );
 
   return (
@@ -238,67 +280,77 @@ function FieldsRenderer({
   return (
     <div className={`flex ${DIR_CN[item.dir]} mb-4`}>
       {item.fields.map(
-        ({ id, key, label, type, hint, error, layout = "stack", config }) => (
-          <Input.Field
-            key={id}
-            label={label}
-            htmlFor={key}
-            className="w-full text-sm"
-            labelClassName="flex-1"
-            layout={layout}
-            hint={hint}
-            error={error}
-          >
-            {type === "custom" ? (
-              <>Custom</>
-            ) : type === "select" ? (
-              <Input.Select
-                {...(config as SelectProps)}
-                id={key}
-                value={formState[key]}
-                onChange={(e) =>
-                  dispatch({ type: key, payload: e.target.value })
-                }
-              />
-            ) : type === "textarea" ? (
-              <Input.TextArea
-                {...(config as TextAreaProps)}
-                id={key}
-                value={formState[key]}
-                onChange={(e) =>
-                  dispatch({ type: key, payload: e.target.value })
-                }
-              />
-            ) : type === "number" ? (
-              <Input.Number
-                {...(config as NumberInputConfigProps)}
-                id={key}
-                value={formState[key]}
-                onValueChange={(value) =>
-                  dispatch({ type: key, payload: value })
-                }
-              />
-            ) : type === "color" ? (
-              <Input.Color
-                {...(config as ColorInputConfigProps)}
-                id={key}
-                value={formState[key]}
-                onValueChange={(value) =>
-                  dispatch({ type: key, payload: value })
-                }
-              />
-            ) : (
-              <Input.Text
-                {...(config as TextInputProps)}
-                id={key}
-                value={formState[key]}
-                onChange={(e) =>
-                  dispatch({ type: key, payload: e.target.value })
-                }
-              />
-            )}
-          </Input.Field>
-        ),
+        ({ id, key, label, type, hint, error, layout = "stack", config }) => {
+          return (
+            <Input.Field
+              key={id}
+              label={label}
+              htmlFor={key}
+              className="w-full text-sm"
+              labelClassName="flex-1"
+              layout={layout}
+              hint={hint}
+              error={error}
+            >
+              {type === "custom" ? (
+                <>Custom</>
+              ) : type === "select" ? (
+                <Input.Select
+                  {...(config as SelectInputConfig)}
+                  id={key}
+                  value={formState[key]}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    dispatch({ type: key, payload: value });
+                    if (config?.onChange) config?.onChange?.(value);
+                  }}
+                />
+              ) : type === "textarea" ? (
+                <Input.TextArea
+                  {...(config as TextAreaInputConfig)}
+                  id={key}
+                  value={formState[key]}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    dispatch({ type: key, payload: value });
+                    if (config?.onChange) config?.onChange?.(value);
+                  }}
+                />
+              ) : type === "number" ? (
+                <Input.Number
+                  {...(config as NumberInputConfig)}
+                  id={key}
+                  value={formState[key]}
+                  onValueChange={(value) => {
+                    dispatch({ type: key, payload: value });
+                    if (config?.onChange) config?.onChange?.(value);
+                  }}
+                />
+              ) : type === "color" ? (
+                <Input.Color
+                  {...(config as ColorInputConfig)}
+                  id={key}
+                  value={formState[key]}
+                  onValueChange={(value) => {
+                    dispatch({ type: key, payload: value });
+                    if (config?.onChange) config?.onChange?.(value);
+                  }}
+                />
+              ) : (
+                <Input.Text
+                  {...(config as InputConfig)}
+                  id={key}
+                  value={formState[key]}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    dispatch({ type: key, payload: value });
+                    if (config?.onChange) config?.onChange?.(value);
+                  }}
+                />
+              )}
+            </Input.Field>
+          );
+        },
       )}
     </div>
   );

@@ -39,8 +39,8 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
     };
 
     setProjectState(newProject);
-    toast.success("Project created successfuly.");
     navigate("/editor");
+    toast.success("Project created successfuly.");
   };
 
   const formData = useMemo(

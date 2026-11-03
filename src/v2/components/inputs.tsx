@@ -445,6 +445,7 @@ export function NumberInput({
         value={value ?? ""}
         disabled={disabled}
         readOnly={readOnly}
+        {...rest}
         onChange={(e) => {
           const text = e.target.value;
           onValueChange(text === "" ? null : Number(text));
@@ -474,7 +475,6 @@ export function NumberInput({
           "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
           showStepper && "text-center",
         )}
-        {...rest}
       />
 
       {unit && (
