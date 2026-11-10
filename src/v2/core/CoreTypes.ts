@@ -148,13 +148,14 @@ export interface BoundingBox {
   height: number;
 }
 
-export interface Tool<M, P> {
-  type: Tools;
+export interface Tool {
+  readonly type: Tools;
+  readonly canvas: HTMLCanvasElement | null;
   activate?(): void;
   deactivate?(): void;
-  onClick?(event?: M): void;
-  onPointerDown?(event?: P): void;
-  onPointerMove?(event?: P): void;
-  onPointerUp?(event?: P): void;
-  onPointerCancel?(event?: P): void;
+  onClick?(event?: React.MouseEvent<HTMLCanvasElement>): void;
+  onPointerDown?(event?: React.PointerEvent<HTMLCanvasElement>): void;
+  onPointerMove?(event?: React.PointerEvent<HTMLCanvasElement>): void;
+  onPointerUp?(event?: React.PointerEvent<HTMLCanvasElement>): void;
+  onPointerCancel?(event?: React.PointerEvent<HTMLCanvasElement>): void;
 }

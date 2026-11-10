@@ -1,20 +1,25 @@
 import type { Tool, Tools } from "@src/core/CoreTypes.js";
-import type { ReactMouseEvent, ReactPointerEvent } from "@src/types/global.js";
+import useProject from "@src/hooks/useProject.js";
 import { getToolController } from "@src/utils/Utils.js";
 import { createContext, useMemo, useState } from "react";
 
 type ToolContextType = {
-  selectedTool: Tools;
-  setSelectedTool: React.Dispatch<React.SetStateAction<Tools>>;
-  activeTool: Tool<ReactMouseEvent, ReactPointerEvent>;
+  selectedTool: Tools | null;
+  setSelectedTool: React.Dispatch<React.SetStateAction<Tools | null>>;
+  activeTool: Tool | null;
 } | null;
 
 const ToolContext = createContext<ToolContextType>(null);
 
 export function ToolProvider({ children }: { children: React.ReactNode }) {
-  const [selectedTool, setSelectedTool] = useState<Tools>("select");
+  const { canvasRef } = useProject();
+  const [selectedTool, setSelectedTool] = useState<Tools | null>(null);
+
   const activeTool = useMemo(
-    () => getToolController(selectedTool),
+    () =>
+      selectedTool === null
+        ? null
+        : getToolController(selectedTool, canvasRef.current),
     [selectedTool],
   );
 

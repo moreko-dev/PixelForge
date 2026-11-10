@@ -1,81 +1,137 @@
 import type { Tool, Tools } from "./CoreTypes.js";
 
-export class SelectTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "select";
+class ToolManager implements Tool {
+  readonly type: Tools;
+  readonly canvas: HTMLCanvasElement | null;
+
+  constructor(type: Tools, canvas: HTMLCanvasElement | null) {
+    this.type = type;
+    this.canvas = canvas;
+  }
+
+  onClick(event?: React.MouseEvent<HTMLCanvasElement>): void {}
+  onPointerCancel(event?: React.PointerEvent<HTMLCanvasElement>): void {}
+  onPointerDown(event?: React.PointerEvent<HTMLCanvasElement>): void {}
+  onPointerMove(event?: React.PointerEvent<HTMLCanvasElement>): void {}
+  onPointerUp(event?: React.PointerEvent<HTMLCanvasElement>): void {}
 }
 
-export class MoveTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "move";
+export class SelectTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("select", canvas);
+  }
 }
 
-export class PanTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "pan";
+export class MoveTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("move", canvas);
+  }
 }
 
-export class BrushTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "brush";
+export class PanTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("pan", canvas);
+  }
 }
 
-export class PencilTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "pencil";
+export class BrushTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("brush", canvas);
+  }
 }
 
-export class EraserTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "eraser";
+export class PencilTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("pencil", canvas);
+  }
 }
 
-export class LineTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "line";
+export class EraserTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("eraser", canvas);
+  }
 }
 
-export class RectangleTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "rectangle";
+export class LineTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("line", canvas);
+  }
 }
 
-export class CircleTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "circle";
+export class RectangleTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("rectangle", canvas);
+  }
 }
 
-export class PolygonTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "polygon";
+export class CircleTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("circle", canvas);
+  }
 }
 
-export class TextTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "text";
+export class PolygonTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("polygon", canvas);
+  }
 }
 
-export class CropTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "crop";
+export class TextTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("text", canvas);
+  }
 }
 
-export class ResizeTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "resize";
+export class CropTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("crop", canvas);
+  }
 }
 
-export class EyedropperTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "eyedropper";
+export class ResizeTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("resize", canvas);
+  }
 }
 
-export class GradientTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "gradient";
+export class EyedropperTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("eyedropper", canvas);
+  }
 }
 
-export class BlurTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "blur";
+export class GradientTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("gradient", canvas);
+  }
 }
 
-export class CloneTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "clone";
+export class BlurTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("blur", canvas);
+  }
 }
 
-export class LassoTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "lasso";
+export class CloneTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("clone", canvas);
+  }
 }
 
-export class MagicTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "magic";
+export class LassoTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("lasso", canvas);
+  }
 }
 
-export class ZoomTool<M, P> implements Tool<M, P> {
-  readonly type: Tools = "zoom";
+export class MagicTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("magic", canvas);
+  }
+}
+
+export class ZoomTool extends ToolManager {
+  constructor(canvas: HTMLCanvasElement | null) {
+    super("zoom", canvas);
+  }
 }

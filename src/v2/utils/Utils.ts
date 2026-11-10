@@ -56,28 +56,31 @@ export function getProjectName(): string {
 
 export function getToolController(
   tool: Tools,
-): Tool<ReactMouseEvent, ReactPointerEvent> {
-  const toolMap: Record<Tools, Tool<ReactMouseEvent, ReactPointerEvent>> = {
-    select: new SelectTool<ReactMouseEvent, ReactPointerEvent>(),
-    move: new MoveTool<ReactMouseEvent, ReactPointerEvent>(),
-    pan: new PanTool<ReactMouseEvent, ReactPointerEvent>(),
-    brush: new BrushTool<ReactMouseEvent, ReactPointerEvent>(),
-    pencil: new PencilTool<ReactMouseEvent, ReactPointerEvent>(),
-    eraser: new EraserTool<ReactMouseEvent, ReactPointerEvent>(),
-    line: new LineTool<ReactMouseEvent, ReactPointerEvent>(),
-    rectangle: new RectangleTool<ReactMouseEvent, ReactPointerEvent>(),
-    circle: new CircleTool<ReactMouseEvent, ReactPointerEvent>(),
-    polygon: new PolygonTool<ReactMouseEvent, ReactPointerEvent>(),
-    text: new TextTool<ReactMouseEvent, ReactPointerEvent>(),
-    crop: new CropTool<ReactMouseEvent, ReactPointerEvent>(),
-    resize: new ResizeTool<ReactMouseEvent, ReactPointerEvent>(),
-    eyedropper: new EyedropperTool<ReactMouseEvent, ReactPointerEvent>(),
-    gradient: new GradientTool<ReactMouseEvent, ReactPointerEvent>(),
-    blur: new BlurTool<ReactMouseEvent, ReactPointerEvent>(),
-    clone: new CloneTool<ReactMouseEvent, ReactPointerEvent>(),
-    lasso: new LassoTool<ReactMouseEvent, ReactPointerEvent>(),
-    magic: new MagicTool<ReactMouseEvent, ReactPointerEvent>(),
-    zoom: new ZoomTool<ReactMouseEvent, ReactPointerEvent>(),
+  canvas: HTMLCanvasElement | null,
+): Tool {
+  type M = ReactMouseEvent;
+  type P = ReactPointerEvent;
+  const toolMap: Record<Tools, Tool> = {
+    select: new SelectTool(canvas),
+    move: new MoveTool(canvas),
+    pan: new PanTool(canvas),
+    brush: new BrushTool(canvas),
+    pencil: new PencilTool(canvas),
+    eraser: new EraserTool(canvas),
+    line: new LineTool(canvas),
+    rectangle: new RectangleTool(canvas),
+    circle: new CircleTool(canvas),
+    polygon: new PolygonTool(canvas),
+    text: new TextTool(canvas),
+    crop: new CropTool(canvas),
+    resize: new ResizeTool(canvas),
+    eyedropper: new EyedropperTool(canvas),
+    gradient: new GradientTool(canvas),
+    blur: new BlurTool(canvas),
+    clone: new CloneTool(canvas),
+    lasso: new LassoTool(canvas),
+    magic: new MagicTool(canvas),
+    zoom: new ZoomTool(canvas),
   };
 
   return toolMap[tool];
