@@ -1,5 +1,5 @@
-import type { Tools } from "@src/types/global.types.js";
-import { useState } from "react";
+import type { Tools } from "@src/core/CoreTypes.js";
+import useTool from "@src/hooks/useTool.js";
 import type { IconType } from "react-icons";
 import {
   LuBlend,
@@ -50,7 +50,7 @@ const tools: toolType[] = [
 ];
 
 function ToolsBar() {
-  const [selectedTool, setSelectedTool] = useState<Tools>("select");
+  const { selectedTool, setSelectedTool } = useTool();
 
   return (
     <div className="bg-sidebar overflow-x-hidden overflow-y-auto flex flex-col gap-2">

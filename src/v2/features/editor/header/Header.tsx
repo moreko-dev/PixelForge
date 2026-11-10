@@ -6,6 +6,7 @@ import HomeButton from "./componets/HomeButton.js";
 import ReportBugButton from "./componets/ReportBugButton.js";
 import SettingsButton from "./componets/SettingsButton.js";
 import ThemeButton from "./componets/ThemeButton.js";
+import ImageButton from "./componets/ImageButton.js";
 
 function Header() {
   return (
@@ -22,6 +23,8 @@ function Header() {
       </div>
 
       <div className="h-full flex gap-2">
+        <ImageButton />
+        <VSeprator marginValue={1} />
         <DownloadButton />
         <ExportButton />
         <VSeprator marginValue={1} />

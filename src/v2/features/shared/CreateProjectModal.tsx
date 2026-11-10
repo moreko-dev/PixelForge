@@ -2,6 +2,7 @@ import Form, { type FormRef } from "@src/components/Form.js";
 import Modal from "@src/components/Modal.js";
 import type { HexaColorType, Project } from "@src/core/CoreTypes.js";
 import useProject from "@src/hooks/useProject.js";
+import { getProjectName } from "@src/utils/Utils.js";
 import { useMemo, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router";
@@ -45,7 +46,7 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
 
   const formData = useMemo(
     () => ({
-      "project-name": "",
+      "project-name": getProjectName(),
       "canvas-width": 500,
       "canvas-height": 500,
       "canvas-bgcolor": "#FFFFFF",

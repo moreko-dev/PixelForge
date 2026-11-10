@@ -19,6 +19,27 @@ export type FontFamilyType =
   | "emoji"
   | "math"
   | "fangsong";
+export type Tools =
+  | "select"
+  | "move"
+  | "pan"
+  | "brush"
+  | "pencil"
+  | "eraser"
+  | "line"
+  | "rectangle"
+  | "circle"
+  | "polygon"
+  | "text"
+  | "crop"
+  | "resize"
+  | "eyedropper"
+  | "gradient"
+  | "blur"
+  | "clone"
+  | "lasso"
+  | "magic"
+  | "zoom";
 
 export interface Project {
   isCreated: boolean;
@@ -125,4 +146,15 @@ export interface BoundingBox {
   y: number;
   width: number;
   height: number;
+}
+
+export interface Tool<M, P> {
+  type: Tools;
+  activate?(): void;
+  deactivate?(): void;
+  onClick?(event?: M): void;
+  onPointerDown?(event?: P): void;
+  onPointerMove?(event?: P): void;
+  onPointerUp?(event?: P): void;
+  onPointerCancel?(event?: P): void;
 }
