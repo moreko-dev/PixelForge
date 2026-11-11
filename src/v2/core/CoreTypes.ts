@@ -1,6 +1,13 @@
 export type SaveStatusType = "saved" | "unsaved" | "changed";
 export type HexaColorType = `#${string}`;
-export type LayersType = "image" | "text" | "pen" | "shape";
+export type RGBColorType =
+  | `rgba(${number}, ${number}, ${number})`
+  | `rgba(${number},${number},${number})`;
+export type RGBAColorType =
+  | `rgba(${number}, ${number}, ${number}, ${number})`
+  | `rgba(${number},${number},${number},${number})`;
+export type CanvasColorType = HexaColorType | RGBColorType | RGBAColorType;
+export type LayersType = "image" | "text" | "brush" | "pen" | "shape";
 export type ShapesType = "line" | "rectangle" | "circle" | "polygon";
 export type CoordinateType = { x: number; y: number };
 export type LineCapType = "butt" | "round" | "square";
@@ -52,8 +59,8 @@ export interface Project {
 export interface Canvas {
   width: number;
   height: number;
-  backgroundColor: HexaColorType;
-  borderColor: HexaColorType;
+  backgroundColor: CanvasColorType;
+  borderColor: CanvasColorType;
 }
 
 export interface Layer {
@@ -76,14 +83,22 @@ export interface ImageLayer extends Layer {
   flipY: boolean;
 }
 
-export interface PenLayer extends Layer {
-  strokeColor: HexaColorType;
+export interface BrushLayer extends Layer {
+  strokeColor: CanvasColorType;
   lineWidth: number;
   lineCap: LineCapType;
   lineJoin: LineJoinType;
-  miterLimit: number;
   points: CoordinateType[];
 }
+
+// export interface PenLayer extends Layer {
+//   strokeColor: HexaColorType;
+//   lineWidth: number;
+//   lineCap: LineCapType;
+//   lineJoin: LineJoinType;
+//   miterLimit: number;
+//   points: CoordinateType[];
+// }
 
 export interface TextLayer extends Layer {
   value: string;
@@ -93,13 +108,13 @@ export interface TextLayer extends Layer {
   height: number;
   fontSize: number;
   fontFamily: FontFamilyType;
-  fillColor: HexaColorType;
+  fillColor: CanvasColorType;
 }
 
 export interface ShapeLayer extends Layer {
   shapeType: ShapesType;
-  strokeColor: HexaColorType;
-  fillColor: HexaColorType;
+  strokeColor: CanvasColorType;
+  fillColor: CanvasColorType;
   lineWidth: number;
 }
 
@@ -124,7 +139,7 @@ export interface RectangleShape extends ShapeLayer {
 }
 
 export interface Shadow {
-  color: HexaColorType;
+  color: CanvasColorType;
   blur: number;
   offsetX: number;
   offsetY: number;
@@ -148,14 +163,17 @@ export interface BoundingBox {
   height: number;
 }
 
-export interface Tool {
+export interface Tool<T = unknown> {
   readonly type: Tools;
   readonly canvas: HTMLCanvasElement | null;
   activate?(): void;
   deactivate?(): void;
-  onClick?(event?: React.MouseEvent<HTMLCanvasElement>): void;
-  onPointerDown?(event?: React.PointerEvent<HTMLCanvasElement>): void;
-  onPointerMove?(event?: React.PointerEvent<HTMLCanvasElement>): void;
-  onPointerUp?(event?: React.PointerEvent<HTMLCanvasElement>): void;
-  onPointerCancel?(event?: React.PointerEvent<HTMLCanvasElement>): void;
+  onClick?(event: React.MouseEvent<HTMLCanvasElement>): void;
+  onPointerDown?(event: React.PointerEvent<HTMLCanvasElement>): void;
+  onPointerMove?(event: React.PointerEvent<HTMLCanvasElement>): void;
+  onPointerUp?(
+    event: React.PointerEvent<HTMLCanvasElement>,
+    callback?: (props: T) => void,
+  ): void;
+  onPointerCancel?(event: React.PointerEvent<HTMLCanvasElement>): void;
 }

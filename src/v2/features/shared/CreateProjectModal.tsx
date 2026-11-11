@@ -1,6 +1,6 @@
 import Form, { type FormRef } from "@src/components/Form.js";
 import Modal from "@src/components/Modal.js";
-import type { HexaColorType, Project } from "@src/core/CoreTypes.js";
+import type { CanvasColorType, Project } from "@src/core/CoreTypes.js";
 import useProject from "@src/hooks/useProject.js";
 import { getProjectName } from "@src/utils/Utils.js";
 import { useMemo, useRef } from "react";
@@ -33,7 +33,7 @@ function CreateProjectModal({ onClose }: { onClose: () => void }) {
       canvas: {
         width: canvasWidth,
         height: canvasHeight,
-        backgroundColor: canvasBgColor as HexaColorType,
+        backgroundColor: canvasBgColor as CanvasColorType,
         borderColor: "#000000",
       },
       layers: [],

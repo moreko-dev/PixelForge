@@ -1,6 +1,11 @@
-import type { Tool, Tools } from "./CoreTypes.js";
+import { getPointerRelativeCoordinate } from "@src/utils/Utils.js";
+import type { CoordinateType, Tool, Tools } from "./CoreTypes.js";
 
-class ToolManager implements Tool {
+export type BrushCallbackType = {
+  points: CoordinateType[];
+};
+
+class ToolManager<T = unknown> implements Tool<T> {
   readonly type: Tools;
   readonly canvas: HTMLCanvasElement | null;
 
@@ -9,11 +14,21 @@ class ToolManager implements Tool {
     this.canvas = canvas;
   }
 
-  onClick(event?: React.MouseEvent<HTMLCanvasElement>): void {}
-  onPointerCancel(event?: React.PointerEvent<HTMLCanvasElement>): void {}
-  onPointerDown(event?: React.PointerEvent<HTMLCanvasElement>): void {}
-  onPointerMove(event?: React.PointerEvent<HTMLCanvasElement>): void {}
-  onPointerUp(event?: React.PointerEvent<HTMLCanvasElement>): void {}
+  onClick(event: React.MouseEvent<HTMLCanvasElement>): void {}
+  onPointerCancel(event: React.PointerEvent<HTMLCanvasElement>): void {}
+  onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {}
+  onPointerMove(event: React.PointerEvent<HTMLCanvasElement>): void {}
+  onPointerUp(
+    event: React.PointerEvent<HTMLCanvasElement>,
+    callback?: (props: T) => void,
+  ): void {}
+
+  getCanvas2dContext(): CanvasRenderingContext2D {
+    if (!this.canvas) throw new Error("No canvas reference");
+    const ctx = this.canvas.getContext("2d");
+    if (!ctx) throw new Error("Failed to get CanvasRenderingContext2D");
+    return ctx;
+  }
 }
 
 export class SelectTool extends ToolManager {
@@ -34,9 +49,43 @@ export class PanTool extends ToolManager {
   }
 }
 
-export class BrushTool extends ToolManager {
+export class BrushTool extends ToolManager<BrushCallbackType> {
+  private isDrawing = false;
+  private points: CoordinateType[] = [];
+
   constructor(canvas: HTMLCanvasElement | null) {
     super("brush", canvas);
+  }
+
+  onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isDrawing = true;
+    const ctx = this.getCanvas2dContext();
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    ctx?.beginPath();
+    ctx?.moveTo(pc.x, pc.y);
+    ctx?.lineTo(pc.x, pc.y);
+    ctx?.stroke();
+    this.points.push({ x: pc.x, y: pc.y });
+  }
+
+  onPointerMove(event: React.PointerEvent<HTMLCanvasElement>): void {
+    if (!this.isDrawing) return;
+    const ctx = this.getCanvas2dContext();
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    ctx?.lineTo(pc.x, pc.y);
+    ctx?.stroke();
+    this.points.push({ x: pc.x, y: pc.y });
+  }
+
+  onPointerUp(
+    event: React.PointerEvent<HTMLCanvasElement>,
+    callback: (props: BrushCallbackType) => void,
+  ): void {
+    const ctx = this.getCanvas2dContext();
+    ctx?.closePath();
+    this.isDrawing = false;
+    callback?.({ points: this.points });
+    this.points = [];
   }
 }
 

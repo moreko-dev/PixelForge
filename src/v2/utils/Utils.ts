@@ -1,4 +1,4 @@
-import type { Tool, Tools } from "@src/core/CoreTypes.js";
+import type { CoordinateType, Tool, Tools } from "@src/core/CoreTypes.js";
 import {
   BlurTool,
   BrushTool,
@@ -21,7 +21,7 @@ import {
   TextTool,
   ZoomTool,
 } from "@src/core/ToolController.js";
-import type { ReactMouseEvent, ReactPointerEvent } from "@src/types/global.js";
+import type React from "react";
 
 export function getCursor(tool: Tools): string {
   const cursorMap: Record<Tools, string> = {
@@ -58,8 +58,6 @@ export function getToolController(
   tool: Tools,
   canvas: HTMLCanvasElement | null,
 ): Tool {
-  type M = ReactMouseEvent;
-  type P = ReactPointerEvent;
   const toolMap: Record<Tools, Tool> = {
     select: new SelectTool(canvas),
     move: new MoveTool(canvas),
@@ -84,4 +82,17 @@ export function getToolController(
   };
 
   return toolMap[tool];
+}
+
+export function getPointerRelativeCoordinate(
+  canvas: HTMLCanvasElement,
+  event: React.PointerEvent<HTMLCanvasElement>,
+): CoordinateType {
+  const rect = canvas.getBoundingClientRect();
+
+  // No Scale //
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top,
+  };
 }
