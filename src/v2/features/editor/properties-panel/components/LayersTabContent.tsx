@@ -1,9 +1,8 @@
-import { DestructiveButton, IconButton } from "@src/components/buttons.js";
+import { DestructiveButton } from "@src/components/buttons.js";
 import { EmptyState } from "@src/components/EmptyState.js";
 import type { LayersType } from "@src/core/CoreTypes.js";
+import useLayer from "@src/hooks/useLayer.js";
 import useProject from "@src/hooks/useProject.js";
-import { useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
 import {
   LuBrush,
   LuImage,
@@ -15,6 +14,7 @@ import {
 
 function LayersTabContent() {
   const { projectState } = useProject();
+  const { selectedLayer, setSelectedLayer } = useLayer();
   if (!projectState) throw new Error("Project state is null or undefined!");
 
   return (
@@ -27,9 +27,13 @@ function LayersTabContent() {
         />
       ) : (
         projectState.layers.map((layer) => (
-          <LayerItem key={layer.id} type={layer.type} name={layer.name}>
-            <span>Layer properties</span>
-          </LayerItem>
+          <LayerItem
+            key={layer.id}
+            type={layer.type}
+            name={layer.name}
+            onClick={() => setSelectedLayer(layer.id)}
+            active={selectedLayer === layer.id}
+          />
         ))
       )}
     </div>
@@ -39,13 +43,14 @@ function LayersTabContent() {
 function LayerItem({
   type,
   name,
-  children,
+  onClick,
+  active,
 }: {
   type: LayersType;
   name: string;
-  children?: React.ReactNode;
+  onClick: () => void;
+  active: boolean;
 }) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const getLayerIconType = () => {
     switch (type) {
       case "brush":
@@ -63,41 +68,33 @@ function LayerItem({
     }
   };
   return (
-    <div>
-      <div
-        className={`select-none w-full flex gap-2 items-center ${isOpen ? "rounded-t" : "rounded"} bg-surface border border-border-subtle overflow-hidden`}
-      >
+    <div
+      className={`bg-surface border ${active ? "border-primary-disabled bg-primary-foreground!" : "border-border-subtle"} rounded overflow-hidden transition-colors duration-300`}
+    >
+      <div className="select-none w-full flex items-stretch">
         <div className="size-8 flex items-center justify-center text-primary bg-surface-raised border-r border-border">
           {getLayerIconType()}
         </div>
+        <div className="w-6 flex justify-center items-center" onClick={onClick}>
+          <div
+            className={`size-2 rounded-full ${active ? "bg-primary" : "bg-surface-active"} transition-colors duration-300`}
+          ></div>
+        </div>
         <div
-          className={`flex-1 text-sm leading-none text-foreground-secondary transition-colors duration-300 ${isOpen ? "text-foreground!" : ""}`}
+          className={`me-2 flex-1 text-sm flex items-center ${active ? "text-foreground" : "text-foreground-secondary"} transition-colors duration-300`}
+          onClick={onClick}
         >
           {name}
         </div>
         <div>
-          <IconButton
-            icon={<BsThreeDots />}
+          <DestructiveButton
+            icon={<LuTrash />}
+            appearance="soft"
+            className="rounded-none border-none!"
             size="sm"
-            className="rounded-none"
-            onClick={() => setIsOpen((prev) => !prev)}
           />
         </div>
       </div>
-
-      {isOpen && (
-        <div className="bg-surface-raised rounded-b flex flex-col gap-2 p-1">
-          <div className="flex justify-end">
-            <DestructiveButton
-              icon={<LuTrash />}
-              appearance="soft"
-              className="size-7! rounded!"
-              size="sm"
-            />
-          </div>
-          {children}
-        </div>
-      )}
     </div>
   );
 }

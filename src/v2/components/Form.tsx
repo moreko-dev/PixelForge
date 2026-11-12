@@ -59,6 +59,21 @@ type InputConfig = Omit<TextInputProps, "onChange"> & {
   ) => void;
 };
 
+type CustomConfig = {
+  Component: React.ComponentType<{
+    value: any;
+    onChange: React.ActionDispatch<
+      [
+        action: {
+          type: string;
+          payload: any;
+        },
+      ]
+    >,
+    key: string;
+  }>;
+};
+
 type FormFieldType =
   | {
       id?: string;
@@ -134,7 +149,7 @@ type FormFieldType =
       layout?: "inline" | "stack";
       hint?: string;
       error?: string;
-      config?: {};
+      config?: CustomConfig;
     };
 
 type FormDataType = Record<string, any>;
@@ -232,7 +247,7 @@ function Form({
         ? (newFormFields as FormFieldsGroupType).map((group, index) => (
             <div
               key={group.groupName.replace(/\s/g, "").concat(String(index))}
-              className="mb-4"
+              // className="mb-4"
             >
               <div className="mb-2 flex gap-2 items-center text-foreground-secondary after:flex-1 after:h-px after:border after:border-border-subtle">
                 {group.groupName}
@@ -244,6 +259,7 @@ function Form({
                     formState={formState}
                     dispatch={dispatch}
                     field={item}
+                    group
                   />
                 ))}
               </div>
@@ -255,6 +271,7 @@ function Form({
               formState={formState}
               dispatch={dispatch}
               field={item}
+              group={false}
             />
           ))}
     </form>
@@ -265,6 +282,7 @@ function FieldsRenderer({
   formState,
   dispatch,
   field: item,
+  group,
 }: {
   formState: FormDataType;
   dispatch: React.ActionDispatch<
@@ -276,11 +294,13 @@ function FieldsRenderer({
     ]
   >;
   field: FormFieldsUngroupType[number];
+  group: boolean;
 }) {
   return (
-    <div className={`flex ${DIR_CN[item.dir]} mb-4`}>
+    <div className={`flex ${DIR_CN[item.dir]} ${group ? "mb-2" : "mb-4"}`}>
       {item.fields.map(
         ({ id, key, label, type, hint, error, layout = "stack", config }) => {
+          const CustomComponent = (config as CustomConfig).Component;
           return (
             <Input.Field
               key={id}
@@ -293,7 +313,7 @@ function FieldsRenderer({
               error={error}
             >
               {type === "custom" ? (
-                <>Custom</>
+                <CustomComponent key={key} value={formState[key]} onChange={dispatch} />
               ) : type === "select" ? (
                 <Input.Select
                   {...(config as SelectInputConfig)}

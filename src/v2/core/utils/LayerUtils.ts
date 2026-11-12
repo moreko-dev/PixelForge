@@ -3,6 +3,8 @@ import type {
   BrushLayer,
   CoordinateType,
   Filter,
+  Layer,
+  Project,
   Shadow,
 } from "../CoreTypes.js";
 
@@ -55,4 +57,26 @@ export function createBrushLayer(points: CoordinateType[]): BrushLayer {
     lineJoin: "miter",
     points,
   };
+}
+
+export function updateLayerPropertiesOnState<L extends Layer>(
+  setState: React.Dispatch<React.SetStateAction<Project | null>>,
+  layer: Layer,
+  key: keyof L,
+  value: any,
+) {
+  setState((prev) => {
+    if (!prev) throw new Error("Project state is null or undefined!");
+    const layersClone = prev.layers.slice();
+    const layerIndex = layersClone.findIndex((item) => item.id === layer.id);
+    layersClone.splice(layerIndex, 1, {
+      ...prev.layers[layerIndex],
+      [key]: value,
+    } as L);
+
+    return {
+      ...prev,
+      layers: layersClone.slice(),
+    };
+  });
 }
