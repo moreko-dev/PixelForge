@@ -62,16 +62,9 @@ type InputConfig = Omit<TextInputProps, "onChange"> & {
 type CustomConfig = {
   Component: React.ComponentType<{
     value: any;
-    onChange: React.ActionDispatch<
-      [
-        action: {
-          type: string;
-          payload: any;
-        },
-      ]
-    >,
-    key: string;
+    onChange: (value: any) => void;
   }>;
+  onChange: (value: any) => void;
 };
 
 type FormFieldType =
@@ -313,7 +306,10 @@ function FieldsRenderer({
               error={error}
             >
               {type === "custom" ? (
-                <CustomComponent key={key} value={formState[key]} onChange={dispatch} />
+                <CustomComponent
+                  value={formState[key]}
+                  onChange={(config as CustomConfig).onChange}
+                />
               ) : type === "select" ? (
                 <Input.Select
                   {...(config as SelectInputConfig)}

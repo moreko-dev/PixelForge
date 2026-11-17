@@ -14,6 +14,7 @@ function getLayerProperties(
 ): React.ReactNode {
   switch (layer.type) {
     case "brush":
+    case "pen":
       return (
         <Form
           formConfig={{ group: true }}
@@ -64,6 +65,14 @@ function getLayerProperties(
                         size: "sm",
                         hideStepper: true,
                         className: "rounded! max-w-30",
+                        onChange: (value) => {
+                          updateLayerPropertiesOnState<BrushLayer>(
+                            setState,
+                            layer,
+                            "lineWidth",
+                            value,
+                          );
+                        },
                       },
                     },
                     {
@@ -73,6 +82,14 @@ function getLayerProperties(
                       layout: "inline",
                       config: {
                         Component: LineCapSelector,
+                        onChange: (value) => {
+                          updateLayerPropertiesOnState<BrushLayer>(
+                            setState,
+                            layer,
+                            "lineCap",
+                            value,
+                          );
+                        },
                       },
                     },
                     {
@@ -82,6 +99,14 @@ function getLayerProperties(
                       layout: "inline",
                       config: {
                         Component: LineJoinSelector,
+                        onChange: (value) => {
+                          updateLayerPropertiesOnState<BrushLayer>(
+                            setState,
+                            layer,
+                            "lineJoin",
+                            value,
+                          );
+                        },
                       },
                     },
                   ],

@@ -1,4 +1,9 @@
-import type { CoordinateType, Tool, Tools } from "@src/core/CoreTypes.js";
+import type {
+  CoordinateType,
+  Project,
+  Tool,
+  Tools,
+} from "@src/core/CoreTypes.js";
 import {
   BlurTool,
   BrushTool,
@@ -22,6 +27,7 @@ import {
   ZoomTool,
 } from "@src/core/ToolController.js";
 import type React from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 export function getCursor(tool: Tools): string {
   const cursorMap: Record<Tools, string> = {
@@ -57,28 +63,29 @@ export function getProjectName(): string {
 export function getToolController(
   tool: Tools,
   canvas: HTMLCanvasElement | null,
+  setState: Dispatch<SetStateAction<Project | null>>,
 ): Tool {
   const toolMap: Record<Tools, Tool> = {
-    select: new SelectTool(canvas),
-    move: new MoveTool(canvas),
-    pan: new PanTool(canvas),
-    brush: new BrushTool(canvas),
-    pencil: new PencilTool(canvas),
-    eraser: new EraserTool(canvas),
-    line: new LineTool(canvas),
-    rectangle: new RectangleTool(canvas),
-    circle: new CircleTool(canvas),
-    polygon: new PolygonTool(canvas),
-    text: new TextTool(canvas),
-    crop: new CropTool(canvas),
-    resize: new ResizeTool(canvas),
-    eyedropper: new EyedropperTool(canvas),
-    gradient: new GradientTool(canvas),
-    blur: new BlurTool(canvas),
-    clone: new CloneTool(canvas),
-    lasso: new LassoTool(canvas),
-    magic: new MagicTool(canvas),
-    zoom: new ZoomTool(canvas),
+    select: new SelectTool(canvas, setState),
+    move: new MoveTool(canvas, setState),
+    pan: new PanTool(canvas, setState),
+    brush: new BrushTool(canvas, setState),
+    pencil: new PencilTool(canvas, setState),
+    eraser: new EraserTool(canvas, setState),
+    line: new LineTool(canvas, setState),
+    rectangle: new RectangleTool(canvas, setState),
+    circle: new CircleTool(canvas, setState),
+    polygon: new PolygonTool(canvas, setState),
+    text: new TextTool(canvas, setState),
+    crop: new CropTool(canvas, setState),
+    resize: new ResizeTool(canvas, setState),
+    eyedropper: new EyedropperTool(canvas, setState),
+    gradient: new GradientTool(canvas, setState),
+    blur: new BlurTool(canvas, setState),
+    clone: new CloneTool(canvas, setState),
+    lasso: new LassoTool(canvas, setState),
+    magic: new MagicTool(canvas, setState),
+    zoom: new ZoomTool(canvas, setState),
   };
 
   return toolMap[tool];
@@ -86,7 +93,7 @@ export function getToolController(
 
 export function getPointerRelativeCoordinate(
   canvas: HTMLCanvasElement,
-  event: React.PointerEvent<HTMLCanvasElement>,
+  event: React.PointerEvent<HTMLCanvasElement> | PointerEvent,
 ): CoordinateType {
   const rect = canvas.getBoundingClientRect();
 

@@ -1,9 +1,11 @@
 import type {
+  AnchorPointType,
   BoundingBox,
   BrushLayer,
   CoordinateType,
   Filter,
   Layer,
+  PenLayer,
   Project,
   Shadow,
 } from "../CoreTypes.js";
@@ -56,6 +58,22 @@ export function createBrushLayer(points: CoordinateType[]): BrushLayer {
     lineCap: "butt",
     lineJoin: "miter",
     points,
+  };
+}
+
+export function createPenLayer(points: AnchorPointType[]): PenLayer {
+  return {
+    type: "pen",
+    id: crypto.randomUUID(),
+    name: getLayerName("Pencil"),
+    shadow: getDefaultShadow(),
+    filter: getDefaultFilter(),
+    boundingBox: getDefaultBoundingBox(),
+    strokeColor: "#000000",
+    lineWidth: 1,
+    lineCap: "butt",
+    lineJoin: "miter",
+    points: points,
   };
 }
 

@@ -1,5 +1,8 @@
+import useLayer from "@src/hooks/useLayer.js";
 function LayerStatus() {
-  return <span>Layer12345</span>;
+  const { selectedLayerName } = useLayer();
+
+  return <span>{selectedLayerName || "NO_SELECTED_LAYER"}</span>;
 }
 
 export default LayerStatus;

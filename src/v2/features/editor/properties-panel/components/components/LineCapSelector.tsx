@@ -1,6 +1,6 @@
 import { IconButton } from "@src/components/buttons.js";
 import type { LineCapType } from "@src/core/CoreTypes.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbCapProjecting, TbCapRounded, TbCapStraight } from "react-icons/tb";
 
 function LineCapSelector({
@@ -8,16 +8,11 @@ function LineCapSelector({
   onChange,
 }: {
   value: any;
-  onChange: React.ActionDispatch<
-    [
-      action: {
-        type: string;
-        payload: any;
-      },
-    ]
-  >;
+  onChange: (value: any) => void;
 }) {
   const [cap, setCap] = useState<LineCapType>(value);
+
+  useEffect(() => onChange(cap), [cap]);
 
   return (
     <div className="bg-input rounded border border-border-strong flex overflow-hidden">

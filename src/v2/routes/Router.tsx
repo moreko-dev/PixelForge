@@ -1,3 +1,5 @@
+import { LayerProvider } from "@src/contexts/LayerContext.js";
+import { ToolProvider } from "@src/contexts/ToolContext.js";
 import NotFoundPage from "@src/pages/NotFoundPage.js";
 import ProjectsPage from "@src/pages/ProjectsPage.js";
 import { createBrowserRouter, type RouteObject } from "react-router";
@@ -25,7 +27,11 @@ const routes: RouteObject[] = [
     path: "/editor",
     element: (
       <EditorProtection>
-        <EditorPage />
+        <LayerProvider>
+          <ToolProvider>
+            <EditorPage />
+          </ToolProvider>
+        </LayerProvider>
       </EditorProtection>
     ),
   },

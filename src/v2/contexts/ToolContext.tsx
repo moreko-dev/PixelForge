@@ -1,7 +1,7 @@
 import type { Tool, Tools } from "@src/core/CoreTypes.js";
 import useProject from "@src/hooks/useProject.js";
 import { getToolController } from "@src/utils/Utils.js";
-import { createContext, useMemo, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 
 type ToolContextType = {
   selectedTool: Tools | null;
@@ -12,19 +12,23 @@ type ToolContextType = {
 const ToolContext = createContext<ToolContextType>(null);
 
 export function ToolProvider({ children }: { children: React.ReactNode }) {
-  const { canvasRef } = useProject();
+  const { canvasRef, setProjectState } = useProject();
   const [selectedTool, setSelectedTool] = useState<Tools | null>(null);
+  let activeTool = useRef<Tool | null>(null);
 
-  const activeTool = useMemo(
-    () =>
+  useEffect(() => {
+    activeTool.current?.deactivate?.();
+    activeTool.current =
       selectedTool === null
         ? null
-        : getToolController(selectedTool, canvasRef.current),
-    [selectedTool],
-  );
+        : getToolController(selectedTool, canvasRef.current, setProjectState);
+    activeTool.current?.activate?.();
+  }, [selectedTool]);
 
   return (
-    <ToolContext.Provider value={{ selectedTool, setSelectedTool, activeTool }}>
+    <ToolContext.Provider
+      value={{ selectedTool, setSelectedTool, activeTool: activeTool.current }}
+    >
       {children}
     </ToolContext.Provider>
   );

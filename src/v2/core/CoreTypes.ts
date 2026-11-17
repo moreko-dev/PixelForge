@@ -10,6 +10,10 @@ export type CanvasColorType = HexaColorType | RGBColorType | RGBAColorType;
 export type LayersType = "image" | "text" | "brush" | "pen" | "shape";
 export type ShapesType = "line" | "rectangle" | "circle" | "polygon";
 export type CoordinateType = { x: number; y: number };
+export type AnchorPointType = CoordinateType & {
+  handleIn: CoordinateType | null;
+  handleOut: CoordinateType | null;
+};
 export type LineCapType = "butt" | "round" | "square";
 export type LineJoinType = "miter" | "round" | "bevel";
 export type FontFamilyType =
@@ -91,14 +95,9 @@ export interface BrushLayer extends Layer {
   points: CoordinateType[];
 }
 
-// export interface PenLayer extends Layer {
-//   strokeColor: HexaColorType;
-//   lineWidth: number;
-//   lineCap: LineCapType;
-//   lineJoin: LineJoinType;
-//   miterLimit: number;
-//   points: CoordinateType[];
-// }
+export interface PenLayer extends BrushLayer {
+  points: AnchorPointType[];
+}
 
 export interface TextLayer extends Layer {
   value: string;
@@ -163,17 +162,17 @@ export interface BoundingBox {
   height: number;
 }
 
-export interface Tool<T = unknown> {
+export interface Tool {
   readonly type: Tools;
   readonly canvas: HTMLCanvasElement | null;
+  readonly setState: React.Dispatch<React.SetStateAction<Project | null>>;
   activate?(): void;
   deactivate?(): void;
   onClick?(event: React.MouseEvent<HTMLCanvasElement>): void;
   onPointerDown?(event: React.PointerEvent<HTMLCanvasElement>): void;
   onPointerMove?(event: React.PointerEvent<HTMLCanvasElement>): void;
-  onPointerUp?(
-    event: React.PointerEvent<HTMLCanvasElement>,
-    callback?: (props: T) => void,
-  ): void;
+  onPointerUp?(event: React.PointerEvent<HTMLCanvasElement>): void;
   onPointerCancel?(event: React.PointerEvent<HTMLCanvasElement>): void;
+  onKeyDown?(event: React.KeyboardEvent<HTMLCanvasElement>): void;
+  onKeyUp?(event: React.KeyboardEvent<HTMLCanvasElement>): void;
 }

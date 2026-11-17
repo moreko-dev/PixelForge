@@ -1,6 +1,6 @@
 import { IconButton } from "@src/components/buttons.js";
 import type { LineJoinType } from "@src/core/CoreTypes.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuOctagon } from "react-icons/lu";
 import { TbBorderCornerRounded, TbBorderCornerSquare } from "react-icons/tb";
 
@@ -9,16 +9,12 @@ function LineJoinSelector({
   onChange,
 }: {
   value: any;
-  onChange: React.ActionDispatch<
-    [
-      action: {
-        type: string;
-        payload: any;
-      },
-    ]
-  >;
+  onChange: (value: any) => void;
 }) {
   const [join, setJoin] = useState<LineJoinType>(value);
+
+  useEffect(() => onChange(join), [join]);
+
   return (
     <div className="bg-input rounded border border-border-strong flex overflow-hidden">
       <IconButton
