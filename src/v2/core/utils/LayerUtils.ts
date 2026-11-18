@@ -3,6 +3,7 @@ import type {
   BoundingBox,
   BrushLayer,
   CoordinateType,
+  EraserLayer,
   Filter,
   Layer,
   PenLayer,
@@ -49,6 +50,9 @@ export function createBrushLayer(points: CoordinateType[]): BrushLayer {
   return {
     type: "brush",
     id: crypto.randomUUID(),
+    locked: false,
+    visible: true,
+    renderable: true,
     name: getLayerName("Brush"),
     shadow: getDefaultShadow(),
     filter: getDefaultFilter(),
@@ -65,6 +69,9 @@ export function createPenLayer(points: AnchorPointType[]): PenLayer {
   return {
     type: "pen",
     id: crypto.randomUUID(),
+    locked: false,
+    visible: true,
+    renderable: true,
     name: getLayerName("Pencil"),
     shadow: getDefaultShadow(),
     filter: getDefaultFilter(),
@@ -73,7 +80,29 @@ export function createPenLayer(points: AnchorPointType[]): PenLayer {
     lineWidth: 1,
     lineCap: "butt",
     lineJoin: "miter",
-    points: points,
+    points,
+  };
+}
+
+export function createEraserLayer(
+  points: CoordinateType[],
+  lineWidth: number = 5,
+): EraserLayer {
+  return {
+    type: "eraser",
+    id: crypto.randomUUID(),
+    locked: true,
+    visible: false,
+    renderable: false,
+    name: getLayerName("Eraser"),
+    shadow: getDefaultShadow(),
+    filter: getDefaultFilter(),
+    boundingBox: getDefaultBoundingBox(),
+    strokeColor: "rgba(0, 0, 0, 0)",
+    lineWidth: lineWidth,
+    lineCap: "round",
+    lineJoin: "round",
+    points,
   };
 }
 

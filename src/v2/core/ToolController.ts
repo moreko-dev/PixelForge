@@ -7,7 +7,11 @@ import type {
   Tool,
   Tools,
 } from "./CoreTypes.js";
-import { createBrushLayer, createPenLayer } from "./utils/LayerUtils.js";
+import {
+  createBrushLayer,
+  createEraserLayer,
+  createPenLayer,
+} from "./utils/LayerUtils.js";
 
 export type BrushCallbackType = {
   points: CoordinateType[];
@@ -17,6 +21,7 @@ class ToolManager implements Tool {
   readonly type: Tools;
   readonly canvas: HTMLCanvasElement | null;
   readonly setState: Dispatch<SetStateAction<Project | null>>;
+  isUsed: boolean = false;
 
   constructor(
     type: Tools,
@@ -106,6 +111,7 @@ export class BrushTool extends ToolManager {
   }
 
   onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isUsed = true;
     this.isDrawing = true;
     const ctx = this.getCanvas2dContext();
     const pc = getPointerRelativeCoordinate(this.canvas!, event);
@@ -113,7 +119,7 @@ export class BrushTool extends ToolManager {
     ctx.moveTo(pc.x, pc.y);
     ctx.lineTo(pc.x, pc.y);
     ctx.stroke();
-    this.points.push({ x: pc.x, y: pc.y });
+    this.points.push({ ...pc });
   }
 
   onPointerMove(event: React.PointerEvent<HTMLCanvasElement>): void {
@@ -138,6 +144,8 @@ export class BrushTool extends ToolManager {
   }
 
   deactivate(): void {
+    if (!this.isUsed) return;
+    this.isUsed = false;
     const brushLayer = createBrushLayer(this.points);
     this.setState((prev) => {
       if (!prev) throw new Error("No project found");
@@ -238,6 +246,7 @@ export class PencilTool extends ToolManager {
   }
 
   onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isUsed = true;
     this.isDrawing = true;
     this.isPointerDown = true;
     this.isDragging = false;
@@ -283,7 +292,8 @@ export class PencilTool extends ToolManager {
   }
 
   deactivate(): void {
-    if (!this.isDrawing) return;
+    if (!this.isDrawing || !this.isUsed) return;
+    this.isUsed = false;
     this.renderPreview();
     this.isDrawing = false;
     this.isPointerDown = false;
@@ -304,47 +314,72 @@ export class PencilTool extends ToolManager {
 
 export class EraserTool extends ToolManager {
   private isDrawing = false;
+  private points: CoordinateType[] = [];
+  private lineWidth: number = 5;
 
   constructor(
     canvas: HTMLCanvasElement | null,
     setState: Dispatch<SetStateAction<Project | null>>,
+    lineWidth?: number,
   ) {
     super("eraser", canvas, setState);
+    this.lineWidth = lineWidth ?? 5;
   }
 
   onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isUsed = true;
     this.isDrawing = true;
     const ctx = this.getCanvas2dContext();
     const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    this.points.push({ ...pc });
     ctx.beginPath();
     ctx.moveTo(pc.x, pc.y);
+    ctx.lineTo(pc.x, pc.y);
+    ctx.stroke();
   }
 
   onPointerMove(event: React.PointerEvent<HTMLCanvasElement>): void {
     if (!this.isDrawing) return;
     const ctx = this.getCanvas2dContext();
     const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    const last = this.points[this.points.length - 1]!;
+    this.points.push({ ...pc });
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
     ctx.lineTo(pc.x, pc.y);
     ctx.stroke();
   }
 
   onPointerUp(event: React.PointerEvent<HTMLCanvasElement>): void {
-    this.isDrawing = false;
     this.getCanvas2dContext().closePath();
+    this.isDrawing = false;
+    this.deactivate();
+    this.points = [];
   }
 
   activate(): void {
     this.resetContextState();
     const ctx = this.getCanvas2dContext();
-    ctx.lineWidth = 5;
+    ctx.lineWidth = this.lineWidth;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.strokeStyle = "rgba(0, 0, 0, 0)";
+    ctx.strokeStyle = "rgba(0, 0, 0, 1)";
     ctx.globalCompositeOperation = "destination-out";
   }
 
   deactivate(): void {
+    if (!this.isUsed) return;
+    this.isUsed = false;
     this.getCanvas2dContext().globalCompositeOperation = "source-over";
+    const eraserLayer = createEraserLayer(this.points);
+    this.points = [];
+    this.setState((prev) => {
+      if (!prev) throw new Error("No project found");
+      return {
+        ...prev,
+        layers: [...prev.layers, eraserLayer],
+      };
+    });
   }
 }
 

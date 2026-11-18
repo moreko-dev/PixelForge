@@ -5,7 +5,7 @@ import PropertiesTabContent from "./components/PropertiesTabContent.js";
 
 function PropertiesPanel() {
   return (
-    <div className="p-0! bg-sidebar flex flex-col gap-4 overflow-hidden">
+    <div className="p-0! bg-sidebar flex flex-col gap-4 overflow-hidden row-span-3">
       <Tabs
         tabItems={[
           { key: "canvas", label: "Canvas", content: <CanvasTabContent /> },

@@ -7,7 +7,13 @@ export type RGBAColorType =
   | `rgba(${number}, ${number}, ${number}, ${number})`
   | `rgba(${number},${number},${number},${number})`;
 export type CanvasColorType = HexaColorType | RGBColorType | RGBAColorType;
-export type LayersType = "image" | "text" | "brush" | "pen" | "shape";
+export type LayersType =
+  | "image"
+  | "text"
+  | "brush"
+  | "pen"
+  | "shape"
+  | "eraser";
 export type ShapesType = "line" | "rectangle" | "circle" | "polygon";
 export type CoordinateType = { x: number; y: number };
 export type AnchorPointType = CoordinateType & {
@@ -71,6 +77,9 @@ export interface Layer {
   type: LayersType;
   id: string;
   name: string;
+  locked: boolean;
+  visible: boolean;
+  renderable: boolean;
   shadow: Shadow;
   filter: Filter;
   boundingBox: BoundingBox;
@@ -98,6 +107,8 @@ export interface BrushLayer extends Layer {
 export interface PenLayer extends BrushLayer {
   points: AnchorPointType[];
 }
+
+export interface EraserLayer extends BrushLayer {}
 
 export interface TextLayer extends Layer {
   value: string;

@@ -53,7 +53,7 @@ function ToolsBar() {
   const { selectedTool, setSelectedTool } = useTool();
 
   return (
-    <div className="bg-sidebar overflow-x-hidden overflow-y-auto flex flex-col gap-2">
+    <div className="bg-sidebar overflow-x-hidden overflow-y-auto flex flex-col gap-2 row-span-3">
       {tools.map((item) => (
         <button
           key={item.id}

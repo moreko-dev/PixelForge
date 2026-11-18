@@ -1,11 +1,17 @@
-import { DestructiveButton } from "@src/components/buttons.js";
+import { DestructiveButton, IconButton } from "@src/components/buttons.js";
 import { EmptyState } from "@src/components/EmptyState.js";
-import type { LayersType } from "@src/core/CoreTypes.js";
+import type { Layer, Project } from "@src/core/CoreTypes.js";
+import { updateLayerPropertiesOnState } from "@src/core/utils/LayerUtils.js";
 import useLayer from "@src/hooks/useLayer.js";
 import useProject from "@src/hooks/useProject.js";
 import {
   LuBrush,
+  LuEraser,
+  LuEye,
+  LuEyeOff,
   LuImage,
+  LuLock,
+  LuLockOpen,
   LuPen,
   LuShapes,
   LuTrash,
@@ -13,26 +19,29 @@ import {
 } from "react-icons/lu";
 
 function LayersTabContent() {
-  const { projectState } = useProject();
+  const { projectState, setProjectState } = useProject();
   const { selectedLayer, setSelectedLayer } = useLayer();
   if (!projectState) throw new Error("Project state is null or undefined!");
+  let renderableLayers = projectState.layers.filter(
+    (layer) => layer.renderable,
+  );
 
   return (
     <div className="flex flex-col gap-1">
-      {projectState.layers.length === 0 ? (
+      {renderableLayers.length === 0 ? (
         <EmptyState
           title="No Layer Found!"
           description="Start using tools to add new layers."
           className="min-h-fit! p-4! border-none!"
         />
       ) : (
-        projectState.layers.map((layer) => (
+        renderableLayers.map((layer) => (
           <LayerItem
+            layer={layer}
             key={layer.id}
-            type={layer.type}
-            name={layer.name}
             onClick={() => setSelectedLayer(layer.id)}
             active={selectedLayer === layer.id}
+            setState={setProjectState}
           />
         ))
       )}
@@ -41,18 +50,18 @@ function LayersTabContent() {
 }
 
 function LayerItem({
-  type,
-  name,
+  layer,
   onClick,
   active,
+  setState,
 }: {
-  type: LayersType;
-  name: string;
+  layer: Layer;
   onClick: () => void;
   active: boolean;
+  setState: React.Dispatch<React.SetStateAction<Project | null>>;
 }) {
   const getLayerIconType = () => {
-    switch (type) {
+    switch (layer.type) {
       case "brush":
         return <LuBrush />;
       case "image":
@@ -63,6 +72,8 @@ function LayerItem({
         return <LuShapes />;
       case "text":
         return <LuType />;
+      case "eraser":
+        return <LuEraser />;
       default:
         return null;
     }
@@ -81,12 +92,38 @@ function LayerItem({
           ></div>
         </div>
         <div
-          className={`me-2 flex-1 text-sm flex items-center ${active ? "text-foreground" : "text-foreground-secondary"} transition-colors duration-300`}
+          className={`min-w-0 me-2 flex-1 text-sm flex items-center ${active ? "text-foreground" : "text-foreground-secondary"} transition-colors duration-300`}
           onClick={onClick}
         >
-          {name}
+          <span className="truncate">{layer.name}</span>
         </div>
         <div>
+          <IconButton
+            icon={layer.visible ? <LuEye /> : <LuEyeOff />}
+            size="sm"
+            className="rounded-none border-none!"
+            onClick={() => {
+              updateLayerPropertiesOnState(
+                setState,
+                layer,
+                "visible",
+                !layer.visible,
+              );
+            }}
+          />
+          <IconButton
+            icon={layer.locked ? <LuLock /> : <LuLockOpen />}
+            size="sm"
+            className="rounded-none border-none!"
+            onClick={() => {
+              updateLayerPropertiesOnState(
+                setState,
+                layer,
+                "locked",
+                !layer.locked,
+              );
+            }}
+          />
           <DestructiveButton
             icon={<LuTrash />}
             appearance="soft"

@@ -253,6 +253,9 @@ function Form({
                     dispatch={dispatch}
                     field={item}
                     group
+                    single={
+                      group.groupFields.length === 1 && item.fields.length === 1
+                    }
                   />
                 ))}
               </div>
@@ -265,6 +268,7 @@ function Form({
               dispatch={dispatch}
               field={item}
               group={false}
+              single={newFormFields.length === 1 && item.fields.length === 1}
             />
           ))}
     </form>
@@ -276,6 +280,7 @@ function FieldsRenderer({
   dispatch,
   field: item,
   group,
+  single = false,
 }: {
   formState: FormDataType;
   dispatch: React.ActionDispatch<
@@ -288,9 +293,12 @@ function FieldsRenderer({
   >;
   field: FormFieldsUngroupType[number];
   group: boolean;
+  single?: boolean;
 }) {
   return (
-    <div className={`flex ${DIR_CN[item.dir]} ${group ? "mb-2" : "mb-4"}`}>
+    <div
+      className={`flex ${DIR_CN[item.dir]} ${single ? "" : group ? "mb-2" : "mb-4"}`}
+    >
       {item.fields.map(
         ({ id, key, label, type, hint, error, layout = "stack", config }) => {
           const CustomComponent = (config as CustomConfig).Component;

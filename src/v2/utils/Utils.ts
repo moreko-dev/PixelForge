@@ -1,3 +1,4 @@
+import type { WorkspaceContextType } from "@src/contexts/WorkspaceContext.js";
 import type {
   CoordinateType,
   Project,
@@ -64,6 +65,7 @@ export function getToolController(
   tool: Tools,
   canvas: HTMLCanvasElement | null,
   setState: Dispatch<SetStateAction<Project | null>>,
+  workspaceConfig: WorkspaceContextType,
 ): Tool {
   const toolMap: Record<Tools, Tool> = {
     select: new SelectTool(canvas, setState),
@@ -71,7 +73,7 @@ export function getToolController(
     pan: new PanTool(canvas, setState),
     brush: new BrushTool(canvas, setState),
     pencil: new PencilTool(canvas, setState),
-    eraser: new EraserTool(canvas, setState),
+    eraser: new EraserTool(canvas, setState, workspaceConfig.eraserWidth),
     line: new LineTool(canvas, setState),
     rectangle: new RectangleTool(canvas, setState),
     circle: new CircleTool(canvas, setState),
