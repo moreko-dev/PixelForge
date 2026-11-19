@@ -9,8 +9,11 @@ import type {
 } from "./CoreTypes.js";
 import {
   createBrushLayer,
+  createEllipseLayer,
   createEraserLayer,
+  createLineLayer,
   createPenLayer,
+  createRectangleLayer,
 } from "./utils/LayerUtils.js";
 
 export type BrushCallbackType = {
@@ -18,10 +21,12 @@ export type BrushCallbackType = {
 };
 
 class ToolManager implements Tool {
+  protected isDrawing = false;
+  protected isDragging = false;
+  protected isUsed = false;
   readonly type: Tools;
   readonly canvas: HTMLCanvasElement | null;
   readonly setState: Dispatch<SetStateAction<Project | null>>;
-  isUsed: boolean = false;
 
   constructor(
     type: Tools,
@@ -100,7 +105,6 @@ export class PanTool extends ToolManager {
 }
 
 export class BrushTool extends ToolManager {
-  private isDrawing = false;
   private points: CoordinateType[] = [];
 
   constructor(
@@ -158,11 +162,9 @@ export class BrushTool extends ToolManager {
 }
 
 export class PencilTool extends ToolManager {
-  private isDrawing = false;
-  private isPointerDown = false;
-  private isDragging = false;
-  private startPoint: CoordinateType | null = null;
   private readonly THRESHOLD = 2;
+  private isPointerDown = false;
+  private startPoint: CoordinateType | null = null;
   private points: AnchorPointType[] = [];
 
   constructor(
@@ -313,7 +315,6 @@ export class PencilTool extends ToolManager {
 }
 
 export class EraserTool extends ToolManager {
-  private isDrawing = false;
   private points: CoordinateType[] = [];
   private lineWidth: number = 5;
 
@@ -384,29 +385,224 @@ export class EraserTool extends ToolManager {
 }
 
 export class LineTool extends ToolManager {
+  private lineBounds: { start: CoordinateType; end: CoordinateType } = {
+    start: { x: 0, y: 0 },
+    end: { x: 0, y: 0 },
+  };
+
   constructor(
     canvas: HTMLCanvasElement | null,
     setState: Dispatch<SetStateAction<Project | null>>,
   ) {
     super("line", canvas, setState);
   }
+
+  onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isUsed = true;
+    this.isDrawing = true;
+    this.isDragging = true;
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    this.lineBounds.start = { ...pc };
+  }
+
+  onPointerMove(event: React.PointerEvent<HTMLCanvasElement>): void {
+    if (!this.isDrawing) return;
+    const ctx = this.getCanvas2dContext();
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    ctx.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
+    ctx.beginPath();
+    ctx.moveTo(this.lineBounds.start.x, this.lineBounds.start.y);
+    ctx.lineTo(pc.x, pc.y);
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  onPointerUp(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isDrawing = false;
+    this.isDragging = false;
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    const ctx = this.getCanvas2dContext();
+    ctx.closePath();
+    this.lineBounds.end = { ...pc };
+    this.deactivate();
+  }
+
+  activate(): void {
+    this.resetContextState();
+  }
+
+  deactivate(): void {
+    if (!this.isUsed) return;
+    this.isUsed = false;
+    const {
+      start: { x: sx, y: sy },
+      end: { x: ex, y: ey },
+    } = (this.lineBounds = { start: { x: 0, y: 0 }, end: { x: 0, y: 0 } });
+    const lineLayer = createLineLayer(sx, sy, ex, ey);
+    this.setState((prev) => {
+      if (!prev) throw new Error("No project found");
+      return {
+        ...prev,
+        layers: [...prev.layers, lineLayer],
+      };
+    });
+  }
 }
 
 export class RectangleTool extends ToolManager {
+  private rectangleBounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } = { x: 0, y: 0, width: 0, height: 0 };
+
   constructor(
     canvas: HTMLCanvasElement | null,
     setState: Dispatch<SetStateAction<Project | null>>,
   ) {
     super("rectangle", canvas, setState);
   }
+
+  onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isUsed = true;
+    this.isDragging = true;
+    this.isDrawing = true;
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    [this.rectangleBounds.x, this.rectangleBounds.y] = [pc.x, pc.y];
+  }
+
+  onPointerMove(event: React.PointerEvent<HTMLCanvasElement>): void {
+    if (!this.isDrawing) return;
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    [this.rectangleBounds.width, this.rectangleBounds.height] = [
+      pc.x - this.rectangleBounds.x,
+      pc.y - this.rectangleBounds.y,
+    ];
+    const ctx = this.getCanvas2dContext();
+    ctx.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
+    const { x, y, width, height } = this.rectangleBounds;
+    ctx.strokeRect(x, y, width, height);
+  }
+
+  onPointerUp(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isDrawing = false;
+    this.isDragging = false;
+    this.deactivate();
+  }
+
+  activate(): void {
+    this.resetContextState();
+  }
+
+  deactivate(): void {
+    if (!this.isUsed) return;
+    this.isUsed = false;
+    const { x, y, width, height } = this.rectangleBounds;
+    const rectangleLayer = createRectangleLayer(x, y, width, height);
+    this.setState((prev) => {
+      if (!prev) throw new Error("No project found");
+      return {
+        ...prev,
+        layers: [...prev.layers, rectangleLayer],
+      };
+    });
+  }
 }
 
-export class CircleTool extends ToolManager {
+export class EllipseTool extends ToolManager {
+  private isShiftDown = false;
+  private ellipseBounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  };
+
   constructor(
     canvas: HTMLCanvasElement | null,
     setState: Dispatch<SetStateAction<Project | null>>,
   ) {
-    super("circle", canvas, setState);
+    super("ellipse", canvas, setState);
+  }
+
+  onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isDragging = true;
+    this.isDrawing = true;
+    this.isUsed = true;
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    [this.ellipseBounds.x, this.ellipseBounds.y] = [pc.x, pc.y];
+  }
+
+  onPointerMove(event: React.PointerEvent<HTMLCanvasElement>): void {
+    if (!this.isDrawing) return;
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    let width = pc.x - this.ellipseBounds.x;
+    let height = pc.y - this.ellipseBounds.y;
+    if (this.isShiftDown) {
+      const size = Math.max(Math.abs(width), Math.abs(height));
+      width = Math.sign(width) * size;
+      height = Math.sign(height) * size;
+    }
+    const x = Math.min(this.ellipseBounds.x, this.ellipseBounds.x + width);
+    const y = Math.min(this.ellipseBounds.y, this.ellipseBounds.y + height);
+    const finalWidth = Math.abs(width);
+    const finalHeight = Math.abs(height);
+    [this.ellipseBounds.width, this.ellipseBounds.height] = [
+      finalWidth,
+      finalHeight,
+    ];
+    const ctx = this.getCanvas2dContext();
+    ctx.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
+    ctx.beginPath();
+    ctx.ellipse(
+      x + finalWidth / 2,
+      y + finalHeight / 2,
+      finalWidth / 2,
+      finalHeight / 2,
+      0,
+      0,
+      Math.PI * 2,
+    );
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  onPointerUp(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isDragging = false;
+    this.isDrawing = false;
+    this.deactivate();
+  }
+
+  onKeyDown(event: React.KeyboardEvent<HTMLCanvasElement>): void {
+    if (event.key === "Shift") this.isShiftDown = true;
+  }
+
+  onKeyUp(event: React.KeyboardEvent<HTMLCanvasElement>): void {
+    if (event.key === "Shift") this.isShiftDown = false;
+  }
+
+  activate(): void {
+    this.resetContextState();
+  }
+
+  deactivate(): void {
+    if (!this.isUsed) return;
+    this.isUsed = false;
+    const { x, y, width, height } = this.ellipseBounds;
+    const ellipseLayer = createEllipseLayer(x, y, width, height);
+    this.setState((prev) => {
+      if (!prev) throw new Error("No project found");
+      return {
+        ...prev,
+        layers: [...prev.layers, ellipseLayer],
+      };
+    });
   }
 }
 

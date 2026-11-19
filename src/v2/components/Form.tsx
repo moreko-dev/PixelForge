@@ -245,7 +245,7 @@ function Form({
               <div className="mb-2 flex gap-2 items-center text-foreground-secondary after:flex-1 after:h-px after:border after:border-border-subtle">
                 {group.groupName}
               </div>
-              <div className="flex flex-col gap-2 px-2">
+              <div className="flex flex-col px-2">
                 {group.groupFields.map((item) => (
                   <FieldsRenderer
                     key={item.id}

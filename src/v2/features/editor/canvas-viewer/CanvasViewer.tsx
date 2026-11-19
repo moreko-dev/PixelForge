@@ -50,6 +50,7 @@ function CanvasViewer() {
           onPointerCancel: (event) =>
             activeTool.current?.onPointerCancel?.(event),
           onKeyDown: (event) => activeTool.current?.onKeyDown?.(event),
+          onKeyUp: (event) => activeTool.current?.onKeyUp?.(event),
         })}
         style={{
           cursor: selectedTool === null ? "default" : getCursor(selectedTool),

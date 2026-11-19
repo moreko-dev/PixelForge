@@ -8,13 +8,13 @@ export type RGBAColorType =
   | `rgba(${number},${number},${number},${number})`;
 export type CanvasColorType = HexaColorType | RGBColorType | RGBAColorType;
 export type LayersType =
-  | "image"
-  | "text"
   | "brush"
   | "pen"
-  | "shape"
-  | "eraser";
-export type ShapesType = "line" | "rectangle" | "circle" | "polygon";
+  | "eraser"
+  | "line"
+  | "rectangle"
+  | "ellipse";
+export type ShapesType = "line" | "rectangle" | "ellipse" | "polygon";
 export type CoordinateType = { x: number; y: number };
 export type AnchorPointType = CoordinateType & {
   handleIn: CoordinateType | null;
@@ -45,7 +45,7 @@ export type Tools =
   | "eraser"
   | "line"
   | "rectangle"
-  | "circle"
+  | "ellipse"
   | "polygon"
   | "text"
   | "crop"
@@ -85,17 +85,6 @@ export interface Layer {
   boundingBox: BoundingBox;
 }
 
-export interface ImageLayer extends Layer {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  src: string;
-  rotate: number;
-  flipX: boolean;
-  flipY: boolean;
-}
-
 export interface BrushLayer extends Layer {
   strokeColor: CanvasColorType;
   lineWidth: number;
@@ -110,43 +99,26 @@ export interface PenLayer extends BrushLayer {
 
 export interface EraserLayer extends BrushLayer {}
 
-export interface TextLayer extends Layer {
-  value: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  fontSize: number;
-  fontFamily: FontFamilyType;
-  fillColor: CanvasColorType;
-}
-
-export interface ShapeLayer extends Layer {
-  shapeType: ShapesType;
+export interface LineLayer extends Layer {
   strokeColor: CanvasColorType;
-  fillColor: CanvasColorType;
   lineWidth: number;
-}
-
-export interface CircleLayer extends ShapeLayer {
-  x: number;
-  y: number;
-  radius: number;
-}
-
-export interface LineShape extends ShapeLayer {
   sx: number;
   sy: number;
   ex: number;
   ey: number;
 }
 
-export interface RectangleShape extends ShapeLayer {
+export interface RectangleLayer extends Layer {
+  strokeColor: CanvasColorType;
+  fillColor: CanvasColorType;
+  lineWidth: number;
   x: number;
   y: number;
   width: number;
   height: number;
 }
+
+export interface EllipseLayer extends RectangleLayer {}
 
 export interface Shadow {
   color: CanvasColorType;

@@ -35,7 +35,7 @@ const tools: toolType[] = [
   { id: "eraser", text: "Eraser", Icon: LuEraser },
   { id: "line", text: "Line", Icon: LuMinus },
   { id: "rectangle", text: "Rectangle", Icon: LuSquare },
-  { id: "circle", text: "Circle", Icon: LuCircle },
+  { id: "ellipse", text: "Ellipse", Icon: LuCircle },
   { id: "polygon", text: "Polygon", Icon: LuHexagon },
   { id: "text", text: "Text", Icon: LuType },
   { id: "crop", text: "Crop", Icon: LuCrop },

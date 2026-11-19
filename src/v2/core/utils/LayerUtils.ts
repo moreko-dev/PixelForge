@@ -3,11 +3,14 @@ import type {
   BoundingBox,
   BrushLayer,
   CoordinateType,
+  EllipseLayer,
   EraserLayer,
   Filter,
   Layer,
+  LineLayer,
   PenLayer,
   Project,
+  RectangleLayer,
   Shadow,
 } from "../CoreTypes.js";
 
@@ -103,6 +106,83 @@ export function createEraserLayer(
     lineCap: "round",
     lineJoin: "round",
     points,
+  };
+}
+
+export function createLineLayer(
+  sx: number,
+  sy: number,
+  ex: number,
+  ey: number,
+): LineLayer {
+  return {
+    type: "line",
+    id: crypto.randomUUID(),
+    locked: false,
+    visible: true,
+    renderable: true,
+    name: getLayerName("Line"),
+    shadow: getDefaultShadow(),
+    filter: getDefaultFilter(),
+    boundingBox: getDefaultBoundingBox(),
+    strokeColor: "#000000",
+    lineWidth: 1,
+    sx,
+    sy,
+    ex,
+    ey,
+  };
+}
+
+export function createRectangleLayer(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): RectangleLayer {
+  return {
+    type: "rectangle",
+    id: crypto.randomUUID(),
+    locked: false,
+    visible: true,
+    renderable: true,
+    name: getLayerName("Rectangle"),
+    shadow: getDefaultShadow(),
+    filter: getDefaultFilter(),
+    boundingBox: getDefaultBoundingBox(),
+    strokeColor: "#000000",
+    fillColor: "#ffffff",
+    lineWidth: 1,
+    x,
+    y,
+    width,
+    height,
+  };
+}
+
+export function createEllipseLayer(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): EllipseLayer {
+  return {
+    type: "ellipse",
+    id: crypto.randomUUID(),
+    locked: false,
+    visible: true,
+    renderable: true,
+    name: getLayerName("Ellipse"),
+    shadow: getDefaultShadow(),
+    filter: getDefaultFilter(),
+    boundingBox: getDefaultBoundingBox(),
+    strokeColor: "#000000",
+    fillColor: "#ffffff",
+    lineWidth: 1,
+    x,
+    y,
+    width,
+    height,
   };
 }
 

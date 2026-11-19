@@ -6,16 +6,13 @@ import useLayer from "@src/hooks/useLayer.js";
 import useProject from "@src/hooks/useProject.js";
 import {
   LuBrush,
-  LuEraser,
   LuEye,
   LuEyeOff,
-  LuImage,
   LuLock,
   LuLockOpen,
   LuPen,
   LuShapes,
   LuTrash,
-  LuType,
 } from "react-icons/lu";
 
 function LayersTabContent() {
@@ -64,16 +61,12 @@ function LayerItem({
     switch (layer.type) {
       case "brush":
         return <LuBrush />;
-      case "image":
-        return <LuImage />;
       case "pen":
         return <LuPen />;
-      case "shape":
+      case "line":
+      case "rectangle":
+      case "ellipse":
         return <LuShapes />;
-      case "text":
-        return <LuType />;
-      case "eraser":
-        return <LuEraser />;
       default:
         return null;
     }

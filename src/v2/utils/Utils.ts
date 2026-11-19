@@ -8,7 +8,7 @@ import type {
 import {
   BlurTool,
   BrushTool,
-  CircleTool,
+  EllipseTool,
   CloneTool,
   CropTool,
   EraserTool,
@@ -40,7 +40,7 @@ export function getCursor(tool: Tools): string {
     eraser: "crosshair",
     line: "crosshair",
     rectangle: "crosshair",
-    circle: "crosshair",
+    ellipse: "crosshair",
     polygon: "crosshair",
     text: "text",
     crop: "crosshair",
@@ -76,7 +76,7 @@ export function getToolController(
     eraser: new EraserTool(canvas, setState, workspaceConfig.eraserWidth),
     line: new LineTool(canvas, setState),
     rectangle: new RectangleTool(canvas, setState),
-    circle: new CircleTool(canvas, setState),
+    ellipse: new EllipseTool(canvas, setState),
     polygon: new PolygonTool(canvas, setState),
     text: new TextTool(canvas, setState),
     crop: new CropTool(canvas, setState),
@@ -104,4 +104,13 @@ export function getPointerRelativeCoordinate(
     x: event.clientX - rect.left,
     y: event.clientY - rect.top,
   };
+}
+
+export function calculateRadius(
+  sx: number,
+  sy: number,
+  cx: number,
+  cy: number,
+): number {
+  return Math.abs(cx >= cy ? sx - cx : sy - cy);
 }
