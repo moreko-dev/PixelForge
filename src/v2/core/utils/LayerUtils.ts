@@ -9,6 +9,7 @@ import type {
   Layer,
   LineLayer,
   PenLayer,
+  PolygonLayer,
   Project,
   RectangleLayer,
   Shadow,
@@ -183,6 +184,28 @@ export function createEllipseLayer(
     y,
     width,
     height,
+  };
+}
+
+export function createPolygonLayer(
+  sides: number,
+  points: CoordinateType[],
+): PolygonLayer {
+  return {
+    type: "polygon",
+    id: crypto.randomUUID(),
+    locked: false,
+    visible: true,
+    renderable: true,
+    name: getLayerName("Polygon"),
+    shadow: getDefaultShadow(),
+    filter: getDefaultFilter(),
+    boundingBox: getDefaultBoundingBox(),
+    strokeColor: "#000000",
+    fillColor: "#ffffff",
+    lineWidth: 1,
+    points,
+    sides,
   };
 }
 

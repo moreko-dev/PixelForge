@@ -13,6 +13,7 @@ import {
   createEraserLayer,
   createLineLayer,
   createPenLayer,
+  createPolygonLayer,
   createRectangleLayer,
 } from "./utils/LayerUtils.js";
 
@@ -607,11 +608,115 @@ export class EllipseTool extends ToolManager {
 }
 
 export class PolygonTool extends ToolManager {
+  private isShiftDown = false;
+  private startPoint: CoordinateType | null = null;
+  private sides: number;
+  private points: CoordinateType[] = [];
+
   constructor(
     canvas: HTMLCanvasElement | null,
     setState: Dispatch<SetStateAction<Project | null>>,
+    sides: number,
   ) {
     super("polygon", canvas, setState);
+    this.sides = sides;
+  }
+
+  getPolygonPoints(
+    start: CoordinateType,
+    end: CoordinateType,
+    sides: number,
+    isRegular = false,
+  ): CoordinateType[] {
+    let dx = end.x - start.x;
+    let dy = end.y - start.y;
+    if (isRegular) {
+      const size = Math.min(Math.abs(dx), Math.abs(dy));
+      dx = Math.sign(dx || 1) * size;
+      dy = Math.sign(dy || 1) * size;
+    }
+    const width = dx;
+    const height = dy;
+    const centerX = start.x + width / 2;
+    const centerY = start.y + height / 2;
+    const radiusX = Math.abs(width) / 2;
+    const radiusY = Math.abs(height) / 2;
+    const points = [];
+    for (let i = 0; i < sides; i++) {
+      const angle = (2 * Math.PI * i) / sides - Math.PI / 2;
+      points.push({
+        x: centerX + radiusX * Math.cos(angle),
+        y: centerY + radiusY * Math.sin(angle),
+      });
+    }
+    return points;
+  }
+
+  renderPreview() {
+    if (this.points.length < 3) return;
+    const ctx = this.getCanvas2dContext();
+    ctx.clearRect(0, 0, this.canvas!.width, this.canvas!.height);
+    ctx.beginPath();
+    const firstPoint = this.points[0]!;
+    ctx.moveTo(firstPoint.x, firstPoint.y);
+    for (let i = 1; i < this.points.length; i++) {
+      const currPoint = this.points[i]!;
+      ctx.lineTo(currPoint.x, currPoint.y);
+    }
+    ctx.lineTo(firstPoint.x, firstPoint.y);
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isDrawing = true;
+    this.isDragging = true;
+    this.isUsed = true;
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    this.startPoint = { ...pc };
+  }
+
+  onPointerMove(event: React.PointerEvent<HTMLCanvasElement>): void {
+    if (!this.isDrawing) return;
+    const pc = getPointerRelativeCoordinate(this.canvas!, event);
+    this.points = this.getPolygonPoints(
+      this.startPoint!,
+      pc,
+      this.sides,
+      this.isShiftDown,
+    );
+    this.renderPreview();
+  }
+
+  onPointerUp(event: React.PointerEvent<HTMLCanvasElement>): void {
+    this.isDrawing = false;
+    this.isDragging = false;
+    this.deactivate();
+  }
+
+  onKeyDown(event: React.KeyboardEvent<HTMLCanvasElement>): void {
+    if (event.key === "Shift") this.isShiftDown = true;
+  }
+
+  onKeyUp(event: React.KeyboardEvent<HTMLCanvasElement>): void {
+    if (event.key === "Shift") this.isShiftDown = false;
+  }
+
+  activate(): void {
+    this.resetContextState();
+  }
+
+  deactivate(): void {
+    if (!this.isUsed) return;
+    this.isUsed = false;
+    const polygonLayer = createPolygonLayer(this.sides, this.points);
+    this.setState((prev) => {
+      if (!prev) throw new Error("No project found");
+      return {
+        ...prev,
+        layers: [...prev.layers, polygonLayer],
+      };
+    });
   }
 }
 

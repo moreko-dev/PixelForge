@@ -5,6 +5,7 @@ import useProject from "@src/hooks/useProject.js";
 import { Fragment } from "react/jsx-runtime";
 import LineProperties from "./components/LineProperties.js";
 import PenBrushProperties from "./components/PenBrushProperties.js";
+import PolygonProperties from "./components/PolygonProperties.js";
 import RectangleProperties from "./components/RectangleProperties.js";
 
 function getLayerProperties(
@@ -20,6 +21,8 @@ function getLayerProperties(
     case "rectangle":
     case "ellipse":
       return <RectangleProperties layer={layer} setState={setState} />;
+    case "polygon":
+      return <PolygonProperties layer={layer} setState={setState} />;
     default:
       return (
         <span className="block select-none text-sm text-muted-foreground text-center">

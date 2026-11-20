@@ -13,7 +13,8 @@ export type LayersType =
   | "eraser"
   | "line"
   | "rectangle"
-  | "ellipse";
+  | "ellipse"
+  | "polygon";
 export type ShapesType = "line" | "rectangle" | "ellipse" | "polygon";
 export type CoordinateType = { x: number; y: number };
 export type AnchorPointType = CoordinateType & {
@@ -125,6 +126,14 @@ export interface Shadow {
   blur: number;
   offsetX: number;
   offsetY: number;
+}
+
+export interface PolygonLayer extends Layer {
+  strokeColor: CanvasColorType;
+  fillColor: CanvasColorType;
+  lineWidth: number;
+  points: CoordinateType[];
+  sides: number;
 }
 
 export interface Filter {

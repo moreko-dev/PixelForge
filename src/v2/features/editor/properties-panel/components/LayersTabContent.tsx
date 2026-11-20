@@ -66,6 +66,7 @@ function LayerItem({
       case "line":
       case "rectangle":
       case "ellipse":
+      case "polygon":
         return <LuShapes />;
       default:
         return null;

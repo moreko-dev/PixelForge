@@ -49,6 +49,42 @@ function getControlContent(tool: Tools | null, config: WorkspaceContextType) {
           />
         </div>
       );
+    case "polygon":
+      return (
+        <div className="flex gap-2 flex-wrap">
+          <Form
+            formConfig={{ group: false }}
+            formFields={[
+              {
+                dir: "col",
+                fields: [
+                  {
+                    key: "poly-sides",
+                    label: "Sides:",
+                    type: "number",
+                    layout: "inline",
+                    config: {
+                      max: 100,
+                      unit: "px",
+                      size: "sm",
+                      hideStepper: true,
+                      className: "rounded! max-w-20!",
+                      placeholder: "3",
+                      onChange: (value) => config.setPolySides(value!),
+                      onBlur: (e) => {
+                        if (Number(e.target.value) < 3) config.setPolySides(3);
+                      },
+                    },
+                  },
+                ],
+              },
+            ]}
+            formData={{
+              "poly-sides": config.polySides,
+            }}
+          />
+        </div>
+      );
     default:
       return (
         <span className="block select-none text-sm text-muted-foreground">
