@@ -1,4 +1,7 @@
-import { getPointerRelativeCoordinate } from "@src/utils/Utils.js";
+import {
+  getPointerCoordinateRelatedTo,
+  getPointerRelativeCoordinate,
+} from "@src/utils/Utils.js";
 import type { Dispatch, SetStateAction } from "react";
 import type {
   AnchorPointType,
@@ -15,6 +18,7 @@ import {
   createPenLayer,
   createPolygonLayer,
   createRectangleLayer,
+  createTextLayer,
 } from "./utils/LayerUtils.js";
 
 export type BrushCallbackType = {
@@ -720,12 +724,100 @@ export class PolygonTool extends ToolManager {
   }
 }
 
+type TextInputState = {
+  ref: React.RefObject<HTMLInputElement | null>;
+  state: {
+    status: "active" | "deactive";
+    x: number;
+    y: number;
+  };
+  setState: React.Dispatch<
+    React.SetStateAction<{
+      status: "active" | "deactive";
+      x: number;
+      y: number;
+    }>
+  >;
+};
+
 export class TextTool extends ToolManager {
+  inputState: TextInputState;
+  private finalX = 0;
+  private finalY = 0;
+
   constructor(
     canvas: HTMLCanvasElement | null,
     setState: Dispatch<SetStateAction<Project | null>>,
+    textInputState: TextInputState,
   ) {
     super("text", canvas, setState);
+    this.inputState = textInputState;
+  }
+
+  deactivateInput() {
+    this.finalX = this.finalY = 0;
+    this.inputState.setState({
+      status: "deactive",
+      x: 0,
+      y: 0,
+    });
+    this.inputState.ref.current?.blur();
+  }
+
+  onPointerDown(event: React.PointerEvent<HTMLCanvasElement>): void {
+    if (this.finalX !== 0 || this.finalY !== 0) return;
+    this.isDrawing = true;
+    this.isUsed = true;
+    const pc = getPointerCoordinateRelatedTo(
+      document.getElementById("canvas-container"),
+      event,
+    )!;
+    const { x, y } = getPointerRelativeCoordinate(this.canvas!, event);
+    [this.finalX, this.finalY] = [x, y];
+    this.inputState.setState({
+      ...pc,
+      status: "active",
+    });
+  }
+
+  onKeyUp(event: React.KeyboardEvent<HTMLCanvasElement>): void {
+    if (["Enter", "Escape"].includes(event.key)) this.deactivate();
+  }
+
+  activate(): void {
+    this.resetContextState();
+  }
+
+  deactivate(): void {
+    if (!this.isUsed) return;
+    this.isUsed = false;
+    this.isDrawing = false;
+    const inputValue = this.inputState.ref.current?.value.trim();
+    if (!inputValue) return this.deactivateInput();
+    const ctx = this.getCanvas2dContext();
+    ctx.font = "18px serif";
+    const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
+      ctx.measureText(inputValue);
+    const height =
+      actualBoundingBoxAscent && actualBoundingBoxDescent
+        ? actualBoundingBoxAscent + actualBoundingBoxDescent
+        : 18 * 1.2;
+    ctx.fillText(inputValue, this.finalX, this.finalY);
+    const textLayer = createTextLayer(
+      inputValue,
+      this.finalX,
+      this.finalY,
+      width,
+      height,
+    );
+    this.setState((prev) => {
+      if (!prev) throw new Error("No project found");
+      return {
+        ...prev,
+        layers: [...prev.layers, textLayer],
+      };
+    });
+    this.deactivateInput();
   }
 }
 

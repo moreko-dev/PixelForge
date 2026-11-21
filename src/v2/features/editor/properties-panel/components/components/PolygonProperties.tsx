@@ -31,7 +31,7 @@ function PolygonProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<PolygonLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "strokeColor",
                         value,
                       );
@@ -50,7 +50,7 @@ function PolygonProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<PolygonLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "fillColor",
                         value,
                       );
@@ -71,7 +71,7 @@ function PolygonProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<PolygonLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "lineWidth",
                         value,
                       );

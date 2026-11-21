@@ -7,6 +7,7 @@ import LineProperties from "./components/LineProperties.js";
 import PenBrushProperties from "./components/PenBrushProperties.js";
 import PolygonProperties from "./components/PolygonProperties.js";
 import RectangleProperties from "./components/RectangleProperties.js";
+import TextProperties from "./components/TextProperties.js";
 
 function getLayerProperties(
   layer: Layer,
@@ -23,6 +24,8 @@ function getLayerProperties(
       return <RectangleProperties layer={layer} setState={setState} />;
     case "polygon":
       return <PolygonProperties layer={layer} setState={setState} />;
+    case "text":
+      return <TextProperties layer={layer} setState={setState} />;
     default:
       return (
         <span className="block select-none text-sm text-muted-foreground text-center">

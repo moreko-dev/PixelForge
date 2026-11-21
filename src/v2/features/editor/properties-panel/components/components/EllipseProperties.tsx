@@ -31,7 +31,7 @@ function EllipseProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<EllipseLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "strokeColor",
                         value,
                       );
@@ -50,7 +50,7 @@ function EllipseProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<EllipseLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "fillColor",
                         value,
                       );
@@ -71,7 +71,7 @@ function EllipseProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<EllipseLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "lineWidth",
                         value,
                       );
@@ -102,7 +102,7 @@ function EllipseProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<EllipseLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "x",
                         value,
                       );
@@ -123,7 +123,7 @@ function EllipseProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<EllipseLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "y",
                         value,
                       );
@@ -136,8 +136,8 @@ function EllipseProperties({
               dir: "col",
               fields: [
                 {
-                  key: "circle-radius",
-                  label: "Radius:",
+                  key: "circle-width",
+                  label: "Width:",
                   type: "number",
                   layout: "inline",
                   config: {
@@ -149,8 +149,29 @@ function EllipseProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<EllipseLayer>(
                         setState,
-                        layer,
-                        "radius",
+                        layer.id,
+                        "width",
+                        value,
+                      );
+                    },
+                  },
+                },
+                {
+                  key: "circle-height",
+                  label: "Height:",
+                  type: "number",
+                  layout: "inline",
+                  config: {
+                    max: 999999,
+                    unit: "px",
+                    size: "sm",
+                    hideStepper: true,
+                    className: "rounded! max-w-30",
+                    onChange: (value) => {
+                      updateLayerPropertiesOnState<EllipseLayer>(
+                        setState,
+                        layer.id,
+                        "height",
                         value,
                       );
                     },
@@ -167,7 +188,8 @@ function EllipseProperties({
         "circle-line-width": (layer as EllipseLayer).lineWidth,
         "circle-x": (layer as EllipseLayer).x,
         "circle-y": (layer as EllipseLayer).y,
-        "circle-radius": (layer as EllipseLayer).radius,
+        "circle-width": (layer as EllipseLayer).width,
+        "circle-height": (layer as EllipseLayer).height,
       }}
     />
   );

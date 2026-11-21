@@ -32,7 +32,7 @@ function RectangleProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<RectangleLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "strokeColor",
                         value,
                       );
@@ -51,7 +51,7 @@ function RectangleProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<RectangleLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "fillColor",
                         value,
                       );
@@ -72,7 +72,7 @@ function RectangleProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<RectangleLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "lineWidth",
                         value,
                       );
@@ -103,7 +103,7 @@ function RectangleProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<RectangleLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "x",
                         value,
                       );
@@ -124,7 +124,7 @@ function RectangleProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<RectangleLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "y",
                         value,
                       );
@@ -150,7 +150,7 @@ function RectangleProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<RectangleLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "width",
                         value,
                       );
@@ -171,7 +171,7 @@ function RectangleProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<RectangleLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "height",
                         value,
                       );

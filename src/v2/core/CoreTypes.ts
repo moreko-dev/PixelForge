@@ -14,7 +14,8 @@ export type LayersType =
   | "line"
   | "rectangle"
   | "ellipse"
-  | "polygon";
+  | "polygon"
+  | "text";
 export type ShapesType = "line" | "rectangle" | "ellipse" | "polygon";
 export type CoordinateType = { x: number; y: number };
 export type AnchorPointType = CoordinateType & {
@@ -134,6 +135,18 @@ export interface PolygonLayer extends Layer {
   lineWidth: number;
   points: CoordinateType[];
   sides: number;
+}
+
+export interface TextLayer extends Layer {
+  value: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  fontSize: number;
+  fontFamily: FontFamilyType;
+  strokeColor: CanvasColorType;
+  fillColor: CanvasColorType;
 }
 
 export interface Filter {

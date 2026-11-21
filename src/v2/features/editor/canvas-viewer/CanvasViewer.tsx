@@ -18,21 +18,37 @@ function CanvasViewer() {
 
   const activeTool = useRef<Tool | null>(null);
 
-  activeTool.current?.deactivate?.();
-  activeTool.current =
-    selectedTool &&
-    getToolController(
-      selectedTool,
-      canvasRef.current,
-      setProjectState,
-      workspaceConfig,
-    );
-  activeTool.current?.activate?.();
+  useEffect(() => {
+    activeTool.current?.deactivate?.();
+    activeTool.current =
+      selectedTool &&
+      getToolController(
+        selectedTool,
+        canvasRef.current,
+        setProjectState,
+        workspaceConfig,
+      );
+    activeTool.current?.activate?.();
+  }, [selectedTool]);
 
   return (
     <div
-      className={`bg-workspace overflow-auto p-20! grid place-items-center col-start-2 ${isControlVisible(selectedTool) ? "row-start-3" : "row-start-2"} row-end-5`}
+      id="canvas-container"
+      className={`relative bg-workspace overflow-auto p-20! grid place-items-center col-start-2 ${isControlVisible(selectedTool) ? "row-start-3" : "row-start-2"} row-end-5`}
     >
+      {workspaceConfig.textInputState.status === "active" && (
+        <input
+          ref={workspaceConfig.textToolInputRef}
+          type="text"
+          style={{
+            top: workspaceConfig.textInputState.y,
+            left: workspaceConfig.textInputState.x,
+          }}
+          className={`absolute bg-transparent text-black outline-none ring-0 border-2 p-1 border-primary-active rounded-none`}
+          onBlur={() => activeTool.current?.deactivate!()}
+          placeholder="Press here to type"
+        />
+      )}
       <canvas
         ref={canvasRef}
         width={projectState.canvas.width}

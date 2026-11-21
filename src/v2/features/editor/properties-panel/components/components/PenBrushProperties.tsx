@@ -33,7 +33,7 @@ function PenBrushProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<BrushLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "strokeColor",
                         value,
                       );
@@ -64,7 +64,7 @@ function PenBrushProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<BrushLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "lineWidth",
                         value,
                       );
@@ -81,7 +81,7 @@ function PenBrushProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<BrushLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "lineCap",
                         value,
                       );
@@ -98,7 +98,7 @@ function PenBrushProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<BrushLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "lineJoin",
                         value,
                       );

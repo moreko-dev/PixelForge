@@ -78,7 +78,11 @@ export function getToolController(
     rectangle: new RectangleTool(canvas, setState),
     ellipse: new EllipseTool(canvas, setState),
     polygon: new PolygonTool(canvas, setState, workspaceConfig.polySides),
-    text: new TextTool(canvas, setState),
+    text: new TextTool(canvas, setState, {
+      ref: workspaceConfig.textToolInputRef,
+      state: workspaceConfig.textInputState,
+      setState: workspaceConfig.setTextInputState,
+    }),
     crop: new CropTool(canvas, setState),
     resize: new ResizeTool(canvas, setState),
     eyedropper: new EyedropperTool(canvas, setState),
@@ -98,6 +102,20 @@ export function getPointerRelativeCoordinate(
   event: React.PointerEvent<HTMLCanvasElement> | PointerEvent,
 ): CoordinateType {
   const rect = canvas.getBoundingClientRect();
+
+  // No Scale //
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top,
+  };
+}
+
+export function getPointerCoordinateRelatedTo(
+  element: HTMLElement | null,
+  event: React.PointerEvent<HTMLCanvasElement> | PointerEvent,
+): CoordinateType | null {
+  if (!element) return null;
+  const rect = element.getBoundingClientRect();
 
   // No Scale //
   return {

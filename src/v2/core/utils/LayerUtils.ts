@@ -13,6 +13,7 @@ import type {
   Project,
   RectangleLayer,
   Shadow,
+  TextLayer,
 } from "../CoreTypes.js";
 
 export function getLayerName(layerType: string): string {
@@ -209,21 +210,66 @@ export function createPolygonLayer(
   };
 }
 
+export function createTextLayer(
+  value: string,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): TextLayer {
+  return {
+    type: "text",
+    id: crypto.randomUUID(),
+    locked: false,
+    visible: true,
+    renderable: true,
+    name: getLayerName("Text"),
+    shadow: getDefaultShadow(),
+    filter: getDefaultFilter(),
+    boundingBox: getDefaultBoundingBox(),
+    value,
+    x,
+    y,
+    width,
+    height,
+    fontFamily: "serif",
+    fontSize: 12,
+    fillColor: "#000000",
+    strokeColor: "rgba(0,0,0,0)",
+  };
+}
+
 export function updateLayerPropertiesOnState<L extends Layer>(
   setState: React.Dispatch<React.SetStateAction<Project | null>>,
-  layer: Layer,
+  layerId: string,
   key: keyof L,
   value: any,
 ) {
   setState((prev) => {
     if (!prev) throw new Error("Project state is null or undefined!");
     const layersClone = prev.layers.slice();
-    const layerIndex = layersClone.findIndex((item) => item.id === layer.id);
+    const layerIndex = layersClone.findIndex((item) => item.id === layerId);
     layersClone.splice(layerIndex, 1, {
       ...prev.layers[layerIndex],
       [key]: value,
     } as L);
 
+    return {
+      ...prev,
+      layers: layersClone.slice(),
+    };
+  });
+}
+
+export function removeLayerOnState(
+  setState: React.Dispatch<React.SetStateAction<Project | null>>,
+  layerId: string,
+) {
+  setState((prev) => {
+    if (!prev) throw new Error("Project state is null or undefined!");
+    const layersClone = prev.layers.slice();
+    const layerIndex = layersClone.findIndex((item) => item.id === layerId);
+    layersClone.splice(layerIndex, 1);
     return {
       ...prev,
       layers: layersClone.slice(),

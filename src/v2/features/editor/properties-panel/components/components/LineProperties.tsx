@@ -31,7 +31,7 @@ function LineProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<LineLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "strokeColor",
                         value,
                       );
@@ -52,7 +52,7 @@ function LineProperties({
                     onChange: (value) => {
                       updateLayerPropertiesOnState<LineLayer>(
                         setState,
-                        layer,
+                        layer.id,
                         "lineWidth",
                         value,
                       );
